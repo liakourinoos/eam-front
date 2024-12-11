@@ -1,0 +1,114 @@
+import './App.css'
+import Footer from './generic components/footer.jsx'
+import Header from './generic components/header.jsx'
+import {cities} from './global_values.jsx';
+import { useState, useEffect } from 'react';
+import {Link } from 'react-router-dom';
+function App() {
+  const images = [
+    'https://images.pexels.com/photos/6974310/pexels-photo-6974310.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', // Image 1
+    'https://www.ziprecruiter.com/svc/fotomat/public-ziprecruiter/cms/829365088InfantNanny.jpg=ws1280x960', // Image 2
+    'https://images.pexels.com/photos/755049/pexels-photo-755049.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', // Image 3
+  ];
+
+  // State to keep track of the current image index
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [fade, setFade] = useState(true); // State to control the fade effect
+  // useEffect to change the image every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length); // Cycle through images
+    }, 3000); // Change image every 3000ms (3 seconds)
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+
+
+
+  return (
+    <div className='w-full h-screen overflow-hidden flex flex-col justify-between'>
+      <Header/>
+      {/* main page */}
+      <div className="w-full flex flex-grow relative   ">
+
+        {/* Blue Div (Background) */}
+        <div
+          className=" h-full w-3/5 absolute top-0 right-0 z-0"
+        >
+          <div className="w-full h-full">
+            <img
+              src={images[currentIndex]}
+              alt="Background"
+              className="object-cover w-full h-full"
+            />
+          </div>
+        </div>
+    {/* main div */}
+        <div
+        className="w-full overflow-y-auto h-full absolute top-0 left-0 z-10 bg-pink-100"
+        style={{
+          boxShadow: "10px 10px 20px rgba(0, 0, 139, 0.7)", // Apply shadow here
+          clipPath: "polygon(0 100%, 0 0, 50% 0, 75% 0, 45% 100%, 50% 100%)",
+        }}
+        >
+          <div className=' w-1/2 my-auto h-full flex flex-col gap-10 '>
+                <p className=' ml-32 mt-10 text-3xl font-extrabold'>Βρείτε την φροντίδα που σας αξίζει!</p>
+                
+                {/* input div */}
+                <div className='pl-5 gap-7 h-1/2  flex flex-col my-auto '>
+
+                  <div>
+                    <p className='text-2xl'>Πόλη</p>
+                    <select className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-full max-w-xs">
+                      <option disabled selected>Επιλέξτε</option>
+                      {cities.map((city,idx)=>
+                      
+                      <option key={idx}>{city}</option>)}
+                    </select>
+                  </div>
+
+                  <div>
+                    <p className='text-2xl'>Περιοχή</p>
+                    <select className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-full max-w-xs">
+                      <option disabled selected>Επιλέξτε</option>
+                      <option>Han Solo</option>
+                      <option>Greedo</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <p className='text-2xl'>Γειτονιά</p>
+                    <select className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-full max-w-xs">
+                      <option disabled selected>Επιλέξτε</option>
+                      <option>Han Solo</option>
+                      <option>Greedo</option>
+                    </select>
+                  </div>
+
+
+                  <div className='w-full  flex justify-end pr-60'>
+                    <Link to='/search' className='rounded-md flex items-center justify-center text-center text-xl bg-pink-600 w-40 h-12 text-white py-1'>
+                      <span>Συνέχεια</span>
+                    </Link>
+                    
+                  </div>
+                
+                </div>
+
+          </div>
+
+        </div>
+
+
+
+
+      </div>
+
+      <Footer/>
+    </div>
+  )
+}
+
+export default App
