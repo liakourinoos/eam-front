@@ -1,8 +1,7 @@
-import { FaEye,FaEyeSlash } from "react-icons/fa";
-import { useState } from "react";
-import Footer from "./generic components/footer";
+// import { FaEye,FaEyeSlash } from "react-icons/fa";
+import Footer from "./generic components/Footer";
 import  { Link } from "react-router-dom";
-import Header from "./generic components/header";
+import Header from "./generic components/Header";
 function SignUp(){
 
     return(

@@ -1,6 +1,6 @@
 import './App.css'
-import Footer from './generic components/footer.jsx'
-import Header from './generic components/header.jsx'
+import Footer from './generic components/Footer.jsx'
+import Header from './generic components/Header.jsx'
 import {cities} from './global_values.jsx';
 import { useState, useEffect } from 'react';
 import {Link } from 'react-router-dom';
@@ -13,7 +13,6 @@ function App() {
 
   // State to keep track of the current image index
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [fade, setFade] = useState(true); // State to control the fade effect
   // useEffect to change the image every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
@@ -24,8 +23,21 @@ function App() {
     return () => clearInterval(interval);
   }, [images.length]);
 
+  const [town,setTown] = useState(undefined);
+  const [location,setLocation] = useState(undefined)
+  const [neighborhood,setNeighborhood] = useState(undefined)
 
 
+  // useEffect(()=>{
+  //   console.log(town)
+  // },[town])
+  // useEffect(()=>{
+  //   console.log(neighborhood)
+  // },[neighborhood])
+
+  // useEffect(()=>{
+  //   console.log(location)
+  // },[location])
 
   return (
     <div className='w-full h-screen overflow-hidden flex flex-col justify-between'>
@@ -47,7 +59,7 @@ function App() {
         </div>
     {/* main div */}
         <div
-        className="w-full overflow-y-auto h-full absolute top-0 left-0 z-10 bg-pink-100"
+        className="w-full overflow-y-auto h-full flex flex-col  justify-center absolute top-0 left-0 z-10 bg-pink-100"
         style={{
           boxShadow: "10px 10px 20px rgba(0, 0, 139, 0.7)", // Apply shadow here
           clipPath: "polygon(0 100%, 0 0, 50% 0, 75% 0, 45% 100%, 50% 100%)",
@@ -57,22 +69,22 @@ function App() {
                 <p className=' ml-32 mt-10 text-3xl font-extrabold'>Βρείτε την φροντίδα που σας αξίζει!</p>
                 
                 {/* input div */}
-                <div className='pl-5 gap-7 h-1/2  flex flex-col my-auto '>
+                <div className='pl-5 gap-7 h-full flex flex-col my-auto '>
 
                   <div>
                     <p className='text-2xl'>Πόλη</p>
-                    <select className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-full max-w-xs">
-                      <option disabled selected>Επιλέξτε</option>
+                    <select onChange={(e)=>setTown(e.target.value)} defaultValue="" className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-full max-w-xs">
+                      <option disabled value="">Επιλέξτε</option>
                       {cities.map((city,idx)=>
                       
-                      <option key={idx}>{city}</option>)}
+                      <option key={idx} value={city}>{city}</option>)}
                     </select>
                   </div>
 
                   <div>
                     <p className='text-2xl'>Περιοχή</p>
-                    <select className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-full max-w-xs">
-                      <option disabled selected>Επιλέξτε</option>
+                    <select  onChange={(e)=>setLocation(e.target.value)} defaultValue="" className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-full max-w-xs">
+                      <option disabled value=''>Επιλέξτε</option>
                       <option>Han Solo</option>
                       <option>Greedo</option>
                     </select>
@@ -80,16 +92,20 @@ function App() {
                   
                   <div>
                     <p className='text-2xl'>Γειτονιά</p>
-                    <select className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-full max-w-xs">
-                      <option disabled selected>Επιλέξτε</option>
+                    <select onChange={(e)=>setNeighborhood(e.target.value)} defaultValue="" className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-full max-w-xs">
+                      <option disabled value={""}>Επιλέξτε</option>
                       <option>Han Solo</option>
                       <option>Greedo</option>
                     </select>
                   </div>
 
 
-                  <div className='w-full  flex justify-end pr-60'>
-                    <Link to='/search' className='rounded-md flex items-center justify-center text-center text-xl bg-pink-600 w-40 h-12 text-white py-1'>
+                  <div className='w-full mb-32 flex justify-end pr-60'>
+                    <Link to={{pathname:'/search',
+                              
+                          }} 
+                          state={{selectedTown:town, selectedNeighborhood:neighborhood,selectedLocation:location}}
+                          className='rounded-md flex items-center justify-center text-center text-xl bg-pink-600 w-40 h-12 text-white py-1'>
                       <span>Συνέχεια</span>
                     </Link>
                     

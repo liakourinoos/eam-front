@@ -6,7 +6,7 @@ function Header(){
             {/* box for logo and name */}
             <div className="flex w-1/3 items-center h-full">
                 <img src={logo} alt="logo" className="w-1/2 h-full"/>
-                <p className='text-4xl ml-2 font-bold text-purple-600'>Nanika</p>
+                <Link to='/' className='text-4xl ml-2 font-bold text-purple-600'>Nanika</Link>
                 {/* language toggle */}
                 <div>
                     

@@ -1,6 +1,6 @@
-import Header from "./generic components/header";
+import Header from "./generic components/Header";
 import Footer
- from "./generic components/footer";
+ from "./generic components/Footer";
  import { Link } from "react-router-dom";
 import { useState } from "react";
 import { FaEye } from "react-icons/fa6";
@@ -13,8 +13,8 @@ function Login(){
     return(
         <div className="w-full h-screen flex flex-col overflow-hidden justify-between bg-pink-100 ">
             <Header/>
-            <div className="w-full h-full overflow-y-auto flex flex-col  items-center py-20 ">
-                <div className="w-2/3 h-full rounded-md flex flex-col p-20 items-center bg-fuchsia-200 shadow-lg shadow-gray-400">
+            <div className="w-full h-full overflow-y-auto flex flex-col items-center py-20 ">
+                <div className="w-2/3  rounded-md flex flex-col p-20 items-center bg-fuchsia-200 shadow-lg shadow-gray-400">
                 <p className="text-5xl font-bold">Σύνδεση</p>
 
                 <div className="w-1/4  mt-20 ">

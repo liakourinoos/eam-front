@@ -1,35 +1,61 @@
-import Header from "./generic components/header";
-import Footer from "./generic components/footer";
+import ParentHeader from "./generic components/ParentHeader.jsx";
+import Footer from './generic components/Footer.jsx'
 import OfferProfile from "./views/OfferProfile.jsx";
-import { useState,useEffect } from "react";
+import NannyNavbar from "./generic components/NannyNavbar.jsx";
+import { useState, useEffect } from "react";
 // for calendar
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { addDays } from 'date-fns';
 import { cities } from "./global_values.jsx";
+import { useLocation, useNavigate } from "react-router-dom";
 
-function Search(){
+function Search() {
 
-    const [experienceSlider,setExperienceSlider] = useState(0);
-    const  handleExperienceChange=(e)=>{
+    const loc = useLocation();
+    const navigate = useNavigate();
+
+    const { 
+        selectedTown = "", 
+        selectedLocation = "", 
+        selectedNeighborhood = "" 
+    } = loc.state || {};
+
+    // States for inputs
+    const [town, setTown] = useState(selectedTown);
+    const [location, setLocation] = useState(selectedLocation);
+    const [neighborhood, setNeighborhood] = useState(selectedNeighborhood);
+
+    // Clear state on refresh
+    useEffect(() => {
+        if (loc.state) {
+            navigate(loc.pathname, { replace: true, state: null });
+        }
+    }, [loc, navigate]);
+
+    // useEffect(() => {
+    //     console.log("Town:", town);
+    //     console.log("Location:", location);
+    //     console.log("Neighborhood:", neighborhood);
+    // }, [town, location, neighborhood]);
+
+    const [experienceSlider, setExperienceSlider] = useState(0);
+    const handleExperienceChange = (e) => {
         setExperienceSlider(Number(e.target.value));
-    }
+    };
 
-    const [yearsSlider,setYearsSlider] = useState(0);
-    const  handleYearsSlider=(e)=>{
+    const [yearsSlider, setYearsSlider] = useState(0);
+    const handleYearsSlider = (e) => {
         setYearsSlider(Number(e.target.value));
-    }
+    };
 
-
-    //for calendar
+    // For calendar
     const [selectedDate, setSelectedDate] = useState(null);
     const today = new Date();
-  
 
-
-    return(
+    return (
         <div className="">
-            <Header/>
+            <ParentHeader />
+            <NannyNavbar/>
             <div className="w-full flex h-screen justify-between bg-slate-300">
 
                 {/* left div - filters */}
@@ -37,53 +63,64 @@ function Search(){
                     <div className="w-3/4 bg-gray-200 shadow-lg rounded-md shadow-gray-700 flex flex-col gap-3 py-5 items-center justify-center">
                         <p className="text-3xl font-bold">Φίλτρα Αναζήτησης</p>
 
-                        
-                        <div > 
+                        {/* Town Filter */}
+                        <div>
                             <p className='text-l'>Πόλη</p>
-                            <select className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
-                                <option disabled selected>Επιλέξτε</option>
-                                {cities.map((city,idx)=>
-                                    <option key={idx}> {city}</option>
+                            <select onChange={(e) => { setTown(e.target.value) }} defaultValue={town} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                                <option disabled value={""}>Επιλέξτε</option>
+                                {cities.map((city, idx) =>
+                                    <option key={idx} value={city}>{city}</option>
                                 )}
                             </select>
                         </div>
-                        <div > 
+
+                        {/* Location Filter */}
+                        <div>
                             <p className='text-l'>Περιοχή</p>
-                            <select className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
-                                <option disabled selected>Επιλέξτε</option>
-                                <option>Han Solo</option>
-                                <option>Greedo</option>
+                            <select onChange={(e) => { setLocation(e.target.value) }} defaultValue={location} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                                <option disabled value={""}>Επιλέξτε</option>
+                                <option value="Han Solo">Han Solo</option>
+                                <option value="Greedo">G</option>
+                                {/* <option value="Aerea3">Area3</option> */}
                             </select>
                         </div>
-                        <div > 
+
+                        {/* Neighborhood Filter */}
+                        <div>
                             <p className='text-l'>Γειτονιά</p>
-                            <select className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
-                                <option disabled selected>Επιλέξτε</option>
-                                <option>Han Solo</option>
-                                <option>Greedo</option>
+                            <select onChange={(e) => { setNeighborhood(e.target.value) }} defaultValue={neighborhood} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                                <option disabled value={""}>Επιλέξτε</option>
+                                {/* <option value="e">Neighborhood1</option> */}
+                                <option value="Han Solo">H S</option>
+                                <option value="Greedo">G</option>
                             </select>
                         </div>
-                        <div className=" flex flex-col items-center "> 
-                            <p className='text-l  w-60'>Απασχόληση επαγγελματία στην οικία μου</p>
-                            <select className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
-                                <option disabled selected>Επιλέξτε</option>
+
+                        {/* Other Filters */}
+                        <div className="flex flex-col items-center">
+                            <p className='text-l w-60'>Απασχόληση επαγγελματία στην οικία μου</p>
+                            <select defaultValue={""} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                                <option disabled value={""}>Επιλέξτε</option>
                                 <option>Ναι</option>
                                 <option>Όχι</option>
                             </select>
                         </div>
-                        <div > 
+
+                        <div>
                             <p className='text-l'>Ηλικία Παιδιού</p>
-                            <select className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
-                                <option disabled selected>Επιλέξτε</option>
-                                <option>Han Solo</option>
-                                <option>Greedo</option>
+                            <select defaultValue={""} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                                <option disabled value={""}>Επιλέξτε</option>
+                                <option>0-1</option>
+                                <option>1-3</option>
+                                <option>3-5</option>
                             </select>
                         </div>
 
+                        {/* Experience Slider */}
                         <div className="w-60 flex flex-col gap-1">
                             <p className="text-l">Χρόνια Εμπειρίας</p>
                             <input onChange={handleExperienceChange} type="range" min={0} max={4} value={experienceSlider} className="range" step="1" />
-                            <div className="flex w-full justify-between  text-xs">
+                            <div className="flex w-full justify-between text-xs">
                                 <span>0</span>
                                 <span>1</span>
                                 <span>2</span>
@@ -92,19 +129,21 @@ function Search(){
                             </div>
                         </div>
 
-                        <div > 
+                        <div>
                             <p className='text-l'>Φύλο</p>
-                            <select className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
-                                <option disabled selected>Επιλέξτε</option>
-                                <option>Han Solo</option>
-                                <option>Greedo</option>
+                            <select defaultValue={""} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                                <option disabled value={""}>Επιλέξτε</option>
+                                <option>Male</option>
+                                <option>Female</option>
+                                <option>Other</option>
                             </select>
                         </div>
 
+                        {/* Employment Period Slider */}
                         <div className="w-60 flex flex-col gap-1">
                             <p className="text-l">Διάστημα Απασχόλησης</p>
                             <input onChange={handleYearsSlider} type="range" min={0} max={9} value={yearsSlider} className="range" step="1" />
-                            <div className="flex w-full justify-between  text-xs">
+                            <div className="flex w-full justify-between text-xs">
                                 <span>0</span>
                                 <span>1</span>
                                 <span>2</span>
@@ -118,48 +157,35 @@ function Search(){
                             </div>
                         </div>
 
+                        {/* Calendar */}
                         <div>
                             <DatePicker
                                 selected={selectedDate}
                                 onChange={(date) => setSelectedDate(date)}
                                 minDate={today}
                                 filterDate={(date) => date >= today}
-                                open={true} // Make the calendar always open
-                                showPopperArrow={false} // Hide the arrow on the calendar
-                                dateFormat="yyyy-MM-dd" // Adjust the format of the displayed date
-                                inline // This will render the calendar directly without an input
-                                disabledKeyboardNavigation // Disable keyboard navigation for this input
+                                inline
+                                disabledKeyboardNavigation
+                                dateFormat="yyyy-MM-dd"
                                 className="calendar-only"
                             />
                         </div>
-                        
-                        
-                        
                     </div>
                 </div>
 
-                {/* right div -results */}
-                <div className=" w-2/3 h-full  overflow-y-auto p-5 ">                   
-                <OfferProfile/> 
-                    <OfferProfile/> <OfferProfile/> <OfferProfile/> <OfferProfile/> <OfferProfile/> <OfferProfile/> 
-                    <OfferProfile/> <OfferProfile/> <OfferProfile/>  <OfferProfile/> <OfferProfile/> <OfferProfile/> 
-                    <OfferProfile/> 
-                    <OfferProfile/> <OfferProfile/> <OfferProfile/> <OfferProfile/> <OfferProfile/> <OfferProfile/> 
-                    <OfferProfile/> <OfferProfile/> <OfferProfile/>  <OfferProfile/> <OfferProfile/> <OfferProfile/> 
-             <OfferProfile/> 
-                    <OfferProfile/> <OfferProfile/> <OfferProfile/> <OfferProfile/> <OfferProfile/> <OfferProfile/> 
-                    <OfferProfile/> <OfferProfile/> <OfferProfile/>  <OfferProfile/> <OfferProfile/> <OfferProfile/> 
-            
-                    
-                
+                {/* Right div - results */}
+                <div className="w-2/3 h-full overflow-y-auto p-5">
+                    <OfferProfile />
+                    <OfferProfile />
+                    <OfferProfile />
+                    <OfferProfile />
+                    <OfferProfile />
+
                 </div>
-
-
-
-
             </div>
-            <Footer/>   
+            <Footer />
         </div>
-    )
+    );
 }
+
 export default Search;
