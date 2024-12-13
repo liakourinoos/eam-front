@@ -4,6 +4,7 @@ import Header from './generic components/Header.jsx'
 import {cities} from './global_values.jsx';
 import { useState, useEffect } from 'react';
 import {Link } from 'react-router-dom';
+import ParentSettings from './ParentSettings.jsx';
 function App() {
   const images = [
     'https://images.pexels.com/photos/6974310/pexels-photo-6974310.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', // Image 1
@@ -38,6 +39,12 @@ function App() {
   // useEffect(()=>{
   //   console.log(location)
   // },[location])
+
+  return(
+    <>
+      <ParentSettings/>
+    </>
+  )
 
   return (
     <div className='w-full h-screen overflow-hidden flex flex-col justify-between'>
