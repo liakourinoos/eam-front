@@ -1,0 +1,197 @@
+import Footer from './generic components/Footer.jsx'
+import Header from './generic components/Header.jsx'
+import {hours,days,availabilityMatrix} from '../global_assets/global_values.jsx'
+import { Link } from 'react-router-dom';
+import { FaCheck, FaFile } from 'react-icons/fa6';
+import { FaFemale, FaQuestionCircle, FaRegQuestionCircle } from 'react-icons/fa';
+import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+// import { MdStarBorder } from 'react-icons/md';
+function NannyProfile(){
+    const gender="Θηλυκό"
+    const rating=3.7;
+    const fullStars = Math.floor(rating); // Integer part (e.g., for 4.5, this will be 4)
+    const halfStars = rating % 1 >= 0.5 ? 1 : 0; // Half star if there's a decimal part
+    const emptyStars = 5 - fullStars - halfStars; // Remaining stars are empty
+    return(
+        <div className="w-full">
+            <Header/>
+           
+
+            {/* main page */}
+            <div className=' w-full bg-gray-200 flex'>
+
+               {/* Left div, nanny info */}
+                <div className="w-4/6 pb-2 ">
+
+                    {/* Breadcrumbs */}
+                    <div className="breadcrumbs pl-5 text-md">
+                        <ul>
+                            <li><Link to="/search">Αναζήτηση</Link></li>
+                            <li>Προφίλ Επαγγελματία</li>
+                        </ul>
+                    </div>
+
+                    {/* Div for nanny name, pfp and contact button */}
+                    <div className="my-4 px-2 w-full h-40  flex items-center justify-between"> 
+                        {/* Left section: pfp, name, and info */}
+                        <div className="flex h-full">
+                            <img 
+                                src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBA3S71zn7_fD0AXbnLDEOb3vvA9Vo03imLw&s"} 
+                                className="size-40 rounded-full" 
+                                alt="Nanny Profile"
+                            />
+                            {/* Info */}
+                            <div className="ml-4 h-2/3 mt-5 text-2xl flex flex-col justify-start">
+                                <div className="w-full flex items-center font-medium">
+                                    <span>Μαρία Παπαδοπούλου, </span>
+                                    <p className="ml-1 mr-2">33</p>
+                                    <FaFemale className='text-xl' title={gender} />
+                                </div>
+                                <p>3 χρόνια εμπειρίας</p>
+                                <div className="flex items-center" title={`βαθμολογία: ${rating}/5`}>
+                                    {/* Render full stars */}
+                                    {Array.from({ length: fullStars }, (_, idx) => (
+                                        <FaStar key={`full-${idx}`} className="text-black" />
+                                    ))}
+                                    {/* Render half star if needed */}
+                                    {halfStars > 0 && <FaStarHalfAlt className="text-black" />}
+                                    {/* Render empty stars */}
+                                    {Array.from({ length: emptyStars }, (_, idx) => (
+                                        <FaRegStar key={`empty-${idx}`} className="text-black" />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right section: contact button */}
+                        <button className="w-1/5 shadow-md shadow-gray-600 bg-white text-2xl rounded-md font-medium h-1/2 ml-auto mr-4">
+                            Επικοινωνία
+                        </button>
+                    </div>
+
+                    {/* bio section */}
+                    <div className='w-2/4 ml-4  mt-10 '>
+                        <p className='text-xl pl-2 font-medium'>Σύντομη Περιγραφή</p>
+                        <div className='rounded-md px-2 py-1 bg-gray-300 w-full'>
+                            <p>Είμαι στοργική και αξιόπιστη νταντά με πάθος για την παιδική ανάπτυξη. Έχω εμπειρία στη δημιουργία καθημερινών προγραμμάτων που βοηθούν 
+                            τα παιδιά να μαθαίνουν και να διασκεδάζουν.</p>
+
+                        </div>
+                    </div>
+
+                    {/* studies section */}
+                    <div className='w-2/4 ml-4  mt-8 '>
+                        <p className='text-xl pl-2 font-medium flex cursor-default items-center gap-2 '  title='Επαληθευμένο από εμάς.'>Σπουδές <FaRegQuestionCircle/></p>
+                        <div className='rounded-md px-2 py-1 bg-gray-300 w-full'>
+                            <ul className='list-disc pl-4'>
+                                <li>AEI βρεφονηπιοκομίας Αθηνών</li>
+                                <li>βαριεμαι γαμω ειναι καργα βαρετο και νυσταζω!!</li>
+
+                            </ul>
+
+                        </div>
+                    </div>
+
+                    {/* certificates section */}
+                    <div className='w-2/4 ml-4  mt-8 '>
+                        <p className='text-xl pl-2 font-medium flex cursor-default items-center gap-2 '  title='Επαληθευμένο από εμάς.'>Πιστοποιήσεις<FaRegQuestionCircle/></p>
+                        <div className='rounded-md px-2 py-1 bg-gray-300 w-full'>
+                            <ul className='list-disc pl-4'>
+                                <li>Πρώτων Βοηθειών</li>
+                                <li>Καρδιοπνευμονική Αναζωογόνηση (ΚΑΡΠΑ)</li>
+                                <li>Πιστοποίηση Παιδικής Διατροφής</li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    {/* systatikes epistoles */}
+                    <div className='w-2/4 ml-4  mt-8 '>
+                        <p className='text-xl pl-2 font-medium flex cursor-default items-center gap-2 '  title='Επαληθευμένο από εμάς.'>Συστατικές Επιστολές</p>
+                        <div className='rounded-md px-2 py-1 bg-gray-300 w-full'>
+                            <div className='w-2/5 px-2 my-1 bg-gray-400 flex items-center gap-1 pl-1 rounded-md'>
+                                <FaFile/> <span className='font-medium text-lg'>Επιστολή_1.txt</span>
+                            </div>
+                            <div className='w-2/5 px-2 my-1 bg-gray-400 flex items-center gap-1 pl-1 rounded-md'>
+                                <FaFile/> <span className='font-medium text-lg'>Επιστολή_1.txt</span>
+                            </div>
+                            <div className='w-2/5 px-2 my-1 bg-gray-400 flex items-center gap-1 pl-1 rounded-md'>
+                                <FaFile/> <span className='font-medium text-lg'>Επιστολή_1.txt</span>
+                            </div>
+                            
+                        </div>
+                    </div>
+                
+                <div className='border-b-2 border-gray-700 my-10 w-3/4 mx-auto h-1'></div>
+
+                <p className='text-2xl mx-auto w-fit font-medium'>Πρόσφατες Αξιολογήσεις Γονέων </p>
+
+                </div>
+
+
+                {/* right div, available hours and skills */}
+                <div className='w-2/6   px-2'>
+                    <p className='font-medium text-xl'>Εβδομαδιαίες Διαθέσιμες ώρες</p>
+                    <table className="table-auto w-full my-1 rounded-md text-xs bg-slate-400 border-collapse">
+                        <thead>
+                            <tr className="bg-gray-300 ">
+                                {/* <th className="px-2 py-1 text-center"></th> */}
+                                <th className="px-2 py-1 text-center "></th> 
+                                {/* Day headers */}
+                                {days.map((day, idx) => (
+                                    <th key={idx} className="px-2 cursor-default  text-center">{day}</th> 
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {hours.map((hour, idx) => (
+                                <tr key={idx} className="  hover:bg-gray-100">
+                                    {/* Hour */}
+                                    <td className="px-4 cursor-default font-normal text-center">{hour}</td> 
+                                    {/* <th className="px-4 "></th> Empty cell for spacing */}
+                                    {availabilityMatrix[idx].map((available, dayIndex) => (
+                                        <td key={dayIndex} className="px-4  text-center">
+                                            {/* Checkmark if available */}
+                                            {available ? <FaCheck className="text-green-700" /> : ""} 
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    
+                    {/* skills */}
+                    <div className='w-2/3 p-2   '>
+                        <p className=' font-medium'>Εξοικιωμένος/η με:</p>
+                        <div className='bg-gray-400 shadow-md py-1 shadow-gray-600 pl-2 w-full h-44 overflow-y-auto rounded-md'>
+                            <ul className='list-disc pl-4'>
+                                <li>Dogs</li>
+                                <li>Cats</li>
+                                <li>Cooking</li>
+                                <li>Dogs</li>
+                                <li>Cats</li>
+                                <li>Cooking</li><li>Dogs</li>
+                                <li>Cats</li>
+                                <li>Cooking</li>
+
+
+                            </ul>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <Footer/>
+        </div>
+
+
+
+    );
+}
+
+export default NannyProfile;

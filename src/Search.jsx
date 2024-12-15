@@ -1,12 +1,12 @@
 import ParentHeader from "./generic components/ParentHeader.jsx";
 import Footer from './generic components/Footer.jsx'
 import OfferProfile from "./views/OfferProfile.jsx";
-import NannyNavbar from "./generic components/NannyNavbar.jsx";
+import ParentNavbar from "./generic components/ParentNavbar.jsx";
 import { useState, useEffect } from "react";
 // for calendar
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { cities } from "./global_values.jsx";
+import { cities,area,geitonia } from "../global_assets/global_values.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function Search() {
@@ -55,7 +55,8 @@ function Search() {
     return (
         <div className="">
             <ParentHeader />
-            <NannyNavbar/>
+            {/* <NannyNavbar/> */}
+            <ParentNavbar/>
             <div className="w-full flex h-screen justify-between bg-slate-300">
 
                 {/* left div - filters */}
@@ -66,7 +67,7 @@ function Search() {
                         {/* Town Filter */}
                         <div>
                             <p className='text-l'>Πόλη</p>
-                            <select onChange={(e) => { setTown(e.target.value) }} defaultValue={town} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                            <select onChange={(e) => { setTown(e.target.value); setLocation(""); setNeighborhood(""); }} value={town} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
                                 {cities.map((city, idx) =>
                                     <option key={idx} value={city}>{city}</option>
@@ -77,29 +78,33 @@ function Search() {
                         {/* Location Filter */}
                         <div>
                             <p className='text-l'>Περιοχή</p>
-                            <select onChange={(e) => { setLocation(e.target.value) }} defaultValue={location} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                            <select onChange={(e) => {  setLocation(e.target.value); setNeighborhood(""); }} value={location} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
-                                <option value="Han Solo">Han Solo</option>
-                                <option value="Greedo">G</option>
-                                {/* <option value="Aerea3">Area3</option> */}
+                                {town!=="" && 
+                                    area.find(a => a.city === town)?.areas.map((area, idx) =>
+                                        <option key={idx} value={area}>{area}</option>
+                                    )
+                                }
                             </select>
                         </div>
 
                         {/* Neighborhood Filter */}
                         <div>
                             <p className='text-l'>Γειτονιά</p>
-                            <select onChange={(e) => { setNeighborhood(e.target.value) }} defaultValue={neighborhood} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                            <select onChange={(e) => { setNeighborhood(e.target.value) }} value={neighborhood} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
-                                {/* <option value="e">Neighborhood1</option> */}
-                                <option value="Han Solo">H S</option>
-                                <option value="Greedo">G</option>
+                                {location!=="" && 
+                                    geitonia.find(g => g.area === location)?.geitonies.map((geitonia, idx) =>
+                                        <option key={idx} value={geitonia}>{geitonia}</option>
+                                    )
+                                }
                             </select>
                         </div>
 
                         {/* Other Filters */}
                         <div className="flex flex-col items-center">
                             <p className='text-l w-60'>Απασχόληση επαγγελματία στην οικία μου</p>
-                            <select defaultValue={""} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                            <select value={""} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
                                 <option>Ναι</option>
                                 <option>Όχι</option>
@@ -108,7 +113,7 @@ function Search() {
 
                         <div>
                             <p className='text-l'>Ηλικία Παιδιού</p>
-                            <select defaultValue={""} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                            <select value={""} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
                                 <option>0-1</option>
                                 <option>1-3</option>
@@ -119,7 +124,7 @@ function Search() {
                         {/* Experience Slider */}
                         <div className="w-60 flex flex-col gap-1">
                             <p className="text-l">Χρόνια Εμπειρίας</p>
-                            <input onChange={handleExperienceChange} type="range" min={0} max={4} value={experienceSlider} className="range" step="1" />
+                            <input onChange={handleExperienceChange} type="range" min={0} max={4} value={experienceSlider} className="range range-secondary" step="1" />
                             <div className="flex w-full justify-between text-xs">
                                 <span>0</span>
                                 <span>1</span>
@@ -131,7 +136,7 @@ function Search() {
 
                         <div>
                             <p className='text-l'>Φύλο</p>
-                            <select defaultValue={""} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                            <select value={""} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
                                 <option>Male</option>
                                 <option>Female</option>
@@ -142,8 +147,8 @@ function Search() {
                         {/* Employment Period Slider */}
                         <div className="w-60 flex flex-col gap-1">
                             <p className="text-l">Διάστημα Απασχόλησης</p>
-                            <input onChange={handleYearsSlider} type="range" min={0} max={9} value={yearsSlider} className="range" step="1" />
-                            <div className="flex w-full justify-between text-xs">
+                            <input onChange={handleYearsSlider} type="range" min={0} max={9} value={yearsSlider} className="range range-secondary" step="1" />
+                            <div className="flex w-full mx-auto justify-between text-xs">
                                 <span>0</span>
                                 <span>1</span>
                                 <span>2</span>

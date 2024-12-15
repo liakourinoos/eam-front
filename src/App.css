@@ -1,0 +1,9 @@
+:root {
+    --b1: transparent; /* Remove base-100 background */
+    --b2: transparent; /* Remove base-200 background */
+    --bc: transparent; /* Remove border colors */
+    --primary: #000000; /* Default primary color */
+    --secondary: #000000; /* Default secondary color */
+    --accent: #000000; /* Default accent color */
+  }
+  

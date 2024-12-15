@@ -1,10 +1,10 @@
 import './App.css'
 import Footer from './generic components/Footer.jsx'
 import Header from './generic components/Header.jsx'
-import {cities} from './global_values.jsx';
+import { cities,area,geitonia } from "../global_assets/global_values.jsx";
 import { useState, useEffect } from 'react';
 import {Link } from 'react-router-dom';
-import ParentSettings from './ParentSettings.jsx';
+// import ParentSettings from './ParentSettings.jsx';
 function App() {
   const images = [
     'https://images.pexels.com/photos/6974310/pexels-photo-6974310.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', // Image 1
@@ -24,9 +24,9 @@ function App() {
     return () => clearInterval(interval);
   }, [images.length]);
 
-  const [town,setTown] = useState(undefined);
-  const [location,setLocation] = useState(undefined)
-  const [neighborhood,setNeighborhood] = useState(undefined)
+  const [town,setTown] = useState("");
+  const [location,setLocation] = useState("")
+  const [neighborhood,setNeighborhood] = useState("")
 
 
   // useEffect(()=>{
@@ -40,11 +40,11 @@ function App() {
   //   console.log(location)
   // },[location])
 
-  return(
-    <>
-      <ParentSettings/>
-    </>
-  )
+  // return(
+  //   <>
+  //     <ParentSettings/>
+  //   </>
+  // )
 
   return (
     <div className='w-full h-screen overflow-hidden flex flex-col justify-between'>
@@ -78,33 +78,42 @@ function App() {
                 {/* input div */}
                 <div className='pl-5 gap-7 h-full flex flex-col my-auto '>
 
-                  <div>
-                    <p className='text-2xl'>Πόλη</p>
-                    <select onChange={(e)=>setTown(e.target.value)} defaultValue="" className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-full max-w-xs">
-                      <option disabled value="">Επιλέξτε</option>
-                      {cities.map((city,idx)=>
-                      
-                      <option key={idx} value={city}>{city}</option>)}
+                 {/* Town Filter */}
+                 <div>
+                    <p className='text-l'>Πόλη</p>
+                    <select onChange={(e) => { setTown(e.target.value); setLocation(""); setNeighborhood(""); }} value={town} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                    <option disabled value={""}>Επιλέξτε</option>
+                      {cities.map((city, idx) =>
+                          <option key={idx} value={city}>{city}</option>
+                      )}
                     </select>
                   </div>
 
+                  {/* Location Filter */}
                   <div>
-                    <p className='text-2xl'>Περιοχή</p>
-                    <select  onChange={(e)=>setLocation(e.target.value)} defaultValue="" className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-full max-w-xs">
-                      <option disabled value=''>Επιλέξτε</option>
-                      <option>Han Solo</option>
-                      <option>Greedo</option>
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <p className='text-2xl'>Γειτονιά</p>
-                    <select onChange={(e)=>setNeighborhood(e.target.value)} defaultValue="" className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-full max-w-xs">
+                    <p className='text-l'>Περιοχή</p>
+                    <select onChange={(e) => {  setLocation(e.target.value); setNeighborhood(""); }} value={location} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                       <option disabled value={""}>Επιλέξτε</option>
-                      <option>Han Solo</option>
-                      <option>Greedo</option>
+                        {town!=="" && 
+                          area.find(a => a.city === town)?.areas.map((area, idx) =>
+                          <option key={idx} value={area}>{area}</option>
+                        )}
                     </select>
                   </div>
+
+                        {/* Neighborhood Filter */}
+                        <div>
+                            <p className='text-l'>Γειτονιά</p>
+                            <select onChange={(e) => { setNeighborhood(e.target.value) }} value={neighborhood} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                                <option disabled value={""}>Επιλέξτε</option>
+                                {location!=="" && 
+                                    geitonia.find(g => g.area === location)?.geitonies.map((geitonia, idx) =>
+                                        <option key={idx} value={geitonia}>{geitonia}</option>
+                                    )
+                                }
+                            </select>
+                        </div>
+
 
 
                   <div className='w-full mb-32 flex justify-end pr-60'>

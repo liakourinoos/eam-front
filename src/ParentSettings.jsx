@@ -1,14 +1,15 @@
 import { useState } from "react";
-import Header from "./generic components/Header";
+// import Header from "./generic components/Header";
 import Footer from "./generic components/Footer";
 import NannyNavbar from './generic components/NannyNavbar.jsx'
 import ParentProfileEdit from "./views/ParentProfileEdit.jsx";
+import ParentHeader from "./generic components/ParentHeader.jsx";
 function ParentSettings(){
     const [shownPage,setShownPage]= useState(1);
     const toggleShownPage=(num)=> setShownPage(num)
     return(
         <div className="w-full  "> 
-        <Header/>
+        <ParentHeader/>
         <NannyNavbar/>
             {/* //main div to change what type of info will be changed */}
             <div className="w-full  flex ">

@@ -1,6 +1,8 @@
+import { Link } from "react-router-dom";
+
 function OfferProfile() {
     return (
-        <div className="w-3/4 h-36 mx-auto my-5  flex justify-between bg-gray-400 rounded-md p-1 shadow-md shadow-gray-700">
+        <Link to='/nannyProfile' className="w-3/4 h-36 mx-auto my-5  flex justify-between bg-gray-400 rounded-md p-1 shadow-md shadow-gray-700">
             {/* photo */}
             <div className="h-full w-1/6  flex items-center justify-center">
                 <img src="https://wallpapers.com/images/featured/tiktok-pfp-ideas-mdtddnjjjrt9f5e7.jpg" className="object-cover size-28 rounded-full "></img>
@@ -50,7 +52,7 @@ function OfferProfile() {
                 </div>
             
             </div>
-        </div>
+        </Link>
     );
 }
 

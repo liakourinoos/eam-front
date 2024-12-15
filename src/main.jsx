@@ -8,6 +8,8 @@ import Search from './Search.jsx'
 import Login from './Login.jsx'
 import SignUp from './SignUp.jsx'
 import About from './About.jsx'
+import ParentSettings from './ParentSettings.jsx'
+import NannyProfile from './NannyProfile.jsx'
 
 const router = createBrowserRouter([
   {path: '/', element: <App/>},
@@ -15,7 +17,8 @@ const router = createBrowserRouter([
   {path: '/login', element: <Login/>},
   {path: '/signup', element: <SignUp/>},
   {path: '/about', element: <About/>},
-
+  {path: '/parentSettings',element:<ParentSettings/>},
+  {path: '/nannyProfile', element:<NannyProfile/>}
 ]);
 
 createRoot(document.getElementById('root')).render(
