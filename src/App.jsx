@@ -2,10 +2,17 @@ import './App.css'
 import Footer from './generic components/Footer.jsx'
 import Header from './generic components/Header.jsx'
 import { cities,area,geitonia } from "../global_assets/global_values.jsx";
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useContext } from 'react';
 import {Link } from 'react-router-dom';
+import { RenderHeaderNavbar } from "../global_assets/global_functions.jsx";
+import {UserContext} from './usrContext.jsx'
+
 // import ParentSettings from './ParentSettings.jsx';
 function App() {
+
+
+
+
   const images = [
     'https://images.pexels.com/photos/6974310/pexels-photo-6974310.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', // Image 1
     'https://www.ziprecruiter.com/svc/fotomat/public-ziprecruiter/cms/829365088InfantNanny.jpg=ws1280x960', // Image 2
@@ -45,10 +52,13 @@ function App() {
   //     <ParentSettings/>
   //   </>
   // )
+  const { userData, setUserData } = useContext(UserContext);
+
 
   return (
     <div className='w-full h-screen overflow-hidden flex flex-col justify-between'>
-      <Header/>
+      {/* <Header/> */}
+      {RenderHeaderNavbar(userData)}
       {/* main page */}
       <div className="w-full flex flex-grow relative   ">
 
@@ -143,4 +153,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

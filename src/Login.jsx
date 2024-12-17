@@ -1,12 +1,44 @@
 import Header from "./generic components/Header";
 import Footer
  from "./generic components/Footer";
- import { Link } from "react-router-dom";
+ import { Link ,useNavigate} from "react-router-dom";
 import { useState } from "react";
 import { FaEye } from "react-icons/fa6";
 import { FaEyeSlash } from "react-icons/fa";
+import {UserContext} from './usrContext.jsx'
+import {useContext} from 'react'
 function Login(){
+    const nav=useNavigate();
+    const { userData, setUserData } = useContext(UserContext);
 
+    const [email,setEmail]= useState(undefined)
+    const [password,setPassword] = useState(undefined)
+
+    const handleLogin =({email,password})=>{
+        if(email==="ilias" && password==="1"){
+            setUserData({
+                name:"2sougiades",
+                surname:"27tsouries",
+                AMKA:"12345678901",
+                gender:"Male",
+                role:"parent"
+            })
+            nav(-1)
+        }
+        else if(email==="nasos" && password==="2"){
+            setUserData({
+                name:"nasos",
+                surname:"fykas",
+                AMKA:"0987654321",
+                gender:"Female",
+                role:"nanny"
+            })
+            nav(-1)
+        }
+
+
+    }
+  
     const [passwordVisibility,setPasswordVisibility] = useState(false);
     const toggleVisibility =()=> setPasswordVisibility(pV => !pV);
 
@@ -22,6 +54,8 @@ function Login(){
                     <input  type="text" 
                             className="w-full h-10 border-2 rounded-md pl-2 mt-1"
                             placeholder="johndoe@gmail.com"
+                            value={email}
+                            onChange={(e)=>setEmail(e.target.value)}
                             />
                 </div>
                 
@@ -31,6 +65,8 @@ function Login(){
                     <div className="w-full flex  items-center justify-center">
                         <input  type={passwordVisibility ? "text" : "password"}
                                 className="w-full h-10 border-l-2 border-y-2 rounded-l-md pl-2 mt-1"
+                                value={password}
+                                onChange={(e)=>setPassword(e.target.value)}
                                 />
                         <button onClick={toggleVisibility} className="w-7  rounded-r-md border-2 h-10 mt-1 bg-white flex items-center justify-center">
                             {!passwordVisibility ? <FaEye/> : <FaEyeSlash/>}
@@ -51,7 +87,7 @@ function Login(){
                 </span>
 
                 
-                <Link to='/' className="bg-pink-600 h-10 w-22  ml-60 flex items-center text-white rounded-md px-3 py-1 mt-5">Σύνδεση</Link>
+                <button onClick={()=>handleLogin({email,password})} className="bg-pink-600 h-10 w-22  ml-60 flex items-center text-white rounded-md px-3 py-1 mt-5">Σύνδεση</button>
                 </div>
             </div>
             <Footer/>

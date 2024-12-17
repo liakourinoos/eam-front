@@ -1,13 +1,18 @@
-import ParentHeader from "./generic components/ParentHeader.jsx";
+// import ParentHeader from "./generic components/ParentHeader.jsx";
+// import Header from './generic components/Header.jsx'
+
 import Footer from './generic components/Footer.jsx'
 import OfferProfile from "./views/OfferProfile.jsx";
-import ParentNavbar from "./generic components/ParentNavbar.jsx";
-import { useState, useEffect } from "react";
+// import ParentNavbar from "./generic components/ParentNavbar.jsx";
+// import NannyNavbar from './generic components/NannyNavbar.jsx'
+import { useState, useEffect,useContext } from "react";
 // for calendar
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { cities,area,geitonia } from "../global_assets/global_values.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
+import { RenderHeaderNavbar } from "../global_assets/global_functions.jsx";
+import {UserContext} from './usrContext.jsx'
 
 function Search() {
 
@@ -52,11 +57,18 @@ function Search() {
     const [selectedDate, setSelectedDate] = useState(null);
     const today = new Date();
 
+    const { userData, setUserData } = useContext(UserContext);
+
+
     return (
         <div className="">
-            <ParentHeader />
-            {/* <NannyNavbar/> */}
-            <ParentNavbar/>
+            {/* {!userData && <Header/>}
+            {userData?.role==="parent" && <ParentHeader/>}
+            {userData?.role==="parent" && <ParentNavbar/>}
+            {userData?.role==="nanny" && <ParentHeader/>}
+            {userData?.role==="nanny" && <NannyNavbar/>} */}
+            {RenderHeaderNavbar(userData)}
+
             <div className="w-full flex h-screen justify-between bg-slate-300">
 
                 {/* left div - filters */}

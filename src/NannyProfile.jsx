@@ -3,7 +3,9 @@ import Header from './generic components/Header.jsx'
 import {hours,days,availabilityMatrix} from '../global_assets/global_values.jsx'
 import { Link } from 'react-router-dom';
 import { FaCheck, FaFile } from 'react-icons/fa6';
-import { FaFemale, FaQuestionCircle, FaRegQuestionCircle } from 'react-icons/fa';
+import { FaFemale, FaRegQuestionCircle } from 'react-icons/fa';
+import {useContext} from 'react'
+import {UserContext } from './usrContext.jsx'
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 // import { MdStarBorder } from 'react-icons/md';
 function NannyProfile(){
@@ -12,6 +14,10 @@ function NannyProfile(){
     const fullStars = Math.floor(rating); // Integer part (e.g., for 4.5, this will be 4)
     const halfStars = rating % 1 >= 0.5 ? 1 : 0; // Half star if there's a decimal part
     const emptyStars = 5 - fullStars - halfStars; // Remaining stars are empty
+
+    const { userData, setUserData } = useContext(UserContext);
+
+
     return(
         <div className="w-full">
             <Header/>
@@ -64,9 +70,9 @@ function NannyProfile(){
                         </div>
 
                         {/* Right section: contact button */}
-                        <button className="w-1/5 shadow-md shadow-gray-600 bg-white text-2xl rounded-md font-medium h-1/2 ml-auto mr-4">
+                        <Link to={`${userData ? '/communicate' : '/login'}`} className="w-1/5 shadow-md shadow-gray-600 bg-white text-2xl flex items-center justify-center rounded-md font-medium h-1/2 ml-auto mr-4">
                             Επικοινωνία
-                        </button>
+                        </Link>
                     </div>
 
                     {/* bio section */}

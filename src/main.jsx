@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { UserProvider } from "./usrContext.jsx"; // Import your context provider
 import './index.css'
 // components 
 import App from './App.jsx'
@@ -21,8 +22,14 @@ const router = createBrowserRouter([
   {path: '/nannyProfile', element:<NannyProfile/>}
 ]);
 
+
+
+
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router}/>
+      <UserProvider>
+        <RouterProvider router={router}/>
+      </UserProvider>
   </StrictMode>,
 )
