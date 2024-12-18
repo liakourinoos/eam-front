@@ -1,16 +1,23 @@
-import { useState } from "react";
+import { useState,useContext } from "react";
 // import Header from "./generic components/Header";
 import Footer from "./generic components/Footer";
-import NannyNavbar from './generic components/NannyNavbar.jsx'
+// import NannyNavbar from './generic components/NannyNavbar.jsx'
 import ParentProfileEdit from "./views/ParentProfileEdit.jsx";
-import ParentHeader from "./generic components/ParentHeader.jsx";
+// import ParentHeader from "./generic components/ParentHeader.jsx";
+import {RenderHeaderNavbar} from '../global_assets/global_functions.jsx'
+import { UserContext } from "./customHooks.jsx";
+
 function ParentSettings(){
     const [shownPage,setShownPage]= useState(1);
     const toggleShownPage=(num)=> setShownPage(num)
+
+    const { userData, setUserData } = useContext(UserContext);
+
     return(
         <div className="w-full  "> 
-        <ParentHeader/>
-        <NannyNavbar/>
+        {/* <ParentHeader/>
+        <NannyNavbar/> */}
+        {RenderHeaderNavbar(userData)}
             {/* //main div to change what type of info will be changed */}
             <div className="w-full  flex ">
 
@@ -28,7 +35,7 @@ function ParentSettings(){
                 {/* right div */}
 
                 <div className="w-full   ">
-                    {shownPage ==1 && <ParentProfileEdit/>}
+                    {shownPage ==1 && <ParentProfileEdit />}
                     {/* {shownPage==1 && <p>Option 1</p>} */}
                     {/* {shownPage ==2 && <ParentAccount Edit/>} */}
                     {shownPage==2 && <p>Option 2</p>}

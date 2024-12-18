@@ -3,13 +3,12 @@ import Footer from './generic components/Footer.jsx'
 import Header from './generic components/Header.jsx'
 import { cities,area,geitonia } from "../global_assets/global_values.jsx";
 import { useState, useEffect,useContext } from 'react';
-import {Link } from 'react-router-dom';
+import {Link, useNavigate } from 'react-router-dom';
 import { RenderHeaderNavbar } from "../global_assets/global_functions.jsx";
-import {UserContext} from './usrContext.jsx'
+import {UserContext} from './customHooks.jsx'
 
 // import ParentSettings from './ParentSettings.jsx';
 function App() {
-
 
 
 
@@ -53,16 +52,24 @@ function App() {
   //   </>
   // )
   const { userData, setUserData } = useContext(UserContext);
+  const nav=useNavigate();
+
+    useEffect(() => {
+      if (userData) {
+          // Navigate to /search or any other route after user is logged in
+          nav("/search");
+      }
+  }, [userData, nav]); 
 
 
-  return (
+  if(!userData) return(
     <div className='w-full h-screen overflow-hidden flex flex-col justify-between'>
       {/* <Header/> */}
       {RenderHeaderNavbar(userData)}
       {/* main page */}
       <div className="w-full flex flex-grow relative   ">
 
-        {/* Blue Div (Background) */}
+        {/* Background) */}
         <div
           className=" h-full w-3/5 absolute top-0 right-0 z-0"
         >

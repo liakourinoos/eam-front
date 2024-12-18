@@ -2,14 +2,14 @@ import { Link } from "react-router-dom";
 
 function OfferProfile() {
     return (
-        <Link to='/nannyProfile' className="w-3/4 h-36 mx-auto my-5  flex justify-between bg-gray-400 rounded-md p-1 shadow-md shadow-gray-700">
+        <Link to='/nannyProfile' className="w-4/5 h-36 mx-auto my-5  flex justify-between bg-stone-100 rounded-md p-1 shadow-md shadow-gray-700">
             {/* photo */}
-            <div className="h-full w-1/6  flex items-center justify-center">
+            <div className="h-full w-1/5  flex items-center justify-center">
                 <img src="https://wallpapers.com/images/featured/tiktok-pfp-ideas-mdtddnjjjrt9f5e7.jpg" className="object-cover size-28 rounded-full "></img>
             </div>
 
             {/* name, rating and bio */}
-            <div className="w-5/6 h-full flex flex-col">
+            <div className="w-full h-full flex flex-col pl-2">
 
                 {/* box 1: name and ratings */}
                 <div className="w-full  flex justify-between pr-1">                
@@ -34,6 +34,31 @@ function OfferProfile() {
                         naso gamiesai
                         naso gamiesai
                         naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai
+                        naso gamiesai        naso gamiesai
                         naso gamiesai
                         naso gamiesai
                         naso gamiesai

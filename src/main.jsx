@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { UserProvider } from "./usrContext.jsx"; // Import your context provider
+import { UserProvider } from "./customHooks.jsx"; // Import your context provider
 import './index.css'
 // components 
 import App from './App.jsx'

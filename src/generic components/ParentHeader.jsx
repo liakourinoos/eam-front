@@ -5,8 +5,11 @@ import { FaGear } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
 import { useState,useContext } from 'react';
 import { useNavigate } from "react-router-dom";
-import {UserContext} from '../usrContext.jsx'
-function ParentHeader(){
+import {UserContext} from '../customHooks.jsx'
+import PropTypes from 'prop-types';
+
+
+function ParentHeader({main_page="/"}){
     const nav=useNavigate();
 
     const [hover,setHover] = useState(false)
@@ -28,7 +31,7 @@ function ParentHeader(){
             {/* box for logo and name */}
             <div className="flex w-1/3 items-center h-full">
                 <img src={logo} alt="logo" className="w-1/2 h-full"/>
-                <Link to='/' className='text-4xl ml-2 font-bold text-purple-600'>Nanika</Link>
+                <Link to={main_page} className='text-4xl ml-2 font-bold text-purple-600'>Nanika</Link>
                 {/* language toggle */}
                 <div>
                     
@@ -64,3 +67,7 @@ function ParentHeader(){
 }
 
 export default ParentHeader;
+
+ParentHeader.propTypes= {
+    main_page:PropTypes.string,
+};

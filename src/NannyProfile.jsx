@@ -5,9 +5,12 @@ import { Link } from 'react-router-dom';
 import { FaCheck, FaFile } from 'react-icons/fa6';
 import { FaFemale, FaRegQuestionCircle } from 'react-icons/fa';
 import {useContext} from 'react'
-import {UserContext } from './usrContext.jsx'
+import {UserContext } from './customHooks.jsx'
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 // import { MdStarBorder } from 'react-icons/md';
+import {RenderHeaderNavbar} from '../global_assets/global_functions.jsx'
+
+
 function NannyProfile(){
     const gender="Θηλυκό"
     const rating=3.7;
@@ -20,8 +23,7 @@ function NannyProfile(){
 
     return(
         <div className="w-full">
-            <Header/>
-           
+            {RenderHeaderNavbar(userData)}
 
             {/* main page */}
             <div className=' w-full bg-gray-200 flex'>

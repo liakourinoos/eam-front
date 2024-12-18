@@ -1,6 +1,15 @@
 import { MdAddPhotoAlternate } from "react-icons/md";
-
+// import PropTypes from 'prop-types';
+import {UserContext} from '../customHooks.jsx'
+import {useContext} from 'react'
 function ParentProfileEdit(){
+
+    //get user info
+    const { userData, setUserData } = useContext(UserContext);
+
+    const handleBioChange = (e) => {
+        setUserData({ ...userData, bio: e.target.value });
+    };
 
     return(
         <div className="w-full h-full oveflow-y-auto flex gap-5 py-10 flex-col items-center">
@@ -28,7 +37,7 @@ function ParentProfileEdit(){
                 <div >
                     <p className="font-medium">Όνομα</p>
                     <input  disabled className="bg-gray-300 w-full h-10 font-medium rounded-md border-2 border-gray-500 px-1 "
-                            value="ΑΑΑ"
+                            value={userData?.name}
                             title="Τα συμπληρωμένα στοιχεία αντλήθηκαν από την ιστοσελίδα του gov.gr"
                     ></input>
                 </div>
@@ -38,7 +47,7 @@ function ParentProfileEdit(){
                 <div >
                     <p className="font-medium">Επίθετο</p>
                     <input  disabled className="bg-gray-300 w-full h-10 font-medium rounded-md border-2 border-gray-500 px-1"
-                            value="ΒΒΒ"
+                            value={userData?.surname}
                             title="Τα συμπληρωμένα στοιχεία αντλήθηκαν από την ιστοσελίδα του gov.gr"
 
                     ></input>
@@ -49,7 +58,7 @@ function ParentProfileEdit(){
                 <div >
                     <p className="font-medium">ΑΜΚΑ</p>
                     <input  disabled className="bg-gray-300 w-full h-10 font-medium rounded-md border-2 border-gray-500 px-1"
-                            value="651632165"
+                            value={userData?.AMKA}
                             title="Τα συμπληρωμένα στοιχεία αντλήθηκαν από την ιστοσελίδα του gov.gr"
 
                     ></input>
@@ -60,7 +69,7 @@ function ParentProfileEdit(){
                 <div >
                     <p className="font-medium">Φύλο</p>
                     <input  disabled className="bg-gray-300 w-full h-10 font-medium rounded-md border-2 border-gray-500 px-1"
-                            value="Θηλυκό"
+                            value={userData?.gender}
                             title="Τα συμπληρωμένα στοιχεία αντλήθηκαν από την ιστοσελίδα του gov.gr"
 
                     ></input>
@@ -72,7 +81,11 @@ function ParentProfileEdit(){
                 <div className="label ml-1">
                     <span className="label-text font-medium">Σύντομο Βιογραφικό</span>
                 </div>
-                <textarea className="textarea textarea-bordered h-24 w-full px-1 resize-none border-2 border-gray-700 rounded-md"></textarea>
+                <textarea   
+                            className="textarea  cursor-pointer textarea-bordered h-24 w-full px-1 resize-none border-2 border-gray-700 rounded-md"
+                            value={userData?.bio}
+                            onChange={handleBioChange}
+                />
             </label>
 
         </div>
@@ -80,3 +93,13 @@ function ParentProfileEdit(){
 }
 
 export default ParentProfileEdit;
+
+// ParentProfileEdit.propTypes= {
+//     userData:PropTypes.shape({
+//         name: PropTypes.string.isRequired,
+//         surname: PropTypes.string.isRequired,
+//         AMKA: PropTypes.string.isRequired,
+//         gender: PropTypes.isRequired, // or more values if needed
+//         role: PropTypes.string.isRequired,
+//     })
+//   };

@@ -12,7 +12,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { cities,area,geitonia } from "../global_assets/global_values.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import { RenderHeaderNavbar } from "../global_assets/global_functions.jsx";
-import {UserContext} from './usrContext.jsx'
+import {UserContext} from './customHooks.jsx'
 
 function Search() {
 
@@ -29,20 +29,9 @@ function Search() {
     const [town, setTown] = useState(selectedTown);
     const [location, setLocation] = useState(selectedLocation);
     const [neighborhood, setNeighborhood] = useState(selectedNeighborhood);
-
-    // Clear state on refresh
-    useEffect(() => {
-        if (loc.state) {
-            navigate(loc.pathname, { replace: true, state: null });
-        }
-    }, [loc, navigate]);
-
-    // useEffect(() => {
-    //     console.log("Town:", town);
-    //     console.log("Location:", location);
-    //     console.log("Neighborhood:", neighborhood);
-    // }, [town, location, neighborhood]);
-
+    const [atMyHouse,setAtMyHouse]= useState("")
+    const [childAge,setChildAge] = useState("");
+    const [gender,setGender] = useState("")
     const [experienceSlider, setExperienceSlider] = useState(0);
     const handleExperienceChange = (e) => {
         setExperienceSlider(Number(e.target.value));
@@ -53,6 +42,15 @@ function Search() {
         setYearsSlider(Number(e.target.value));
     };
 
+    // Clear state on refresh
+    useEffect(() => {
+        if (loc.state) {
+            navigate(loc.pathname, { replace: true, state: null });
+        }
+    }, [loc, navigate]);
+
+
+
     // For calendar
     const [selectedDate, setSelectedDate] = useState(null);
     const today = new Date();
@@ -62,11 +60,7 @@ function Search() {
 
     return (
         <div className="">
-            {/* {!userData && <Header/>}
-            {userData?.role==="parent" && <ParentHeader/>}
-            {userData?.role==="parent" && <ParentNavbar/>}
-            {userData?.role==="nanny" && <ParentHeader/>}
-            {userData?.role==="nanny" && <NannyNavbar/>} */}
+          
             {RenderHeaderNavbar(userData)}
 
             <div className="w-full flex h-screen justify-between bg-slate-300">
@@ -116,7 +110,7 @@ function Search() {
                         {/* Other Filters */}
                         <div className="flex flex-col items-center">
                             <p className='text-l w-60'>Απασχόληση επαγγελματία στην οικία μου</p>
-                            <select value={""} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                            <select value={atMyHouse} onChange={(e)=>setAtMyHouse(e.target.value)} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
                                 <option>Ναι</option>
                                 <option>Όχι</option>
@@ -125,7 +119,7 @@ function Search() {
 
                         <div>
                             <p className='text-l'>Ηλικία Παιδιού</p>
-                            <select value={""} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                            <select value={childAge} onChange={(e)=>setChildAge(e.target.value)} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
                                 <option>0-1</option>
                                 <option>1-3</option>
@@ -148,7 +142,7 @@ function Search() {
 
                         <div>
                             <p className='text-l'>Φύλο</p>
-                            <select value={""} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                            <select value={gender} onChange={(e)=>setGender(e.target.value)} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
                                 <option>Male</option>
                                 <option>Female</option>

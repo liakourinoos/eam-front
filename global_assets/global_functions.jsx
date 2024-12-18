@@ -20,7 +20,7 @@ export const RenderHeaderNavbar=(usrData)=>{
     else if(usrData?.role==="parent"){
         return (
             <>
-                <ParentHeader/>
+                <ParentHeader main_page={'/search'} />
                 <ParentNavbar/>
             </>
         )
@@ -28,7 +28,7 @@ export const RenderHeaderNavbar=(usrData)=>{
     else if(usrData?.role==="nanny"){
         return (
             <>
-                <ParentHeader/>
+                <ParentHeader />
                 <NannyNavbar/>
             </>
         )
