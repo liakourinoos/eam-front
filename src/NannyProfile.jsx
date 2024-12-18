@@ -1,5 +1,4 @@
 import Footer from './generic components/Footer.jsx'
-import Header from './generic components/Header.jsx'
 import {hours,days,availabilityMatrix} from '../global_assets/global_values.jsx'
 import { Link } from 'react-router-dom';
 import { FaCheck, FaFile } from 'react-icons/fa6';
@@ -9,7 +8,7 @@ import {UserContext } from './customHooks.jsx'
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 // import { MdStarBorder } from 'react-icons/md';
 import {RenderHeaderNavbar} from '../global_assets/global_functions.jsx'
-
+import NannyReview from './views/NannyReview.jsx'
 
 function NannyProfile(){
     const gender="Θηλυκό"
@@ -35,7 +34,7 @@ function NannyProfile(){
                     <div className="breadcrumbs pl-5 text-md">
                         <ul>
                             <li><Link to="/search">Αναζήτηση</Link></li>
-                            <li>Προφίλ Επαγγελματία</li>
+                            <li className='font-medium'>Προφίλ Επαγγελματία</li>
                         </ul>
                     </div>
 
@@ -56,7 +55,7 @@ function NannyProfile(){
                                     <FaFemale className='text-xl' title={gender} />
                                 </div>
                                 <p>3 χρόνια εμπειρίας</p>
-                                <div className="flex items-center" title={`βαθμολογία: ${rating}/5`}>
+                                <div className="flex items-center" title={`Βαθμολογία: ${rating}/5`}>
                                     {/* Render full stars */}
                                     {Array.from({ length: fullStars }, (_, idx) => (
                                         <FaStar key={`full-${idx}`} className="text-black" />
@@ -72,7 +71,7 @@ function NannyProfile(){
                         </div>
 
                         {/* Right section: contact button */}
-                        <Link to={`${userData ? '/communicate' : '/login'}`} className="w-1/5 shadow-md shadow-gray-600 bg-white text-2xl flex items-center justify-center rounded-md font-medium h-1/2 ml-auto mr-4">
+                        <Link to={`${userData ? '/contact' : '/login'}`} className="w-1/5 shadow-md shadow-gray-600 bg-white text-2xl flex items-center justify-center rounded-md font-medium h-1/2 ml-auto mr-4">
                             Επικοινωνία
                         </Link>
                     </div>
@@ -133,6 +132,15 @@ function NannyProfile(){
                 <div className='border-b-2 border-gray-700 my-10 w-3/4 mx-auto h-1'></div>
 
                 <p className='text-2xl mx-auto w-fit font-medium'>Πρόσφατες Αξιολογήσεις Γονέων </p>
+
+                <div className='w-full  mt-5 mb-3  flex flex-col items-center gap-4'>
+                    <NannyReview name='Maria' surname='Pap' rating={5} date='99/99/99999' review='good nanny!'/>
+                    <NannyReview name='Maria' surname='Pap' rating={4} date='99/99/99999' review='could be better'/>
+
+                    <NannyReview name='Maria' surname='Pap' rating={2} date='99/99/99999' review={"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"}/>
+                    <NannyReview name='Maria' surname='Pap' rating={1} date='99/99/99999' review='would not recommend!'/>
+
+                </div>
 
                 </div>
 

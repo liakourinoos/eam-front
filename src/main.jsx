@@ -11,6 +11,7 @@ import SignUp from './SignUp.jsx'
 import About from './About.jsx'
 import ParentSettings from './ParentSettings.jsx'
 import NannyProfile from './NannyProfile.jsx'
+import Contact from './Contact.jsx'
 
 const router = createBrowserRouter([
   {path: '/', element: <App/>},
@@ -19,7 +20,8 @@ const router = createBrowserRouter([
   {path: '/signup', element: <SignUp/>},
   {path: '/about', element: <About/>},
   {path: '/parentSettings',element:<ParentSettings/>},
-  {path: '/nannyProfile', element:<NannyProfile/>}
+  {path: '/nannyProfile', element:<NannyProfile/>},
+  {path:'/contact' , element:<Contact/>},
 ]);
 
 
