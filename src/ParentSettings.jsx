@@ -3,6 +3,7 @@ import { useState,useContext } from "react";
 import Footer from "./generic components/Footer";
 // import NannyNavbar from './generic components/NannyNavbar.jsx'
 import ParentProfileEdit from "./views/ParentProfileEdit.jsx";
+import AccountEdit from "./views/AccountEdit.jsx";
 // import ParentHeader from "./generic components/ParentHeader.jsx";
 import {RenderHeaderNavbar} from '../global_assets/global_functions.jsx'
 import { UserContext } from "./customHooks.jsx";
@@ -19,7 +20,7 @@ function ParentSettings(){
         <NannyNavbar/> */}
         {RenderHeaderNavbar(userData)}
             {/* //main div to change what type of info will be changed */}
-            <div className="w-full  flex ">
+            <div className="w-full bg-white flex ">
 
                 {/* left div to select which page will be shown */}
                 <div className="w-1/5 flex flex-col items-center h-full  mt-10 ml-10 sticky top-5 ">
@@ -38,7 +39,7 @@ function ParentSettings(){
                     {shownPage ==1 && <ParentProfileEdit />}
                     {/* {shownPage==1 && <p>Option 1</p>} */}
                     {/* {shownPage ==2 && <ParentAccount Edit/>} */}
-                    {shownPage==2 && <p>Option 2</p>}
+                    {shownPage==2 && <AccountEdit email={userData?.email} password={userData?.password} number={userData?.number} skype={userData?.skype} />}
 
 
 

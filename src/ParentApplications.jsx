@@ -1,0 +1,46 @@
+import { useState } from "react";
+import {RenderHeaderNavbar} from '../global_assets/global_functions.jsx'
+import { useContext } from 'react';
+import { UserContext } from './customHooks.jsx';
+import Footer from './generic components/Footer.jsx';
+import ParentFinalApplications from "./views/ParentFinalApplications.jsx";
+
+
+function ParentApplications() {
+    const { userData, setUserData } = useContext(UserContext);
+
+    const [selectedPage,setSelectedPage] = useState(1);
+    return (
+        <div className="w-full bg-pallete-50 h-screen">
+            {RenderHeaderNavbar(userData,2)}
+
+            {/* main page */}
+            <div className="w-full flex-grow  flex flex-col ">
+
+                {/* buttons */}
+                <div className="w-full h-16 font-medium text-xl flex items-center justify-center my-5 gap-10 rounded-md ">
+                    <button     className={` ${selectedPage===1 ? 'bg-pallete-400 border-gray-700' : "bg-gray-300 border-gray-400" } h-full rounded-md  w-1/6  border-2`}
+                                onClick={()=>setSelectedPage(1)}
+                    >
+                        Οριστικοποιημένες
+                    </button>
+
+                    <button     className={` ${selectedPage===2 ? 'bg-pallete-400 border-gray-700' : "bg-gray-300 border-gray-400" } h-full rounded-md  w-1/6  border-2`}
+                                onClick={()=>setSelectedPage(2)}
+                    >
+                        Μη Οριστικοποιημένες
+                    </button>
+                </div>
+
+                {/* page displayed */}
+                {selectedPage===1 && <ParentFinalApplications/>}
+                {/* {selectedPage===2 && <ParentDraftApplications/>} */}
+
+            </div>
+        
+            <Footer/>
+        </div>
+    );
+}
+
+export default ParentApplications;

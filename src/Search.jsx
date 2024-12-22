@@ -63,7 +63,7 @@ function Search() {
           
             {RenderHeaderNavbar(userData)}
 
-            <div className="w-full flex h-screen justify-between bg-slate-300">
+            <div className="w-full flex h-screen justify-between bg-pallete-50">
 
                 {/* left div - filters */}
                 <div className="w-1/3 h-full flex flex-col items-center overflow-y-auto py-10 ">

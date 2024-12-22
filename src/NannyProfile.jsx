@@ -3,7 +3,7 @@ import {hours,days,availabilityMatrix} from '../global_assets/global_values.jsx'
 import { Link } from 'react-router-dom';
 import { FaCheck, FaFile } from 'react-icons/fa6';
 import { FaFemale, FaRegQuestionCircle } from 'react-icons/fa';
-import {useContext} from 'react'
+import {useContext,useState,useEffect} from 'react'
 import {UserContext } from './customHooks.jsx'
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 // import { MdStarBorder } from 'react-icons/md';
@@ -19,6 +19,30 @@ function NannyProfile(){
 
     const { userData, setUserData } = useContext(UserContext);
 
+    const [isVisible, setIsVisible] = useState(false);
+
+    // Show the button when the user scrolls down
+    const handleScroll = () => {
+        if (window.scrollY > 200) { // Adjust this value as needed
+            setIsVisible(true);
+        } else {
+            setIsVisible(false);
+        }
+    };
+
+    // Scroll to the top when the button is clicked
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth', // Smooth scrolling
+        });
+    };
+
+    useEffect(() => {
+        // Listen to the scroll event
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    },[]);
 
     return(
         <div className="w-full">
@@ -71,7 +95,7 @@ function NannyProfile(){
                         </div>
 
                         {/* Right section: contact button */}
-                        <Link to={`${userData ? '/contact' : '/login'}`} className="w-1/5 shadow-md shadow-gray-600 bg-white text-2xl flex items-center justify-center rounded-md font-medium h-1/2 ml-auto mr-4">
+                        <Link to={`${userData ? '/contact' : '/login'}`} className="w-1/5  bg-pallete-300 text-gray-50  text-3xl flex items-center justify-center rounded-md font-medium h-1/2 ml-auto mr-4">
                             Επικοινωνία
                         </Link>
                     </div>
@@ -141,6 +165,15 @@ function NannyProfile(){
                     <NannyReview name='Maria' surname='Pap' rating={1} date='99/99/99999' review='would not recommend!'/>
 
                 </div>
+                        {/* Scroll to top button */}
+                {isVisible && (
+                    <button
+                    onClick={scrollToTop}
+                    className="fixed bottom-20 right-8 p-4 bg-blue-500 text-white size-16 flex items-center justify-center text-2xl font-semibold rounded-full shadow-lg hover:bg-blue-600 transition-all duration-300 z-50"
+                    >
+                        ↑
+                    </button>
+                )}
 
                 </div>
 
@@ -148,27 +181,26 @@ function NannyProfile(){
                 {/* right div, available hours and skills */}
                 <div className='w-2/6   px-2'>
                     <p className='font-medium text-xl'>Εβδομαδιαίες Διαθέσιμες ώρες</p>
-                    <table className="table-auto w-full my-1 rounded-md text-xs bg-slate-400 border-collapse">
+                    <table className="table-auto w-full my-1 rounded-md text-xs bg-slate-400 border-collapse shadow-sm shadow-gray-700">
                         <thead>
-                            <tr className="bg-gray-300 ">
-                                {/* <th className="px-2 py-1 text-center"></th> */}
+                            <tr className="bg-gray-300  rounded-md ">
                                 <th className="px-2 py-1 text-center "></th> 
                                 {/* Day headers */}
                                 {days.map((day, idx) => (
-                                    <th key={idx} className="px-2 cursor-default  text-center">{day}</th> 
+                                    <th key={idx} className="px-2 cursor-default rounded-md  text-center">{day}</th> 
                                 ))}
                             </tr>
                         </thead>
                         <tbody>
                             {hours.map((hour, idx) => (
-                                <tr key={idx} className="  hover:bg-gray-100">
+                                <tr key={idx} className="text-center border-y-2 hover:bg-gray-100">
                                     {/* Hour */}
-                                    <td className="px-4 cursor-default font-normal text-center">{hour}</td> 
-                                    {/* <th className="px-4 "></th> Empty cell for spacing */}
+                                    <td className="text-center cursor-default font-normal ">{hour}</td> 
+                                    
                                     {availabilityMatrix[idx].map((available, dayIndex) => (
-                                        <td key={dayIndex} className="px-4  text-center">
+                                        <td key={dayIndex} className="">
                                             {/* Checkmark if available */}
-                                            {available ? <FaCheck className="text-green-700" /> : ""} 
+                                            {available ? <FaCheck className="text-green-700 mx-auto" /> : ""} 
                                         </td>
                                     ))}
                                 </tr>

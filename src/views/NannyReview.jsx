@@ -11,13 +11,13 @@ function NannyReview({name="default-n" , surname="def-sur", rating=0, date="99/9
             {/* main div with name,pfp,date and star rating */}
             <div className='w-full h-2/5 rounded-t-md flex justify-between'>
                 {/* img */}
-                <div className='h-full w-1/6 pl-1 py-1 '>
+                <div className='h-full  w-20 pl-1 py-1 '>
                     <img    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT77xKzr6ZPTH_WYNuPVmYx_Lu5EvM2LXSDWQ&s"
                             className='h-full object-contain  rounded-full'
                     />
                 </div>
                 {/* rest of data, name date and rating */}
-                <div className='w-full h-2/3  flex justify-between pr-5'>
+                <div className='w-full h-full flex justify-between pr-5'>
                     {/* date and name */}
                     <div className='h-full py-1  font-medium'>
                         <p className='text-sm pl-2   '>{date}</p>
@@ -25,7 +25,7 @@ function NannyReview({name="default-n" , surname="def-sur", rating=0, date="99/9
                     </div>
 
                     {/* rating */}
-                    <div className='h-full flex items-center' title={`Βαθμολογία: ${rating}/5`}>
+                    <div className='h-full flex items-start mt-4' title={`Βαθμολογία: ${rating}/5`}>
                         {/* Render full stars */}
                         {Array.from({ length: fullStars }, (_, idx) => (
                             <FaStar key={`full-${idx}`} className="text-black" />

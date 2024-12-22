@@ -1,12 +1,13 @@
 import logo from '../assets/imgs/logo.png';
+import { PiBabyDuotone } from "react-icons/pi";
 import { Link } from 'react-router-dom';
 function Header(){
     return(
-        <div className="h-16 w-full flex justify-between border-b-2 border-black bg-red-50" >
+        <div className="h-16 w-full flex justify-between border-b-2 border-black bg-pallete-50" >
             {/* box for logo and name */}
             <div className="flex w-1/3 items-center h-full">
-                <img src={logo} alt="logo" className="w-1/2 h-full"/>
-                <Link to='/' className='text-4xl ml-2 font-bold text-purple-600'>Nanika</Link>
+                <PiBabyDuotone className="w-1/6 ml-5 h-full text-pallete-600"/>
+                <Link to='/' className='text-4xl ml-3 font-bold text-pallete-600'>Nanika</Link>
                 {/* language toggle */}
                 <div>
                     

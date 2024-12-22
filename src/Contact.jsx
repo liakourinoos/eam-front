@@ -1,18 +1,26 @@
-import {useContext}  from 'react'
+import {useContext,useState}  from 'react'
 import {UserContext } from './customHooks.jsx'
 import { RenderHeaderNavbar } from '../global_assets/global_functions.jsx';
 import Footer from './generic components/Footer.jsx'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import { MdPhone,MdEmail } from "react-icons/md";
 import { IoChevronBack } from "react-icons/io5";
 import { LiaSkype } from "react-icons/lia";
+
 function Contact(){
     const { userData, setUserData } = useContext(UserContext);
 
+    const [selectedOption, setSelectedOption] = useState('0');
+    const toggleSelectedOption =(option)=>{
+        setSelectedOption(option);
+    }
+
+    const nav=useNavigate();
+
     return(
-        <div className='w-full h-screen'>
+        <div className='w-full h-screen flex flex-col'>
             {RenderHeaderNavbar(userData)}
-            <div className='h-full bg-gray-300'>
+            <div className='flex-grow pb-5 flex flex-col bg-pallete-50'>
 
                 {/* Breadcrumbs */}
                 <div className="breadcrumbs pl-5 text-md">
@@ -20,53 +28,66 @@ function Contact(){
                         <li><Link to="/search">Αναζήτηση</Link></li>
                         <li><Link to="/nannyProfile">Προφίλ Επαγγελματία</Link></li>
                         <li className='font-medium'>Επικοινωνία με Επαγγελματία</li>
-
                     </ul>
                 </div>
 
-                {/* div for page title and back button */}
-                <div className=" mt-2 w-full h-20  flex gap-10 items-center px-2 ">
-                    <div className='size-12 bg-gray-400 rounded-md flex items-center ml-10 justify-center shadow-sm shadow-gray-600'>
-                        <IoChevronBack className='text-4xl mr-2 '/>
-                    </div>
-                    <p className='text-3xl mx-auto font-medium '>Επιλέξτε Τρόπο Επικοινωνίας</p>
-                </div>
+                {/* div for back button */}
+                    <button     className='size-12 mt-5 flex items-center justify-center bg-gray-400 rounded-md  ml-10  shadow-sm shadow-gray-600'
+                                onClick={()=>nav(-1)}
+                    >
+                        <IoChevronBack className='text-4xl'/>
+                    </button>
+
+                <p className='text-4xl mt-5 text-center font-medium'>Επιλέξτε Τρόπο Επικοινωνίας</p>
 
                 {/* options div */}
-                <div className="w-full h-1/3  font-medium  flex items-center justify-center gap-14">
-                   
-                    <div className="w-32 h-4/5 flex flex-col gap-3">
-                        <div className="size-32 rounded-md flex flex-col items-center font-medium text-lg justify-end bg-gray-400">
-                            <MdPhone className='size-14 bg-yellow-'/>
-                            <p className='mt-5'>Τηλεφωνικά</p>
+                <div className="w-full flex flex-grow font-medium items-center justify-center gap-14">
+                    <div className="group w-1/12 flex flex-col items-center gap-2">
+                        <div className={`${selectedOption==='1' && 'border-2 border-pallete-600'} h-36 cursor-pointer w-full rounded-md flex flex-col items-center justify-center gap-3 bg-pallete-300 group-hover:border-2 group-hover:border-gray-700`}
+                             onClick={()=>toggleSelectedOption('1')}>
+                            <MdPhone className='text-6xl'/>
+                            <p className='text-center'>Τηλεφωνικά</p>
                         </div>
-                        <p className='rounded-md w-full bg-gray-400 text-center'>6969696969</p>
+                        <div className={`${selectedOption==='1' && 'border-2 border-pallete-600'} w-full flex items-center justify-center group-hover:border-2 group-hover:border-gray-700 bg-pallete-300 rounded-md`}>
+                            <p className='w-full text-center overflow-x-auto'>{userData?.number}</p>
+                        </div>
                     </div>
 
-                    <div className="w-32 h-4/5 flex flex-col gap-3">
-                        <div className="size-32 rounded-md flex flex-col items-center  font-medium text-lg justify-end bg-gray-400 ">
-                            <MdEmail className='size-14'/>
-                            <p className='mt-5'>Ηλεκτρονικά</p>
+                    <div className="group w-1/12 flex flex-col items-center gap-2">
+                        <div className={`${selectedOption==='2' && 'border-2 border-pallete-600'} h-36 cursor-pointer w-full rounded-md flex flex-col items-center justify-center gap-3 bg-pallete-300 group-hover:border-2 group-hover:border-gray-700`}
+                             onClick={()=>toggleSelectedOption('2')}>
+                            <MdEmail className='text-6xl'/>
+                            <p className='text-center'>Ηλεκτρονικά</p>
                         </div>
-                        <p className='rounded-md w-full bg-gray-400  px-1 overflow-x-auto'>my_email@email.com</p>
+                        <div className={`${selectedOption==='2' && 'border-2 border-pallete-600'} w-full flex items-center justify-center group-hover:border-2 group-hover:border-gray-700 bg-pallete-300 rounded-md`}>
+                            <p className='w-full text-center overflow-x-auto'>{userData?.email}</p>
+                        </div>
                     </div>
-                   
-                    <div className="w-32 h-4/5 flex flex-col gap-3">
-                        <div className="size-32 rounded-md flex flex-col items-center font-medium text-lg justify-end bg-gray-400">
-                            <LiaSkype className="size-16 text-sky-300 "/>
-                            <p className='mt-4'>Skype</p>
-                        </div>
 
-                        <p className='rounded-md w-full bg-gray-400 px-1 overflow-x-auto'>@myskypeaddress</p>
+                    <div className={` group w-1/12 flex flex-col items-center gap-2`}>
+                        <div className={`${selectedOption==='3' && 'border-2 border-pallete-600'} ${userData?.skype.length >0 ? 'bg-pallete-300' : 'bg-gray-400'} h-36 cursor-pointer w-full rounded-md flex flex-col items-center justify-center gap-3  group-hover:border-2 group-hover:border-gray-700`}
+                             onClick={userData?.skype.length >0 ? ()=> toggleSelectedOption('3') : undefined  }>
+                            <LiaSkype className='text-6xl'/>
+                            <p className='text-center'>Skype</p>
+                        </div>
+                        <div    className={`${selectedOption==='3' && 'border-2 border-pallete-600'} ${userData?.skype.length >0 ? 'bg-pallete-300' : 'bg-gray-400'} w-full flex items-center justify-center group-hover:border-2 group-hover:border-gray-700 rounded-md`}
+                                disabled={userData?.skype.len ===0}
+                        >
+                            <p className='w-full text-center overflow-x-auto'>{userData?.skype.length>0 ? userData?.skype : "-"}</p>
+                        </div>
                     </div>
-                   
-                  
+                </div>
+
+                {/* confirm button */}
+                <div className='w-full h-1/12 flex justify-end px-32'>
+                    <button className={`text-xl font-medium rounded-md p-3 ${selectedOption==='0' ? 'bg-gray-400' : 'bg-pallete-300'}`}
+                            disabled={selectedOption==='0'}>
+                        Επιβεβαίωση
+                    </button>
                 </div>
             </div>
             <Footer/>
         </div>
-
-
     );
 }
 

@@ -6,7 +6,8 @@ import { useState, useEffect,useContext } from 'react';
 import {Link, useNavigate } from 'react-router-dom';
 import { RenderHeaderNavbar } from "../global_assets/global_functions.jsx";
 import {UserContext} from './customHooks.jsx'
-
+import { useQuery } from '@tanstack/react-query';
+import {Login} from './FetchFunctions.jsx'
 // import ParentSettings from './ParentSettings.jsx';
 function App() {
 
@@ -35,22 +36,6 @@ function App() {
   const [neighborhood,setNeighborhood] = useState("")
 
 
-  // useEffect(()=>{
-  //   console.log(town)
-  // },[town])
-  // useEffect(()=>{
-  //   console.log(neighborhood)
-  // },[neighborhood])
-
-  // useEffect(()=>{
-  //   console.log(location)
-  // },[location])
-
-  // return(
-  //   <>
-  //     <ParentSettings/>
-  //   </>
-  // )
   const { userData, setUserData } = useContext(UserContext);
   const nav=useNavigate();
 
@@ -62,6 +47,15 @@ function App() {
   }, [userData, nav]); 
 
 
+  const email = 'ilias@gmail.com';
+  const password='1'
+
+  const {data:loginData,isLoading}= useQuery({
+    queryFn: ()=> Login(email, password),
+    queryKey: ['login']
+  })
+
+ 
   if(!userData) return(
     <div className='w-full h-screen overflow-hidden flex flex-col justify-between'>
       {/* <Header/> */}
@@ -96,7 +90,7 @@ function App() {
                 <div className='pl-5 gap-7 h-full flex flex-col my-auto '>
 
                  {/* Town Filter */}
-                 <div>
+                  <div>
                     <p className='text-l'>Πόλη</p>
                     <select onChange={(e) => { setTown(e.target.value); setLocation(""); setNeighborhood(""); }} value={town} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                     <option disabled value={""}>Επιλέξτε</option>

@@ -7,7 +7,7 @@ import { useState,useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import {UserContext} from '../customHooks.jsx'
 import PropTypes from 'prop-types';
-
+import { PiBabyDuotone } from 'react-icons/pi';
 
 function ParentHeader({main_page="/"}){
     const nav=useNavigate();
@@ -27,11 +27,11 @@ function ParentHeader({main_page="/"}){
     };
 
     return(
-        <div className="h-16 w-full flex justify-between border-b-2 border-black bg-red-50" >
+        <div className="h-16 w-full flex justify-between border-b-2 border-black bg-pallete-50" >
             {/* box for logo and name */}
             <div className="flex w-1/3 items-center h-full">
-                <img src={logo} alt="logo" className="w-1/2 h-full"/>
-                <Link to={main_page} className='text-4xl ml-2 font-bold text-purple-600'>Nanika</Link>
+                <PiBabyDuotone className="w-1/6  ml-5 h-full text-pallete-600"/>
+                <Link to='/' className='text-4xl ml-3 font-bold text-pallete-600'>Nanika</Link>
                 {/* language toggle */}
                 <div>
                     
@@ -48,7 +48,7 @@ function ParentHeader({main_page="/"}){
                     <p className={`text-2xl w-3/5 font-medium text-start truncate  ${hover && 'text-red-500'}`}> {userData?.name} {userData?.surname} </p>
                 </Link>
                {/* settings */}
-                <button onClick={toggleSettings} className="relative h-full text-center hover:text-red-500">
+                <div onClick={toggleSettings} className="relative cursor-pointer w-1/6 flex items-center justify-center h-full text-center hover:text-red-500">
                     {settings && 
                         <div className='absolute top-full -right-2 flex flex-col gap-2 w-52 bg-gray-500  border-2 border-gray-700 text-white      z-10'>
                             <Link to='/parentsettings' className='flex items-center justify-evenly h-12 p-2 border-b-2 w-full'> <FaGear className='text-2xl'/><span className='text-sm'>Ρυθμίσεις Λογαριασμού</span></Link>
@@ -58,7 +58,7 @@ function ParentHeader({main_page="/"}){
 
                     <MdOutlineExpandMore className='font-bold text-4xl '/>
             
-                </button>
+                </div>
 
             </div>
 

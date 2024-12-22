@@ -22,6 +22,10 @@ function Login(){
                 name:"2sougiades",
                 surname:"27tsouries",
                 AMKA:"12345678901",
+                email:"iliasdm@gmail.com",
+                password:"1",
+                number:"6987654321",
+                skype:"iliasdm",
                 gender:"Male",
                 role:"parent",
                 bio:"THis is my bio!"
@@ -56,7 +60,7 @@ function Login(){
                 <div className="w-1/4  mt-20 ">
                     <p className="text-xl ml-1 font-medium ">Email</p>
                     <input  type="text" 
-                            className="w-full h-10 border-2 border-gray-300 rounded-md pl-2 mt-1 bg-stone-100"
+                            className="w-full h-10 border-2 border-gray-300 rounded-md pl-2 mt-1 bg-white"
                             placeholder="johndoe@gmail.com"
                             value={email}
                             onChange={(e)=>setEmail(e.target.value)}
@@ -68,11 +72,11 @@ function Login(){
                     
                     <div className="w-full flex  items-center justify-center">
                         <input  type={passwordVisibility ? "text" : "password"}
-                                className="w-full h-10 border-l-2 border-y-2 rounded-l-md pl-2 mt-1 border-gray-300 bg-stone-100"
+                                className="w-full h-10 border-l-2 border-y-2 rounded-l-md pl-2 mt-1 border-gray-300 bg-white"
                                 value={password}
                                 onChange={(e)=>setPassword(e.target.value)}
                                 />
-                        <button onClick={toggleVisibility} className="w-7  rounded-r-md border-2 border-gray-300 h-10 mt-1 bg-stone-100 flex items-center justify-center">
+                        <button onClick={toggleVisibility} className="w-7  rounded-r-md border-2 border-gray-300 h-10 mt-1 bg-white flex items-center justify-center">
                             {!passwordVisibility ? <FaEye/> : <FaEyeSlash/>}
                         </button>
 
@@ -90,8 +94,10 @@ function Login(){
                     </Link>
                 </span>
 
-                
-                <button onClick={()=>handleLogin({email,password})} className="bg-pink-600 h-10 w-22  ml-60 flex items-center font-medium text-white rounded-md px-3 py-1 mt-5">Σύνδεση</button>
+                    <div className="w-full flex justify-end px-32">
+                        <button onClick={()=>handleLogin({email,password})} className="bg-pink-600 h-10 w-32 text-lg justify-center  ml-60 flex items-center font-medium text-white rounded-md px-3 py-1 mt-5">Σύνδεση</button>
+
+                    </div>
                 </div>
             </div>
             <Footer/>

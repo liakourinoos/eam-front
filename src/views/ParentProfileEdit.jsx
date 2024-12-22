@@ -12,7 +12,7 @@ function ParentProfileEdit(){
     };
 
     return(
-        <div className="w-full h-full oveflow-y-auto flex gap-5 py-10 flex-col items-center">
+        <div className="w-full h-full  oveflow-y-auto flex gap-5 py-10 flex-col items-center">
 
             <p className="text-3xl font-bold ">Το Προφίλ Μου</p>
             <div className='flex flex-col items-center gap-2 relative '>
@@ -82,7 +82,7 @@ function ParentProfileEdit(){
                     <span className="label-text font-medium">Σύντομο Βιογραφικό</span>
                 </div>
                 <textarea   
-                            className="textarea  cursor-pointer textarea-bordered h-24 w-full px-1 resize-none border-2 border-gray-700 rounded-md"
+                            className="textarea bg-gray-100  textarea-bordered h-24 w-full px-1 resize-none border-2 border-gray-700 rounded-md"
                             value={userData?.bio}
                             onChange={handleBioChange}
                 />
