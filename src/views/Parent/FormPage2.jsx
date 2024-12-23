@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { FaQuestion } from "react-icons/fa";
 import {hours,days} from '../../../global_assets/global_values.jsx';
-
+import { MdArrowBackIosNew } from "react-icons/md";
 function FormPage2({ form, setForm, nextFn }) {
     const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -75,7 +75,12 @@ function FormPage2({ form, setForm, nextFn }) {
                 <li className="step">Οριστικοποίηση</li>
             </ul>
 
-            <p className="text-3xl font-medium my-20 text-center">Περιοχή και Πρόγραμμα</p>
+            <button onClick={()=>nextFn(-1)}
+                    className="bg-white  mt-10 ml-10 flex items-center justify-center font-medium border-2 size-14 border-gray-500 text-md rounded-md "    
+            >
+                <MdArrowBackIosNew className="text-3xl"/>
+            </button>
+            <p className="text-3xl font-medium mt-5 mb-10 text-center">Περιοχή και Πρόγραμμα</p>
 
             <div className="w-1/6 mx-auto">
                 <div className="flex gap-2 items-center">
@@ -208,12 +213,12 @@ function FormPage2({ form, setForm, nextFn }) {
             </div>
 
             <div className='w-11/12 mx-auto flex justify-end'>                    
-                <button onClick={nextFn}
+                <button onClick={()=> nextFn(1)}
                         className={` border-2 font-medium w-48 border-gray-500 text-md px-2 mr-10 h-14 rounded-md my-3
-                                    ${!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" ? 'bg-gray-300' : 'bg-white' }
+                                    ${!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" || form.name==="" || form.surname==="" || form.AMKA==="" || form.schedule.length===0 ? 'bg-gray-300' : 'bg-white' }
                         `}
-                        disabled={!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address===""}
-                        title={`${!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" ? 'Παρακαλώ συμπληρώστε όλα τα πεδία.' : "" }`}
+                        disabled={!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" || form.name==="" || form.surname==="" || form.AMKA==="" || form.schedule.length===0}
+                        title={`${!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" || form.name==="" || form.surname==="" || form.AMKA==="" || form.schedule.length===0 ? 'Παρακαλώ συμπληρώστε όλα τα πεδία.' : "" }`}
                 >
                     Οριστικοποίηση Αίτησης
                 </button>

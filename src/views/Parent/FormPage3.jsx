@@ -2,6 +2,7 @@ import { useState } from "react";
 import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
 import { FaCheckCircle } from "react-icons/fa";
+
 function FormPage3({ form, setForm, nextFn }) {
 
     return (

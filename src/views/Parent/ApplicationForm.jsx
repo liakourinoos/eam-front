@@ -23,7 +23,7 @@ function ApplicationForm({action="Δημιουργία Νέας Αίτησης"}
     });
 
     const [selectedPage,setSelectedPage] = useState(1);
-    const handleNextPage = ()=> setSelectedPage(sp => sp+1);
+    const handleNextPage = (num=1)=> setSelectedPage(sp => sp+num);
 
     return(
         <div className='w-full h-screen flex flex-col bg-pallete-50'>
@@ -48,7 +48,6 @@ function ApplicationForm({action="Δημιουργία Νέας Αίτησης"}
                 </div>
 
                 {/* main content, the two page form */}
-                {/* <div className='flex-grow flex flex-col'> */}
                     <div className='w-11/12 mx-auto flex flex-col flex-grow bg-pallete-100 rounded-md shadow-md shadow-gray-400 mb-3 '>
 
                         {/* page1,2,3 here */}
@@ -59,7 +58,6 @@ function ApplicationForm({action="Δημιουργία Νέας Αίτησης"}
 
 
                     </div>
-                {/* </div> */}
 
             </div>
             <Footer/>

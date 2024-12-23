@@ -83,7 +83,7 @@ function FormPage1({ form, setForm, nextFn }) {
             </div>
 
             <div className='w-11/12  mx-auto flex justify-end '>                    
-                            <button onClick={()=>{nextFn()}}
+                            <button onClick={()=>{nextFn(1)}}
                                     className='bg-white border-2 font-medium w-48 border-gray-500 text-md px-2 mr-10 h-14 rounded-md my-3'
                             >
                                 Επόμενο
