@@ -26,19 +26,22 @@ function PaymentInfo({firstName,lastName,paymentDate,voucher}) {
         return new Date(formatDate(paymentDate)) < new Date(currentDate);
     };
     return (
-        <div className='w-full h-20 text-2xl rounded-md border-2 border-gray-300 bg-white flex items-center font-medium justify-between py-2 px-10'>
-            <div className='flex gap-3'>
+        <div className='w-full h-20 text-2xl rounded-md border-2 text-center border-gray-300 bg-white flex items-center font-medium  py-2'>
+            <div className='flex gap-3 w-1/4 justify-center '>
                 <p>{firstName}</p>
                 <p>{lastName}</p>
             </div>
-            <div className={`flex flex-col w-1/5 items-center ${hasPaymentDatePassed() ? 'text-red-600' : ''}`}>
+            <div className={`flex flex-col w-1/4  items-center ${hasPaymentDatePassed() ? 'text-red-600' : ''}`}>
                 <p>{paymentDate}</p>
                 {hasPaymentDatePassed() && <p>(Εκπρόθεσμη οφειλή)</p>}
             </div>
-            <p>{voucher}</p>
-            <button className='bg-green-400 text-xl text-white  rounded-md w-32 h-full px-2 py-1'>
+            <p className='w-1/4  '>{voucher}</p>
+            <div className='w-1/4  flex justify-center '>
+                <button className='bg-green-400 text-xl text-white  rounded-md w-36 h-full px-2 py-1'>
                 Αποστολή Voucher
-            </button>
+                </button>
+            </div>
+            
 
         </div>
     );

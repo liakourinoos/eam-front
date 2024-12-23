@@ -4,18 +4,17 @@ import { useContext } from 'react';
 import { UserContext } from './customHooks.jsx';
 import Footer from './generic components/Footer.jsx';
 import ParentFinalApplications from "./views/ParentFinalApplications.jsx";
-
-
+import ParentDraftApplications from "./views/ParentDraftApplications.jsx";
 function ParentApplications() {
     const { userData, setUserData } = useContext(UserContext);
 
     const [selectedPage,setSelectedPage] = useState(1);
     return (
-        <div className="w-full bg-pallete-50 h-screen">
+        <div className="w-full flex flex-col bg-pallete-50 min-h-screen ">
             {RenderHeaderNavbar(userData,2)}
 
             {/* main page */}
-            <div className="w-full flex-grow  flex flex-col ">
+            <div className="w-full  flex-grow  flex flex-col ">
 
                 {/* buttons */}
                 <div className="w-full h-16 font-medium text-xl flex items-center justify-center my-5 gap-10 rounded-md ">
@@ -33,9 +32,10 @@ function ParentApplications() {
                 </div>
 
                 {/* page displayed */}
-                {selectedPage===1 && <ParentFinalApplications/>}
-                {/* {selectedPage===2 && <ParentDraftApplications/>} */}
-
+                <div className="flex flex-col flex-grow bg-pallete-50 ">                    
+                    {selectedPage===1 && <ParentFinalApplications/>}
+                    {selectedPage===2 && <ParentDraftApplications/>}
+                </div>
             </div>
         
             <Footer/>
