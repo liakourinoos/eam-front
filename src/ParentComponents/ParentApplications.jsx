@@ -1,10 +1,10 @@
 import { useState } from "react";
-import {RenderHeaderNavbar} from '../global_assets/global_functions.jsx'
+import {RenderHeaderNavbar} from '../../global_assets/global_functions.jsx'
 import { useContext } from 'react';
-import { UserContext } from './customHooks.jsx';
-import Footer from './generic components/Footer.jsx';
-import ParentFinalApplications from "./views/ParentFinalApplications.jsx";
-import ParentDraftApplications from "./views/ParentDraftApplications.jsx";
+import { UserContext } from '../customHooks.jsx';
+import Footer from '../generic components/Footer.jsx';
+import ParentFinalApplications from "../views/Parent/ParentFinalApplications.jsx";
+import ParentDraftApplications from "../views/Parent/ParentDraftApplications.jsx";
 function ParentApplications() {
     const { userData, setUserData } = useContext(UserContext);
 

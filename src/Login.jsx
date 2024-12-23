@@ -36,6 +36,9 @@ function Login(){
             setUserData({
                 name:"nasos",
                 surname:"fykas",
+                email:"fykoulinos@gmail.com",
+                password:"2",
+                number:"0004567891",
                 AMKA:"0987654321",
                 gender:"Female",
                 role:"nanny",

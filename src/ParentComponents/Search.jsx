@@ -1,18 +1,14 @@
-// import ParentHeader from "./generic components/ParentHeader.jsx";
-// import Header from './generic components/Header.jsx'
 
-import Footer from './generic components/Footer.jsx'
-import OfferProfile from "./views/OfferProfile.jsx";
-// import ParentNavbar from "./generic components/ParentNavbar.jsx";
-// import NannyNavbar from './generic components/NannyNavbar.jsx'
+import Footer from '../generic components/Footer.jsx'
+import OfferProfile from "../views/Search/OfferProfile.jsx";
 import { useState, useEffect,useContext } from "react";
 // for calendar
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { cities,area,geitonia } from "../global_assets/global_values.jsx";
+import { cities,area,geitonia } from "../../global_assets/global_values.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
-import { RenderHeaderNavbar } from "../global_assets/global_functions.jsx";
-import {UserContext} from './customHooks.jsx'
+import { RenderHeaderNavbar } from "../../global_assets/global_functions.jsx";
+import {UserContext} from '../customHooks.jsx'
 
 function Search() {
 
@@ -60,7 +56,7 @@ function Search() {
 
     return (
         <div className="">
-          
+        
             {RenderHeaderNavbar(userData)}
 
             <div className="w-full flex h-screen justify-between bg-pallete-50">

@@ -1,12 +1,12 @@
 import { useState,useContext } from "react";
 // import Header from "./generic components/Header";
-import Footer from "./generic components/Footer";
+import Footer from "../generic components/Footer.jsx";
 // import NannyNavbar from './generic components/NannyNavbar.jsx'
-import ParentProfileEdit from "./views/ParentProfileEdit.jsx";
-import AccountEdit from "./views/AccountEdit.jsx";
+import ParentProfileEdit from "../views/Profile/ProfileEdit.jsx";
+import AccountEdit from "../views/Profile/AccountEdit.jsx";
 // import ParentHeader from "./generic components/ParentHeader.jsx";
-import {RenderHeaderNavbar} from '../global_assets/global_functions.jsx'
-import { UserContext } from "./customHooks.jsx";
+import {RenderHeaderNavbar} from '../../global_assets/global_functions.jsx'
+import { UserContext } from "../customHooks.jsx";
 
 function ParentSettings(){
     const [shownPage,setShownPage]= useState(1);

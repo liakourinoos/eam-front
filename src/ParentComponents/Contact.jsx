@@ -1,7 +1,7 @@
 import {useContext,useState}  from 'react'
-import {UserContext } from './customHooks.jsx'
-import { RenderHeaderNavbar } from '../global_assets/global_functions.jsx';
-import Footer from './generic components/Footer.jsx'
+import {UserContext } from '../customHooks.jsx'
+import { RenderHeaderNavbar } from '../../global_assets/global_functions.jsx';
+import Footer from '../generic components/Footer.jsx'
 import {Link, useNavigate} from 'react-router-dom'
 import { MdPhone,MdEmail } from "react-icons/md";
 import { IoChevronBack } from "react-icons/io5";

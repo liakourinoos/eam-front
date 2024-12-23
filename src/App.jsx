@@ -50,10 +50,10 @@ function App() {
   const email = 'ilias@gmail.com';
   const password='1'
 
-  const {data:loginData,isLoading}= useQuery({
-    queryFn: ()=> Login(email, password),
-    queryKey: ['login']
-  })
+  // const {data:loginData,isLoading}= useQuery({
+  //   queryFn: ()=> Login(email, password),
+  //   queryKey: ['login']
+  // })
 
  
   if(!userData) return(

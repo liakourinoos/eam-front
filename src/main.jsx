@@ -8,16 +8,16 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './index.css'
 // components 
 import App from './App.jsx'
-import Search from './Search.jsx'
+import Search from './ParentComponents/Search.jsx'
 import Login from './Login.jsx'
 import SignUp from './SignUp.jsx'
 import About from './About.jsx'
-import ParentSettings from './ParentSettings.jsx'
-import NannyProfile from './NannyProfile.jsx'
-import Contact from './Contact.jsx'
-import ParentPayment from './ParentPayment.jsx'
-import ParentApplications from './ParentApplications.jsx'
-
+import ParentSettings from './ParentComponents/ParentSettings.jsx'
+import NannyProfile from './NannyComponents/NannyProfile.jsx'
+import Contact from './ParentComponents/Contact.jsx'
+import ParentPayment from './ParentComponents/ParentPayment.jsx'
+import ParentApplications from './ParentComponents/ParentApplications.jsx'
+import ApplicationForm from '../src/views/Parent/ApplicationForm.jsx'
 const router = createBrowserRouter([
   {path: '/', element: <App/>},
   {path: '/search', element: <Search/>},
@@ -29,6 +29,7 @@ const router = createBrowserRouter([
   {path:'/contact' , element:<Contact/>},
   {path: '/parentpayments', element: <ParentPayment/>},
   {path: '/parentapplications', element: <ParentApplications/>},
+  {path: '/applicationform', element: <ApplicationForm/>}
 ]);
 const queryClient = new QueryClient();
 

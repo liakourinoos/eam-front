@@ -3,17 +3,9 @@ import ParentNavbar from '../src/generic components/ParentNavbar'
 import ParentHeader from '../src/generic components/ParentHeader'
 import Header from '../src/generic components/Header'
 
-// export const CheckUser=({email,password})=>{
-//     if(email=="i" ){
-//         return {name:"2sougiades",Surname:"27tsouries"}
-//     }
-//     else if (email=="n")
-//         return {name:"Nasos",Surname:"Fykas"}
-//     else return {name: undefined ,Surname: undefined}
-// }
 
 
-export const RenderHeaderNavbar=(usrData)=>{
+export const RenderHeaderNavbar=(usrData, page=1)=>{
     if(!usrData){ //guest
         return <Header/>
     }
@@ -21,7 +13,7 @@ export const RenderHeaderNavbar=(usrData)=>{
         return (
             <>
                 <ParentHeader main_page={'/search'} />
-                <ParentNavbar/>
+                <ParentNavbar page={page}/>
             </>
         )
     }

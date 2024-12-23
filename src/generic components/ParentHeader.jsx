@@ -1,4 +1,3 @@
-import logo from '../assets/imgs/logo.png';
 import { Link } from 'react-router-dom';
 import { MdOutlineExpandMore } from "react-icons/md";
 import { FaGear } from "react-icons/fa6";
@@ -29,14 +28,14 @@ function ParentHeader({main_page="/"}){
     return(
         <div className="h-16 w-full flex justify-between border-b-2 border-black bg-pallete-50" >
             {/* box for logo and name */}
-            <div className="flex w-1/3 items-center h-full">
+            <Link to='/' className="flex w-1/3 items-center h-full">
                 <PiBabyDuotone className="w-1/6  ml-5 h-full text-pallete-600"/>
-                <Link to='/' className='text-4xl ml-3 font-bold text-pallete-600'>Nanika</Link>
+                <p  className='text-4xl ml-3 font-bold text-pallete-600'>Nanika</p>
                 {/* language toggle */}
                 <div>
                     
                 </div>
-            </div>
+            </Link>
             {/* user info */}
             <div className='h-full w-1/3 items-center   flex justify-end gap-3 pr-3 '>
                 <Link    to='/profile' className={`h-full w-full p-2 flex items-center justify-end gap-3 `}

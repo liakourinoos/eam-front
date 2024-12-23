@@ -1,14 +1,14 @@
-import Footer from './generic components/Footer.jsx'
-import {hours,days,availabilityMatrix} from '../global_assets/global_values.jsx'
+import Footer from '../generic components/Footer.jsx'
+import {hours,days,availabilityMatrix} from '../../global_assets/global_values.jsx'
 import { Link } from 'react-router-dom';
 import { FaCheck, FaFile } from 'react-icons/fa6';
 import { FaFemale, FaRegQuestionCircle } from 'react-icons/fa';
 import {useContext,useState,useEffect} from 'react'
-import {UserContext } from './customHooks.jsx'
+import {UserContext } from '../customHooks.jsx'
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 // import { MdStarBorder } from 'react-icons/md';
-import {RenderHeaderNavbar} from '../global_assets/global_functions.jsx'
-import NannyReview from './views/NannyReview.jsx'
+import {RenderHeaderNavbar} from '../../global_assets/global_functions.jsx'
+import NannyReview from '../views/Nanny/NannyReview.jsx'
 
 function NannyProfile(){
     const gender="Θηλυκό"
@@ -183,24 +183,33 @@ function NannyProfile(){
                     <p className='font-medium text-xl'>Εβδομαδιαίες Διαθέσιμες ώρες</p>
                     <table className="table-auto w-full my-1 rounded-md text-xs bg-slate-400 border-collapse shadow-sm shadow-gray-700">
                         <thead>
-                            <tr className="bg-gray-300  rounded-md ">
-                                <th className="px-2 py-1 text-center "></th> 
-                                {/* Day headers */}
+                            <tr className="bg-gray-300 rounded-md">
+                                <th className="px-2 py-1 text-center"></th>
+                                {/* Render the headers for the days */}
                                 {days.map((day, idx) => (
-                                    <th key={idx} className="px-2 cursor-default rounded-md  text-center">{day}</th> 
+                                    <th key={idx} className="px-2 cursor-default rounded-md text-center">
+                                        {day}
+                                    </th>
                                 ))}
                             </tr>
                         </thead>
                         <tbody>
-                            {hours.map((hour, idx) => (
-                                <tr key={idx} className="text-center border-y-2 hover:bg-gray-100">
-                                    {/* Hour */}
-                                    <td className="text-center cursor-default font-normal ">{hour}</td> 
-                                    
-                                    {availabilityMatrix[idx].map((available, dayIndex) => (
-                                        <td key={dayIndex} className="">
-                                            {/* Checkmark if available */}
-                                            {available ? <FaCheck className="text-green-700 mx-auto" /> : ""} 
+                            {/* Iterate over hours to create rows */}
+                            {hours.map((hour, hourIdx) => (
+                                <tr key={hourIdx} className="text-center border-y-2 hover:bg-gray-100">
+                                    {/* First column for the time slot */}
+                                    <td className="text-center cursor-default font-normal">{hour}</td>
+                                    {/* Iterate over days for each hour */}
+                                    {days.map((day, dayIdx) => (
+                                        <td key={dayIdx} className="border-2 border-x">
+                                            {/* Check if the current day and hour exists in the availabilityMatrix */}
+                                            {availabilityMatrix.some(
+                                                (entry) => entry.day === day && entry.hour === hour
+                                            ) ? (
+                                                <FaCheck className="text-green-800 font-medium mx-auto" />
+                                            ) : (
+                                                ""
+                                            )}
                                         </td>
                                     ))}
                                 </tr>

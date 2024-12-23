@@ -1,6 +1,6 @@
 import { MdAddPhotoAlternate } from "react-icons/md";
 // import PropTypes from 'prop-types';
-import {UserContext} from '../customHooks.jsx'
+import {UserContext} from '../../customHooks.jsx'
 import {useContext} from 'react'
 function ParentProfileEdit(){
 

@@ -2,12 +2,11 @@ import { FaFacebook } from "react-icons/fa6";
 import { FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { Link } from "react-router-dom";
-import logo from '../assets/imgs/logo.png';
 import { PiBabyDuotone } from "react-icons/pi";
 function Footer() {
 
     return(
-        <div className="w-full h-16 flex justify-between  border-t-2 border-black bg-pallete-100"> 
+        <div className="w-full h-16 flex justify-between  border-t-2 border-black bg-pallete-50"> 
             {/* div1, social media links */}
             <div className="w-1/3 h-full flex gap-10 pl-10 items-center  ">
 
@@ -32,7 +31,7 @@ function Footer() {
             {/* div2, logo */}
             <div className="w-1/3 h-full flex justify-center ">
                 <PiBabyDuotone className="w-1/6  h-full text-pallete-600"/>
-           
+            
             </div>
 
             {/* div3, support, help */}
