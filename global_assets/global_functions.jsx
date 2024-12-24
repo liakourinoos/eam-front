@@ -6,10 +6,11 @@ import Header from '../src/generic components/Header'
 
 
 export const RenderHeaderNavbar=(usrData, page=1)=>{
+    // console.log(usrData)
     if(!usrData){ //guest
         return <Header/>
     }
-    else if(usrData?.role==="parent"){
+    else if(usrData?.role===false){
         return (
             <>
                 <ParentHeader main_page={'/search'} />
@@ -17,7 +18,7 @@ export const RenderHeaderNavbar=(usrData, page=1)=>{
             </>
         )
     }
-    else if(usrData?.role==="nanny"){
+    else if(usrData?.role===true){
         return (
             <>
                 <ParentHeader />
