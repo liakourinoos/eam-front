@@ -4,7 +4,7 @@ import { FaGear } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
 import { useState,useContext } from 'react';
 import { useNavigate } from "react-router-dom";
-import {UserContext} from '../customHooks.jsx'
+import {useAuth} from '../customHooks.jsx'
 import PropTypes from 'prop-types';
 import { PiBabyDuotone } from 'react-icons/pi';
 
@@ -16,14 +16,14 @@ function ParentHeader({main_page="/"}){
     const [settings,SetSettings] = useState(false)
     const toggleSettings=()=>(SetSettings((s)=>!s))
 
-    const { userData, setUserData } = useContext(UserContext);
+    const { userData,logout } = useAuth(); // Access the user from the context
 
+    const handleLogOut=async()=>{
+        await logout(); // Call the logout function from context
+        nav("/"); // Redirect to
+    }
 
-    const handleLogout = () => {
-        setUserData(undefined);
-        nav('/');
     
-    };
 
     return(
         <div className="h-16 w-full flex justify-between border-b-2 border-black bg-pallete-50" >
@@ -51,7 +51,7 @@ function ParentHeader({main_page="/"}){
                     {settings && 
                         <div className='absolute top-full -right-2 flex flex-col gap-2 w-52 bg-gray-500  border-2 border-gray-700 text-white      z-10'>
                             <Link to='/parentsettings' className='flex items-center justify-evenly h-12 p-2 border-b-2 w-full'> <FaGear className='text-2xl'/><span className='text-sm'>Ρυθμίσεις Λογαριασμού</span></Link>
-                            <button onClick={handleLogout} className='flex items-center justify-evenly h-10 p-2 w-full'> <MdLogout  className='text-2xl'/> Αποσύνδεση</button>
+                            <button onClick={handleLogOut} className='flex items-center justify-evenly h-10 p-2 w-full'> <MdLogout  className='text-2xl'/> Αποσύνδεση</button>
 
                         </div>}
 

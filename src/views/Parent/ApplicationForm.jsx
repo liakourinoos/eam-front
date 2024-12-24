@@ -1,6 +1,6 @@
 import {RenderHeaderNavbar} from '../../../global_assets/global_functions.jsx';
 import { useContext,useState,useEffect } from 'react';
-import {UserContext} from '../../customHooks.jsx';
+import {useAuth} from '../../customHooks.jsx';
 import Footer from '../../generic components/Footer.jsx';
 import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -8,7 +8,7 @@ import FormPage1 from './FormPage1.jsx';
 import FormPage2 from './FormPage2.jsx';
 import FormPage3 from './FormPage3.jsx';
 function ApplicationForm({action="Δημιουργία Νέας Αίτησης"}){
-    const { userData, setUserData } = useContext(UserContext);
+    const { userData } = useAuth();
     // form should either start with this or be fetched from the server
     const [formState, setFormState] = useState({
         name:"",

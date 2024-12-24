@@ -6,13 +6,13 @@ import ParentProfileEdit from "../views/Profile/ProfileEdit.jsx";
 import AccountEdit from "../views/Profile/AccountEdit.jsx";
 // import ParentHeader from "./generic components/ParentHeader.jsx";
 import {RenderHeaderNavbar} from '../../global_assets/global_functions.jsx'
-import { UserContext } from "../customHooks.jsx";
+import { useAuth } from "../customHooks.jsx";
 
 function ParentSettings(){
     const [shownPage,setShownPage]= useState(1);
     const toggleShownPage=(num)=> setShownPage(num)
 
-    const { userData, setUserData } = useContext(UserContext);
+    const { userData } = useAuth();
 
     return(
         <div className="w-full  "> 

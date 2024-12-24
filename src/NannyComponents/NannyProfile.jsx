@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { FaCheck, FaFile } from 'react-icons/fa6';
 import { FaFemale, FaRegQuestionCircle } from 'react-icons/fa';
 import {useContext,useState,useEffect} from 'react'
-import {UserContext } from '../customHooks.jsx'
+import {useAuth } from '../customHooks.jsx'
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 // import { MdStarBorder } from 'react-icons/md';
 import {RenderHeaderNavbar} from '../../global_assets/global_functions.jsx'
@@ -17,7 +17,7 @@ function NannyProfile(){
     const halfStars = rating % 1 >= 0.5 ? 1 : 0; // Half star if there's a decimal part
     const emptyStars = 5 - fullStars - halfStars; // Remaining stars are empty
 
-    const { userData, setUserData } = useContext(UserContext);
+    const { userData } = useAuth();
 
     const [isVisible, setIsVisible] = useState(false);
 

@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { cities,area,geitonia } from "../../global_assets/global_values.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import { RenderHeaderNavbar } from "../../global_assets/global_functions.jsx";
-import {UserContext} from '../customHooks.jsx'
+import {useAuth} from '../customHooks.jsx'
 
 function Search() {
 
@@ -51,7 +51,7 @@ function Search() {
     const [selectedDate, setSelectedDate] = useState(null);
     const today = new Date();
 
-    const { userData, setUserData } = useContext(UserContext);
+    const { userData } = useAuth();
 
 
     return (

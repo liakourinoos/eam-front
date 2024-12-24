@@ -1,11 +1,11 @@
 import {RenderHeaderNavbar} from '../../global_assets/global_functions.jsx'
 import { useContext } from 'react';
-import { UserContext } from '../customHooks.jsx';
+import { useAuth } from '../customHooks.jsx';
 import Footer from '../generic components/Footer.jsx';
 import PaymentInfo from '../views/Parent/PaymentInfo.jsx';
 function ParentPayment() {
 
-    const { userData, setUserData } = useContext(UserContext);
+    const { userData } = useAuth();
 
 
 

@@ -5,9 +5,9 @@ import { cities,area,geitonia } from "../global_assets/global_values.jsx";
 import { useState, useEffect,useContext } from 'react';
 import {Link, useNavigate } from 'react-router-dom';
 import { RenderHeaderNavbar } from "../global_assets/global_functions.jsx";
-import {UserContext} from './customHooks.jsx'
+import {useAuth} from './customHooks.jsx'
 import { useQuery } from '@tanstack/react-query';
-import {Login} from './FetchFunctions.jsx'
+import {fetchUsers} from './FetchFunctions.jsx'
 // import ParentSettings from './ParentSettings.jsx';
 function App() {
 
@@ -36,7 +36,7 @@ function App() {
   const [neighborhood,setNeighborhood] = useState("")
 
 
-  const { userData, setUserData } = useContext(UserContext);
+  const { userData } = useAuth(); // Access the user from the context  
   const nav=useNavigate();
 
     useEffect(() => {
@@ -47,16 +47,9 @@ function App() {
   }, [userData, nav]); 
 
 
-  const email = 'ilias@gmail.com';
-  const password='1'
+  
 
-  // const {data:loginData,isLoading}= useQuery({
-  //   queryFn: ()=> Login(email, password),
-  //   queryKey: ['login']
-  // })
-
- 
-  if(!userData) return(
+  return(
     <div className='w-full h-screen overflow-hidden flex flex-col justify-between'>
       {/* <Header/> */}
       {RenderHeaderNavbar(userData)}

@@ -1,5 +1,5 @@
 import {useContext,useState}  from 'react'
-import {UserContext } from '../customHooks.jsx'
+import {useAuth } from '../customHooks.jsx'
 import { RenderHeaderNavbar } from '../../global_assets/global_functions.jsx';
 import Footer from '../generic components/Footer.jsx'
 import {Link, useNavigate} from 'react-router-dom'
@@ -8,7 +8,7 @@ import { IoChevronBack } from "react-icons/io5";
 import { LiaSkype } from "react-icons/lia";
 
 function Contact(){
-    const { userData, setUserData } = useContext(UserContext);
+    const { userData } = useAuth();
 
     const [selectedOption, setSelectedOption] = useState('0');
     const toggleSelectedOption =(option)=>{

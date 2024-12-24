@@ -1,30 +1,105 @@
-import { createContext, useState } from "react";
+import { useState, useEffect, useContext, createContext } from 'react';
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '../firebase'; // Ensure this is the correct path to your Firebase config
 
-// Create the context
-export const UserContext = createContext(undefined);
+const AuthContext = createContext();
 
-// Create the provider
-export const UserProvider = ({ children }) => {
-  // const [userData, setUserData] = useState(undefined); // Initialize with undefined
-  const [userData, setUserData] = useState({
-      name:"2sougiades",
-      surname:"27tsouries",
-      AMKA:"12345678901",
-      email:"iliasdm@gmail.com",
-      password:"1",
-      number:"6987654321",
-      skype:"iliasdm",
-      gender:"Male",
-      role:"parent",
-      bio:"THis is my bio!"
+export const useAuth = () => {
+    return useContext(AuthContext);
+};
 
-  });
+export const AuthProvider = ({ children }) => {
+    const [userData, setUserData] = useState(null); // For storing user data
+    const [loading, setLoading] = useState(true); // For loading state
+    const auth = getAuth();
 
-  return (
-    <UserContext.Provider value={{ userData, setUserData }}>
-      {children}
-    </UserContext.Provider>
-  );
+    // When the app loads, check if the user is already logged in
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    // Query to find the user document based on UID field
+                    const q = query(collection(db, 'users'), where('uid', '==', user.uid));
+                    const querySnapshot = await getDocs(q); // Get documents matching the query
+                    
+                    if (!querySnapshot.empty) {
+                        const docSnap = querySnapshot.docs[0]; // Get the first matched document
+                        setUserData({ ...docSnap.data(), uid: user.uid }); // Set user data from Firestore
+                    } else {
+                        console.error('No document found for UID:', user.uid);
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data: ', error);
+                }
+            } else {
+                setUserData(null); // No user logged in
+            }
+            setLoading(false); // Set loading to false once the user is checked
+        });
+        return unsubscribe; // Cleanup the listener on component unmount
+    }, [auth]);
+
+
+    // Login function
+    const login = async (email, password) => {
+    setLoading(true); 
+
+    try {
+         
+        // Firebase sign-in
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user; // Extract the user object
+        // console.log("User signed in successfully:", user);
+
+        // Query Firestore for user data
+        const q = query(collection(db, 'users'), where('uid', '==', user.uid));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+        const docSnap = querySnapshot.docs[0];
+        const userData = { ...docSnap.data(), uid: user.uid };
+        // console.log("User data from Firestore:", userData);
+        return userData; // Return the enriched user data
+        } else {
+        console.error("No user document found for uid:", user.uid);
+        throw new Error("User data not found in Firestore.");
+        }
+    } catch (error) {
+        console.error("Error in login function:", error.message);
+        throw error; // Re-throw to handle it in `handleLogin`
+    } finally {
+        setLoading(false); // Reset loading state
+    }
 };
 
 
+    // Logout function
+    const logout = async () => {
+        setLoading(true); // Set loading to true while logging out
+        try {
+            await signOut(auth);
+            setUserData(null); // Clear user data on logout
+        } catch (error) {
+            console.error('Error during logout:', error);
+        } finally {
+            setLoading(false); // Set loading to false after logout
+        }
+    };
+
+    const value = {
+        userData,
+        setUserData,
+        loading,
+        login,
+        logout,
+    };
+
+    return (
+        <AuthContext.Provider value={value}>
+            {/* Always render children, manage loading state independently */}
+            {children}
+        </AuthContext.Provider>
+    );
+    
+};

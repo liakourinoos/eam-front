@@ -1,15 +1,15 @@
 import { MdAddPhotoAlternate } from "react-icons/md";
 // import PropTypes from 'prop-types';
-import {UserContext} from '../../customHooks.jsx'
+import {useAuth} from '../../customHooks.jsx'
 import {useContext} from 'react'
 function ParentProfileEdit(){
 
     //get user info
-    const { userData, setUserData } = useContext(UserContext);
+    const { userData } = useAuth();
 
-    const handleBioChange = (e) => {
-        setUserData({ ...userData, bio: e.target.value });
-    };
+    // const handleBioChange = (e) => {
+    //     setUserData({ ...userData, bio: e.target.value });
+    // };
 
     return(
         <div className="w-full h-full  oveflow-y-auto flex gap-5 py-10 flex-col items-center">
