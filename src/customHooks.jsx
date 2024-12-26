@@ -83,17 +83,17 @@ export const AuthProvider = ({ children }) => {
     };
     
     // Function to fetch the user data from Firestore, for the authentication ONLY
-    const fetchUserDataByUID = async (user) => {
+    const fetchUserDataByUID = async (uid) => {
         try {
-            const q = query(collection(db, 'users'), where('uid', '==', user.uid));
+            const q = query(collection(db, 'users'), where('uid', '==', uid));
             const querySnapshot = await getDocs(q); // Get documents matching the query
 
             if (!querySnapshot.empty) {
                 const docSnap = querySnapshot.docs[0]; // Get the first matched document
                 // setUserData({ ...docSnap.data(), uid: user.uid }); // Set user data from Firestore
-                return { id: docSnap.id, ...docSnap.data() };
+                return {  ...docSnap.data(),id: docSnap.id, };
             } else {
-                console.error('No document found for UID:', user.uid);
+                console.error('No document found for UID:', uid);
             }
         } catch (error) {
             console.error('Error fetching user data: ', error);
@@ -102,6 +102,7 @@ export const AuthProvider = ({ children }) => {
 
     const refetch = async () => {
         if (auth.currentUser) {
+            console.log(auth.currentUser.uid)
             const userData = await fetchUserDataByUID(auth.currentUser.uid);
             setUserData(userData); // Re-fetch the current user data
         }

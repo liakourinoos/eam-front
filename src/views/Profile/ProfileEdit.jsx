@@ -13,16 +13,18 @@ function ParentProfileEdit(){
     const [bio,setBio] = useState("");
     
     useEffect(() => {
-        if(userData)
+        if(userData){
             console.log(userData);
             setBio(userData?.bio || "");
+        }
     }, [userData]);
 
     const {mutateAsync:changeBio,isPending} = useMutation({
-        mutationFn:() => updateBio(userData?.uid, bio),
+        mutationFn:() => updateBio(userData?.id, bio),
         onSuccess:()=>{
             console.log("Bio updated successfully")
             refetch(); // Use the captured refetch function
+            console.log("ASS")
         }
     });
 

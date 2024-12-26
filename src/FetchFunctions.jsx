@@ -30,33 +30,18 @@ export async function logInUser(email, password) {
     }
 }
 
-export async function updateBio(uid,newBio) {
-    console.log(uid,newBio)
+export async function updateBio(id,newBio) {
+    console.log(id,newBio)
     try {
-        // Create a query to find the document with the specified UID
-        const q = query(
-            collection(db, "users"),
-            where("uid", "==", uid)
-        );
+        // Directly reference the document using the document ID
+        const docRef = doc(db, "users", id); // `id` is the document ID
 
-        // Execute the query
-        const querySnapshot = await getDocs(q);
-
-        if (querySnapshot.empty) {
-            console.log("No matching document found.");
-            return;
-        }
-
-        // Get the first document (assuming UID is unique)
-        const docSnapshot = querySnapshot.docs[0];
-        const docRef = doc(db, "users", docSnapshot.id);
-
-        // Update the field
+        // Update the 'bio' field in the document
         await updateDoc(docRef, {
-            ["bio"]: newBio,
+            bio: newBio,
         });
 
-        console.log(`Document with ID ${docSnapshot.id} updated successfully.`);
+        console.log(`Document with ID ${id} updated successfully.`);
     } catch (error) {
         console.error("Error updating document:", error);
     }
