@@ -18,7 +18,7 @@ function ParentSettings(){
         <div className="w-full  "> 
         {/* <ParentHeader/>
         <NannyNavbar/> */}
-        {RenderHeaderNavbar(userData)}
+        {RenderHeaderNavbar(userData,0)}
             {/* //main div to change what type of info will be changed */}
             <div className="w-full bg-white flex ">
 

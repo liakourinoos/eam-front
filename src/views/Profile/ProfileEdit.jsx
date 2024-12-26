@@ -1,18 +1,40 @@
 import { MdAddPhotoAlternate } from "react-icons/md";
 // import PropTypes from 'prop-types';
 import {useAuth} from '../../customHooks.jsx'
-import {useContext} from 'react'
+import { useEffect,useState } from "react";
+import { updateBio } from "../../FetchFunctions.jsx";
+import { set } from "date-fns";
+import { useMutation } from "@tanstack/react-query";
 function ParentProfileEdit(){
 
     //get user info
-    const { userData } = useAuth();
+    const { userData,loading,refetch } = useAuth(); 
+    
+    const [bio,setBio] = useState("");
+    
+    useEffect(() => {
+        if(userData)
+            console.log(userData);
+            setBio(userData?.bio || "");
+    }, [userData]);
 
-    // const handleBioChange = (e) => {
-    //     setUserData({ ...userData, bio: e.target.value });
-    // };
+    const {mutateAsync:changeBio,isPending} = useMutation({
+        mutationFn:() => updateBio(userData?.uid, bio),
+        onSuccess:()=>{
+            console.log("Bio updated successfully")
+            refetch(); // Use the captured refetch function
+        }
+    });
 
-    return(
-        <div className="w-full h-full  oveflow-y-auto flex gap-5 py-10 flex-col items-center">
+    const handleBioChange = (e) => {
+        setBio(e.target.value);
+    };
+
+    if(loading) return <div className="w-full h-screen flex items-center justify-center"><span className="loading loading-spinner loading-lg"></span></div>
+
+    if(!loading) 
+        return(
+        <div className="w-full  flex gap-5 py-10 flex-col items-center">
 
             <p className="text-3xl font-bold ">Το Προφίλ Μου</p>
             <div className='flex flex-col items-center gap-2 relative '>
@@ -58,7 +80,7 @@ function ParentProfileEdit(){
                 <div >
                     <p className="font-medium">ΑΜΚΑ</p>
                     <input  disabled className="bg-gray-300 w-full h-10 font-medium rounded-md border-2 border-gray-500 px-1"
-                            value={userData?.AMKA}
+                            value={userData?.AMKA }
                             title="Τα συμπληρωμένα στοιχεία αντλήθηκαν από την ιστοσελίδα του gov.gr"
 
                     ></input>
@@ -69,7 +91,7 @@ function ParentProfileEdit(){
                 <div >
                     <p className="font-medium">Φύλο</p>
                     <input  disabled className="bg-gray-300 w-full h-10 font-medium rounded-md border-2 border-gray-500 px-1"
-                            value={userData?.gender}
+                            value={userData?.gender == true ? "Αρσενικό": "Θηλυκό"}
                             title="Τα συμπληρωμένα στοιχεία αντλήθηκαν από την ιστοσελίδα του gov.gr"
 
                     ></input>
@@ -83,10 +105,17 @@ function ParentProfileEdit(){
                 </div>
                 <textarea   
                             className="textarea bg-gray-100  textarea-bordered h-24 w-full px-1 resize-none border-2 border-gray-700 rounded-md"
-                            value={userData?.bio}
+                            value={bio}
                             onChange={handleBioChange}
                 />
             </label>
+
+            <button className="bg-pallete-300 w-32 font-medium h-10 px-2 text-center rounded-md"
+                    onClick={()=>changeBio()}
+                    disabled={!userData?.uid || isPending}
+            >
+                {isPending ? <span className="loading loading-md"></span> : "Αποθήκευση"}
+            </button>
 
         </div>
     );

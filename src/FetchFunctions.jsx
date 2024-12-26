@@ -1,8 +1,7 @@
-import { collection, addDoc ,getDocs} from "firebase/firestore";
+import { collection,getFirestore, addDoc ,getDocs,query, where,doc, updateDoc} from "firebase/firestore";
 import { db } from "../firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../firebase";
-
 
 
 export async function fetchUsers() {
@@ -28,6 +27,38 @@ export async function logInUser(email, password) {
     } catch (error) {
         console.error("Error logging in:", error);
         throw error;
+    }
+}
+
+export async function updateBio(uid,newBio) {
+    console.log(uid,newBio)
+    try {
+        // Create a query to find the document with the specified UID
+        const q = query(
+            collection(db, "users"),
+            where("uid", "==", uid)
+        );
+
+        // Execute the query
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            console.log("No matching document found.");
+            return;
+        }
+
+        // Get the first document (assuming UID is unique)
+        const docSnapshot = querySnapshot.docs[0];
+        const docRef = doc(db, "users", docSnapshot.id);
+
+        // Update the field
+        await updateDoc(docRef, {
+            ["bio"]: newBio,
+        });
+
+        console.log(`Document with ID ${docSnapshot.id} updated successfully.`);
+    } catch (error) {
+        console.error("Error updating document:", error);
     }
 }
 

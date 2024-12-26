@@ -22,17 +22,16 @@ export const AuthProvider = ({ children }) => {
                     // Query to find the user document based on UID field
                     const q = query(collection(db, 'users'), where('uid', '==', user.uid));
                     const querySnapshot = await getDocs(q); // Get documents matching the query
-                    
                     if (!querySnapshot.empty) {
                         const docSnap = querySnapshot.docs[0]; // Get the first matched document
-                        setUserData({ ...docSnap.data(), uid: user.uid }); // Set user data from Firestore
+                        setUserData({ ...docSnap.data(), uid: user.uid,id:docSnap.id }); // Set user data from Firestore
                     } else {
                         console.error('No document found for UID:', user.uid);
                     }
-                } catch (error) {
+                }catch(error){
                     console.error('Error fetching user data: ', error);
                 }
-            } else {
+            }else{
                 setUserData(null); // No user logged in
             }
             setLoading(false); // Set loading to false once the user is checked
@@ -43,35 +42,31 @@ export const AuthProvider = ({ children }) => {
 
     // Login function
     const login = async (email, password) => {
-    setLoading(true); 
+        setLoading(true); 
+        try {
+            // Firebase sign-in
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user; // Extract the user object
+            // Query Firestore for user data
+            const q = query(collection(db, 'users'), where('uid', '==', user.uid));
+            const querySnapshot = await getDocs(q);
 
-    try {
-         
-        // Firebase sign-in
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user; // Extract the user object
-        // console.log("User signed in successfully:", user);
+            if (!querySnapshot.empty) {
+                const docSnap = querySnapshot.docs[0];
+                const userData = { ...docSnap.data() , id: docSnap.id}; // Enrich user data
+                return userData; // Return the enriched user data
+            } else {
+                console.error("No user document found for uid:", user.uid);
+                throw new Error("User data not found in Firestore.");
+            }
 
-        // Query Firestore for user data
-        const q = query(collection(db, 'users'), where('uid', '==', user.uid));
-        const querySnapshot = await getDocs(q);
-
-        if (!querySnapshot.empty) {
-        const docSnap = querySnapshot.docs[0];
-        const userData = { ...docSnap.data(), uid: user.uid };
-        // console.log("User data from Firestore:", userData);
-        return userData; // Return the enriched user data
-        } else {
-        console.error("No user document found for uid:", user.uid);
-        throw new Error("User data not found in Firestore.");
+        } catch (error) {
+            console.error("Error in login function:", error.message);
+            throw error; // Re-throw to handle it in `handleLogin`
+        } finally {
+            setLoading(false); // Reset loading state
         }
-    } catch (error) {
-        console.error("Error in login function:", error.message);
-        throw error; // Re-throw to handle it in `handleLogin`
-    } finally {
-        setLoading(false); // Reset loading state
-    }
-};
+    };
 
 
     // Logout function
@@ -86,6 +81,31 @@ export const AuthProvider = ({ children }) => {
             setLoading(false); // Set loading to false after logout
         }
     };
+    
+    // Function to fetch the user data from Firestore, for the authentication ONLY
+    const fetchUserDataByUID = async (user) => {
+        try {
+            const q = query(collection(db, 'users'), where('uid', '==', user.uid));
+            const querySnapshot = await getDocs(q); // Get documents matching the query
+
+            if (!querySnapshot.empty) {
+                const docSnap = querySnapshot.docs[0]; // Get the first matched document
+                // setUserData({ ...docSnap.data(), uid: user.uid }); // Set user data from Firestore
+                return { id: docSnap.id, ...docSnap.data() };
+            } else {
+                console.error('No document found for UID:', user.uid);
+            }
+        } catch (error) {
+            console.error('Error fetching user data: ', error);
+        }
+    };
+
+    const refetch = async () => {
+        if (auth.currentUser) {
+            const userData = await fetchUserDataByUID(auth.currentUser.uid);
+            setUserData(userData); // Re-fetch the current user data
+        }
+    };
 
     const value = {
         userData,
@@ -93,6 +113,7 @@ export const AuthProvider = ({ children }) => {
         loading,
         login,
         logout,
+        refetch
     };
 
     return (
