@@ -15,7 +15,7 @@ function ParentProfileEdit(){
     useEffect(() => {
         if(userData){
             // console.log(userData);
-            setBio(userData?.bio || "");
+            setBio(userData?.bio );
         }
     }, [userData]);
 

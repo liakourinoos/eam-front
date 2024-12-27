@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 import {useAuth} from '../customHooks.jsx'
 import PropTypes from 'prop-types';
 import { PiBabyDuotone } from 'react-icons/pi';
-function ParentHeader({main_page="/"}){
+
+function UserHeader({main_page="/",role,id}){
 
 
     const nav=useNavigate();
@@ -44,7 +45,7 @@ function ParentHeader({main_page="/"}){
                 </Link>
                 {/* user info */}
                 <div className='h-full w-1/3 items-center   flex justify-end gap-3 pr-3 '>
-                    <Link    to='/profile' className={`h-full w-full p-2 flex items-center justify-end gap-3 `}
+                    <Link    to={`${role? `/nannyprofile/${id}` : `/parentprofile${id}` }`} className={`h-full w-full p-2 flex items-center justify-end gap-3 `}
                             onMouseEnter={() => toggleHover(true)}
                             onMouseLeave={() => toggleHover(false)}
                     >
@@ -71,8 +72,10 @@ function ParentHeader({main_page="/"}){
         );
 }
 
-export default ParentHeader;
+export default UserHeader;
 
-ParentHeader.propTypes= {
+UserHeader.propTypes= {
     main_page:PropTypes.string,
+    role:PropTypes.bool.isRequired,
+    id:PropTypes.string.isRequired
 };

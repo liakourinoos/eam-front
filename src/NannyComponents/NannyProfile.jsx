@@ -2,25 +2,52 @@ import Footer from '../generic components/Footer.jsx'
 import {hours,days,availabilityMatrix} from '../../global_assets/global_values.jsx'
 import { Link } from 'react-router-dom';
 import { FaCheck, FaFile } from 'react-icons/fa6';
-import { FaFemale, FaRegQuestionCircle } from 'react-icons/fa';
-import {useContext,useState,useEffect} from 'react'
+import { FaFemale, FaMale, FaRegQuestionCircle } from 'react-icons/fa';
+import {useState,useEffect} from 'react'
 import {useAuth } from '../customHooks.jsx'
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 // import { MdStarBorder } from 'react-icons/md';
 import {RenderHeaderNavbar} from '../../global_assets/global_functions.jsx'
 import NannyReview from '../views/Nanny/NannyReview.jsx'
+import { useParams } from 'react-router-dom';
+import { fetchUser } from '../FetchFunctions.jsx';
+import { useQuery } from '@tanstack/react-query';
 
 function NannyProfile(){
-    const gender="Θηλυκό"
-    const rating=3.7;
-    const fullStars = Math.floor(rating); // Integer part (e.g., for 4.5, this will be 4)
-    const halfStars = rating % 1 >= 0.5 ? 1 : 0; // Half star if there's a decimal part
-    const emptyStars = 5 - fullStars - halfStars; // Remaining stars are empty
 
-    const { userData } = useAuth();
+
+    const { userData:myData,loading } = useAuth();
+
+    const { id } = useParams();
+    
+    const [fullStars,setFullStars]=useState(0);
+    const [halfStars,setHalfStars]=useState(0); ;
+    const [emptyStars,setEmptyStars]=useState(0);
+
+    // Check if the id from the URL is the same as myData.id to avoid unnecessary fetching
+    const skipFetch = myData && myData.id === id;
+
+    // Query only if the id is different from myData.id
+    const { data: usrData, isLoading: isUserLoading } = useQuery({
+        queryKey: ['user', id],
+        queryFn: () => fetchUser(id),
+        enabled: !skipFetch, // Only run the query if we should fetch data
+        retry: 0,
+    });
+
+    const userData = skipFetch ? myData : usrData;
+
+
+    useEffect(()=>{
+        if(userData?.rating){
+            const rating = userData?.rating;
+            setFullStars(Math.floor(rating)); // Integer part (e.g., for 4.5, this will be 4)
+            setHalfStars(rating % 1 >= 0.5 ? 1 : 0); // Half star if there's a decimal part
+            setEmptyStars(5 - Math.floor(rating) - (rating % 1 >= 0.5 ? 1 : 0)); // Remaining stars are empty
+        }
+    },[userData])
 
     const [isVisible, setIsVisible] = useState(false);
-
     // Show the button when the user scrolls down
     const handleScroll = () => {
         if (window.scrollY > 200) { // Adjust this value as needed
@@ -29,7 +56,6 @@ function NannyProfile(){
             setIsVisible(false);
         }
     };
-
     // Scroll to the top when the button is clicked
     const scrollToTop = () => {
         window.scrollTo({
@@ -37,16 +63,39 @@ function NannyProfile(){
             behavior: 'smooth', // Smooth scrolling
         });
     };
-
     useEffect(() => {
         // Listen to the scroll event
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     },[]);
 
-    return(
+
+    if(loading || isUserLoading)
+        return (
+            <div className="w-full bg-white h-screen flex items-center justify-center">
+                <span className="loading loading-spinner loading-lg"></span>
+            </div>
+        )
+
+
+    if(!loading && !isUserLoading && !usrData ){
+        console.log(myData)
+        return(
+            <div className='w-full h-screen bg-white'> 
+                {RenderHeaderNavbar(myData)}
+                <div className='h-screen bg-white flex flex-col gap-5 items-center justify-center text-3xl font-medium'>
+                    <p >Δε βρέθηκε ο χρήστης.</p>
+                    <Link to='/' className='text-blue-500 ml-2'>Επιστροφή στην αρχική σελίδα.</Link>
+                </div>
+                <Footer/>
+            </div>
+        )
+    }
+    
+    if(!loading && !isUserLoading && userData) 
+        return(
         <div className="w-full">
-            {RenderHeaderNavbar(userData)}
+            {RenderHeaderNavbar(myData)}
 
             {/* main page */}
             <div className=' w-full bg-gray-200 flex'>
@@ -67,19 +116,20 @@ function NannyProfile(){
                         {/* Left section: pfp, name, and info */}
                         <div className="flex h-full">
                             <img 
-                                src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBA3S71zn7_fD0AXbnLDEOb3vvA9Vo03imLw&s"} 
+                                src={userData?.img} 
                                 className="size-40 rounded-full" 
                                 alt="Nanny Profile"
                             />
                             {/* Info */}
                             <div className="ml-4 h-2/3 mt-5 text-2xl flex flex-col justify-start">
                                 <div className="w-full flex items-center font-medium">
-                                    <span>Μαρία Παπαδοπούλου, </span>
-                                    <p className="ml-1 mr-2">33</p>
-                                    <FaFemale className='text-xl' title={gender} />
+                                    <span>{userData?.name} {userData?.surname}, </span>
+                                    <p className="ml-1 mr-2">{userData?.age}</p>
+                                    { !userData?.gender && <FaFemale className='text-xl' title={"Θηλυκό"} />}
+                                    {  userData?.gender && <FaMale className='text-xl' title={"Αρσενικό"} /> }
                                 </div>
-                                <p>3 χρόνια εμπειρίας</p>
-                                <div className="flex items-center" title={`Βαθμολογία: ${rating}/5`}>
+                                <p>{userData?.experience} χρόνια εμπειρίας</p>
+                                <div className="flex items-center" title={`Βαθμολογία: ${userData?.rating}/5`}>
                                     {/* Render full stars */}
                                     {Array.from({ length: fullStars }, (_, idx) => (
                                         <FaStar key={`full-${idx}`} className="text-black" />
@@ -94,18 +144,17 @@ function NannyProfile(){
                             </div>
                         </div>
 
-                        {/* Right section: contact button */}
-                        <Link to={`${userData ? '/contact' : '/login'}`} className="w-1/5  bg-pallete-300 text-gray-50  text-3xl flex items-center justify-center rounded-md font-medium h-1/2 ml-auto mr-4">
+                        {/* Right section: contact button, ONLY visible when Im not in my own profile */}
+                        { id!==userData?.id && <Link to={`${userData ? '/contact' : '/login'}`} className="w-1/5  bg-pallete-300 text-gray-50  text-3xl flex items-center justify-center rounded-md font-medium h-1/2 ml-auto mr-4">
                             Επικοινωνία
-                        </Link>
+                        </Link>}
                     </div>
 
                     {/* bio section */}
                     <div className='w-2/4 ml-4  mt-10 '>
                         <p className='text-xl pl-2 font-medium'>Σύντομη Περιγραφή</p>
                         <div className='rounded-md px-2 py-1 bg-gray-300 w-full'>
-                            <p>Είμαι στοργική και αξιόπιστη νταντά με πάθος για την παιδική ανάπτυξη. Έχω εμπειρία στη δημιουργία καθημερινών προγραμμάτων που βοηθούν 
-                            τα παιδιά να μαθαίνουν και να διασκεδάζουν.</p>
+                            <p>{userData?.bio}</p>
 
                         </div>
                     </div>
@@ -203,7 +252,7 @@ function NannyProfile(){
                                     {days.map((day, dayIdx) => (
                                         <td key={dayIdx} className="border-2 border-x">
                                             {/* Check if the current day and hour exists in the availabilityMatrix */}
-                                            {availabilityMatrix.some(
+                                            {userData?.availabilityMatrix.some(
                                                 (entry) => entry.day === day && entry.hour === hour
                                             ) ? (
                                                 <FaCheck className="text-green-800 font-medium mx-auto" />

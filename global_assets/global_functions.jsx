@@ -1,18 +1,18 @@
 import NannyNavbar from '../src/generic components/NannyNavbar'
 import ParentNavbar from '../src/generic components/ParentNavbar'
-import ParentHeader from '../src/generic components/ParentHeader'
+import UserHeader from '../src/generic components/UserHeader'
 import Header from '../src/generic components/Header'
 
 
 export const RenderHeaderNavbar=(usrData, page=1)=>{
-    // console.log(usrData)
+    console.log(usrData)
     if(!usrData){ //guest
         return <Header/>
     }
     else if(usrData?.role===false){
         return (
             <>
-                <ParentHeader main_page={'/search'} />
+                <UserHeader main_page={'/search'} role={usrData?.role} id={usrData?.id}/>
                 <ParentNavbar page={page}/>
             </>
         )
@@ -20,7 +20,7 @@ export const RenderHeaderNavbar=(usrData, page=1)=>{
     else if(usrData?.role===true){
         return (
             <>
-                <ParentHeader />
+                <UserHeader role={usrData?.role} id={usrData?.id}/>
                 <NannyNavbar/>
             </>
         )

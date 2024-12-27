@@ -18,20 +18,62 @@ function SignUp(){
         number:"",
         AMKA:"12345678910",
         bio:"added from function",
-        name:"Kaggelos",
-        surname:"Paulidis",
-        gender:true,
-        role:true,
+        name:"Ntanta",
+        surname:"Kati",
+        gender:false,
+        role:false,
         newUser:true,
-        img:"https://us-tuna-sounds-images.voicemod.net/9508b716-9458-4d69-9508-54c06cc48caa-1728958336005.jpeg"
+        img:"https://us-tuna-sounds-images.voicemod.net/9508b716-9458-4d69-9508-54c06cc48caa-1728958336005.jpeg",
+        availabilityMatrix:[
+            {day:'ΔΕΥ',hour:"12:00"},
+            {day:'ΤΡΙ',hour:"12:00"},
+            {day:'ΤΕΤ',hour:"14:00"},
+            {day:'ΠΕΜ',hour:"09:00"},
+            {day:'ΠΑΡ',hour:"18:00"},
+            {day:'ΣΑΒ',hour:"20:00"},
+            {day:'ΚΥΡ',hour:"07:00"},
+            {day:'ΤΡΙ',hour:"21:00"},
+            {day:'ΔΕΥ',hour:"08:00"},
+        ]
 
     });
+
+    const duration = 3000;
+
+    const [successMessage,setSuccessMessage] = useState(false)
+
+    useEffect(()=>{
+        if(successMessage){//make it appear for 3 seconds
+            const timer = setTimeout(() => {
+                setSuccessMessage(false); // Hide the alert after the duration
+            }, duration);
+            // Cleanup the timer on component unmount
+            return () => clearTimeout(timer);
+        }
+    },[successMessage,duration] )
 
     const {mutateAsync:createUser,isPending,error} = useMutation({
         mutationFn:() => registerUser(SignUpData),
         onSuccess:()=>{
             console.log("Added User successfully")
-            // refetch(); // Use the captured refetch function
+            setSuccessMessage(true);
+            setSignUpMessage("")
+            setRepeatPassword("")
+            //reset them
+            setSignUpData({
+                email:"",
+                password:"",
+                number:"",
+                AMKA:"12345678910",
+                bio:"added from function",
+                name:"Kaggelos",
+                surname:"Paulidis",
+                gender:true,
+                role:true,
+                newUser:true,
+                img:"https://us-tuna-sounds-images.voicemod.net/9508b716-9458-4d69-9508-54c06cc48caa-1728958336005.jpeg"
+        
+            })
         
         },
         onError:(error)=>{
@@ -63,6 +105,22 @@ function SignUp(){
 
     return(
         <div className="w-full h-full flex flex-col  justify-between bg-pink-100 ">
+           {successMessage && <div role="alert" className="alert alert-success fixed top-32 left-1/2 transform -translate-x-1/2 w-1/2 flex items-center justify-center  p-4 rounded shadow">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 shrink-0 stroke-current"
+                    fill="none"
+                    viewBox="0 0 24 24">
+                    <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Η εγγραφή σας ολοκληρώθηκε!</span>
+            </div>}
+
+
             <Header/>
             <div className="w-full flex-grow flex flex-col  items-center py-20 ">
                 <div className="w-2/3 flex-grow rounded-md flex flex-col p-20 items-center bg-fuchsia-200 shadow-lg shadow-gray-400">

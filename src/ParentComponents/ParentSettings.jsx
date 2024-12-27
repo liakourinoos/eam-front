@@ -4,7 +4,6 @@ import Footer from "../generic components/Footer.jsx";
 // import NannyNavbar from './generic components/NannyNavbar.jsx'
 import ParentProfileEdit from "../views/Profile/ProfileEdit.jsx";
 import AccountEdit from "../views/Profile/AccountEdit.jsx";
-// import ParentHeader from "./generic components/ParentHeader.jsx";
 import {RenderHeaderNavbar} from '../../global_assets/global_functions.jsx'
 import { useAuth } from "../customHooks.jsx";
 
@@ -16,8 +15,7 @@ function ParentSettings(){
 
     return(
         <div className="w-full  "> 
-        {/* <ParentHeader/>
-        <NannyNavbar/> */}
+        
         {RenderHeaderNavbar(userData,0)}
             {/* //main div to change what type of info will be changed */}
             <div className="w-full bg-white flex ">

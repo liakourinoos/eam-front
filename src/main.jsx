@@ -18,6 +18,8 @@ import Contact from './ParentComponents/Contact.jsx'
 import ParentPayment from './ParentComponents/ParentPayment.jsx'
 import ParentApplications from './ParentComponents/ParentApplications.jsx'
 import ApplicationForm from '../src/views/Parent/ApplicationForm.jsx'
+
+
 const router = createBrowserRouter([
   {path: '/', element: <App/>},
   {path: '/search', element: <Search/>},
@@ -25,11 +27,14 @@ const router = createBrowserRouter([
   {path: '/signup', element: <SignUp/>},
   {path: '/about', element: <About/>},
   {path: '/parentSettings',element:<ParentSettings/>},
-  {path: '/nannyProfile', element:<NannyProfile/>},
   {path:'/contact' , element:<Contact/>},
   {path: '/parentpayments', element: <ParentPayment/>},
   {path: '/parentapplications', element: <ParentApplications/>},
-  {path: '/applicationform', element: <ApplicationForm/>}
+  {path: '/applicationform', element: <ApplicationForm/>},
+
+   // Dynamic route for ParentProfile
+  // { path: '/parentprofile/:id', element: <ParentProfile /> },
+  { path: '/nannyprofile/:id', element:<NannyProfile/>}
 ]);
 const queryClient = new QueryClient();
 
