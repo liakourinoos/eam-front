@@ -19,16 +19,16 @@ export async function fetchUsers() {
 }
 
 // Log In Existing User
-export async function logInUser(email, password) {
-    console.log(email,password);  //ok!
-    try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        return userCredential.user; // Returns the user object
-    } catch (error) {
-        console.error("Error logging in:", error);
-        throw error;
-    }
-}
+// export async function logInUser(email, password) {
+//     console.log(email,password);  //ok!
+//     try {
+//         const userCredential = await signInWithEmailAndPassword(auth, email, password);
+//         return userCredential.user; // Returns the user object
+//     } catch (error) {
+//         console.error("Error logging in:", error);
+//         throw error;
+//     }
+// }
 
 export async function updateBio(id,newBio) {
     console.log(id,newBio)

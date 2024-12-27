@@ -72,17 +72,17 @@ function App() {
           </div>
       {/* main div */}
           <div
-          className="w-full overflow-y-auto h-full flex flex-col  justify-center absolute top-0 left-0 z-10 bg-pink-100"
+          className="w-full overflow-y-auto h-full flex flex-col  justify-center absolute top-0 left-0 z-10 bg-pink-200"
           style={{
             boxShadow: "10px 10px 20px rgba(0, 0, 139, 0.7)", // Apply shadow here
             clipPath: "polygon(0 100%, 0 0, 50% 0, 75% 0, 45% 100%, 50% 100%)",
           }}
           >
-            <div className=' w-1/2 my-auto h-full flex flex-col gap-10 '>
-                  <p className=' ml-32 mt-10 text-3xl font-extrabold'>Βρείτε την φροντίδα που σας αξίζει!</p>
+            <div className='w-1/2 my-auto h-full flex flex-col gap-10 '>
+                  <p className=' ml-32 mt-20 text-3xl font-extrabold'>Βρείτε την φροντίδα που σας αξίζει!</p>
                   
                   {/* input div */}
-                  <div className='pl-5 gap-7 h-full flex flex-col my-auto '>
+                  <div className='pl-20 gap-7 h-full flex flex-col justify-center   '>
 
                   {/* Town Filter */}
                     <div>

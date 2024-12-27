@@ -39,7 +39,7 @@ function ParentSettings(){
                     {shownPage ==1 && <ParentProfileEdit />}
                     {/* {shownPage==1 && <p>Option 1</p>} */}
                     {/* {shownPage ==2 && <ParentAccount Edit/>} */}
-                    {shownPage==2 && <AccountEdit email={userData?.email} password={userData?.password} number={userData?.number} skype={userData?.skype} />}
+                    {shownPage==2 && <AccountEdit  />}
 
 
 

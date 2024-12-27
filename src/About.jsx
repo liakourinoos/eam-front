@@ -30,12 +30,12 @@ function App() {
   }, []);
 
     return (
-    <div className='w-full h-screen flex flex-col justify-between'>
+    <div className='w-full h-screen flex flex-col justify-between bg-white'>
         <Header />
         {/* main page */}
-        <div className="w-full  flex-grow relative">
+        <div className="w-full  flex-grow relative bg-white">
             <p className='ml-32 text-3xl font-bold mt-10 mb-2'>Εγχειρίδιο Χρήσης</p>
-            <div className='w-1/3 border-2 border-black ml-32 py-2 pl-3 flex flex-col gap-2 text-lg font-medium'>
+            <div className='w-1/3 border-2 border-black ml-32 py-2 pl-3 flex flex-col gap-2 text-lg font-medium bg-white'>
                 <p className='underline text-2xl'>Περιεχόμενα</p>
                 <a href="#section1" className="hover:text-purple-500">1. Εισαγωγή</a>
     <a href="#section2" className="hover:text-purple-500">2. Δημιουργία Λογαριασμού/ Είσοδος στην υπηρεσία</a>

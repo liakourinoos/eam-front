@@ -32,7 +32,7 @@ function Login() {
     } catch (error) {
       console.error("Error in handleLogin:", error.message); // Log error details
 
-      if(error.message === "Firebase: Error (auth/invalid-email).")  setMessage('Λάθος email/κωδικός πρόσβασης'); // Update message state
+      if(error.message)  setMessage(error.message); // Update message state
     } finally {
       console.log("handleLogin finished"); // Debugging exit point
     }
@@ -101,11 +101,12 @@ function Login() {
           <div className="w-full flex justify-end px-32">
             <button
               onClick={handleLogin}
-              type="button"
+              type="submit"
               className="bg-pink-600 h-10 w-32 text-lg justify-center ml-60 flex items-center font-medium text-white rounded-md px-3 py-1 mt-5"
               disabled={isLoading} // Disable button when loading
             >
-              {isLoading ? "Logging in..." : "Σύνδεση"}
+              {isLoading && <span className="loading loading-spinner loading-md "/>}
+              {!isLoading && "Σύνδεση"}
             </button>
           </div>
 

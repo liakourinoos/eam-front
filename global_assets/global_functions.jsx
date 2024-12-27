@@ -4,7 +4,6 @@ import ParentHeader from '../src/generic components/ParentHeader'
 import Header from '../src/generic components/Header'
 
 
-
 export const RenderHeaderNavbar=(usrData, page=1)=>{
     // console.log(usrData)
     if(!usrData){ //guest
