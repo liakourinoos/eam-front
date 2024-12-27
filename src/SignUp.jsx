@@ -4,14 +4,44 @@ import Header from "./generic components/Header";
 import { useState } from "react";
 import { FaEye,FaEyeSlash } from "react-icons/fa";
 import { useEffect } from "react";
+import { registerUser } from "./FetchFunctions";
+import { useMutation } from "@tanstack/react-query";
+
 function SignUp(){
     const nav=useNavigate();
+    
+    const [signUpMessage,setSignUpMessage] = useState("")
+
     const [SignUpData, setSignUpData] = useState({
         email:"",
         password:"",
-        repeatPassword:"",
-        number:""
+        number:"",
+        AMKA:"12345678910",
+        bio:"added from function",
+        name:"Kaggelos",
+        surname:"Paulidis",
+        gender:true,
+        role:true,
+        newUser:true,
+        img:"https://us-tuna-sounds-images.voicemod.net/9508b716-9458-4d69-9508-54c06cc48caa-1728958336005.jpeg"
+
     });
+
+    const {mutateAsync:createUser,isPending,error} = useMutation({
+        mutationFn:() => registerUser(SignUpData),
+        onSuccess:()=>{
+            console.log("Added User successfully")
+            // refetch(); // Use the captured refetch function
+        
+        },
+        onError:(error)=>{
+            console.log(error.message)
+            if(error.message==="Firebase: Error (auth/email-already-in-use).") setSignUpMessage("Το email χρησιμοποιείται ήδη.");
+            else setSignUpMessage(error.message);
+        }
+    });
+
+    const [repeatPassword,setRepeatPassword] = useState("")
 
     const [passwordVisibility1,setPasswordVisibility1] = useState(false);
     const toggleVisibility1 =()=> setPasswordVisibility1(pV => !pV);
@@ -22,18 +52,14 @@ function SignUp(){
     const [matchingPasswords,setMatchingPasswords]= useState(true);
 
     useEffect(()=>{
-        if (SignUpData.repeatPassword.length === 0) {
+        if (repeatPassword.length === 0) {
             setMatchingPasswords(true);
         } else {
-            setMatchingPasswords(SignUpData.password === SignUpData.repeatPassword && SignUpData.password.length > 0);
+            setMatchingPasswords(SignUpData.password === repeatPassword && SignUpData.password.length > 0);
         }
-    },[SignUpData.password,SignUpData.repeatPassword])
+    },[SignUpData.password,repeatPassword])
 
 
-    const handleSignUp =({email,password,number})=>{
-        // do some things
-        nav(-1 )
-    }
 
     return(
         <div className="w-full h-full flex flex-col  justify-between bg-pink-100 ">
@@ -41,6 +67,7 @@ function SignUp(){
             <div className="w-full flex-grow flex flex-col  items-center py-20 ">
                 <div className="w-2/3 flex-grow rounded-md flex flex-col p-20 items-center bg-fuchsia-200 shadow-lg shadow-gray-400">
                     <p className="text-5xl font-bold">Εγγραφή</p>
+                    {signUpMessage.length>0 && <p className="text-red-500 text-3xl font-medium -mb-10 mx-auto mt-10">{signUpMessage}</p>}
 
                     <div className="w-1/4  mt-20 ">
                         <p className="text-xl ml-1 font-medium ">Email</p>
@@ -75,8 +102,8 @@ function SignUp(){
                         <div className="w-full flex  items-center justify-center">
                             <input  type={passwordVisibility2 ? "text" : "password"}
                                     className={`w-full ${matchingPasswords? 'border-gray-300': 'border-red-700'  } h-10 border-l-2 border-y-2 rounded-l-md pl-2 mt-1  bg-white`}
-                                    value={SignUpData.repeatPassword}
-                                    onChange={(e)=>setSignUpData({...SignUpData,repeatPassword:e.target.value})}
+                                    value={repeatPassword}
+                                    onChange={(e)=>setRepeatPassword(e.target.value)}
                                     />
                             <button onClick={toggleVisibility2} className={`w-7 ${matchingPasswords? 'border-gray-300': 'border-red-700 text-red-700'  } rounded-r-md border-2 border-gray-300 h-10 mt-1 bg-white flex items-center justify-center`}>
                                 {!passwordVisibility2 ? <FaEye/> : <FaEyeSlash/>}
@@ -111,12 +138,12 @@ function SignUp(){
                     <div className="w-full flex justify-end px-32 mt-3">
 
                     
-                        <button     className={`h-10 w-32  flex items-center justify-center text-xl font-medium text-white rounded-md px-3 py-1 mt-10 ${!(SignUpData.repeatPassword.length > 0 && SignUpData.email.length>0 && SignUpData.number.length>0 && SignUpData.password.length > 0 && matchingPasswords) ? 'bg-gray-400 ' : 'bg-pink-600'}`}
-                                    disabled={!(SignUpData.repeatPassword.length > 0 && SignUpData.email.length>0 && SignUpData.number.length>0 && SignUpData.password.length > 0 && matchingPasswords)}
-                                    onClick={()=>handleSignUp(SignUpData)}
-                                    title={`${!(SignUpData.repeatPassword.length > 0 && SignUpData.email.length>0 && SignUpData.number.length>0 && SignUpData.password.length > 0 && matchingPasswords) ? "Παρακαλούμε συμπληρώστε όλα τα πεδία." : ""} `}
+                        <button     className={`h-10 w-32  flex items-center justify-center text-xl font-medium text-white rounded-md px-3 py-1 mt-10 ${!(repeatPassword.length > 0 && SignUpData.email.length>0 && SignUpData.number.length>0 && SignUpData.password.length > 0 && matchingPasswords) ? 'bg-gray-400 ' : 'bg-pink-600'}`}
+                                    disabled={!(repeatPassword.length > 0 && SignUpData.email.length>0 && SignUpData.number.length>0 && SignUpData.password.length > 0 && matchingPasswords)}
+                                    onClick={()=>createUser()}
+                                    title={`${!(repeatPassword.length > 0 && SignUpData.email.length>0 && SignUpData.number.length>0 && SignUpData.password.length > 0 && matchingPasswords) ? "Παρακαλούμε συμπληρώστε όλα τα πεδία." : ""} `}
                         >
-                            Εγγραφή
+                            {isPending ? 'Pending...' :'Εγγραφή'}
                         </button>
                     </div>
                 </div>

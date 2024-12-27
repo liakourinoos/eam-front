@@ -79,7 +79,7 @@ function App() {
           }}
           >
             <div className='w-1/2 my-auto h-full flex flex-col gap-10 '>
-                  <p className=' ml-32 mt-20 text-3xl font-extrabold'>Βρείτε την φροντίδα που σας αξίζει!</p>
+                  <p className=' ml-32 mt-20 text-5xl font-extrabold'>Βρείτε την φροντίδα που σας αξίζει!</p>
                   
                   {/* input div */}
                   <div className='pl-20 gap-7 h-full flex flex-col justify-center   '>

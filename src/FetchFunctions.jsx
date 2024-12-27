@@ -1,8 +1,8 @@
 import { collection,getFirestore, addDoc ,getDocs,query, where,doc, updateDoc} from "firebase/firestore";
 import { db } from "../firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { auth } from "../firebase";
-
+// import { auth } from "../firebase";
+import { getAuth } from "firebase/auth";
 
 export async function fetchUsers() {
     try {
@@ -17,18 +17,6 @@ export async function fetchUsers() {
         throw error; // Throw the error so it can be caught by the calling component
     }
 }
-
-// Log In Existing User
-// export async function logInUser(email, password) {
-//     console.log(email,password);  //ok!
-//     try {
-//         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-//         return userCredential.user; // Returns the user object
-//     } catch (error) {
-//         console.error("Error logging in:", error);
-//         throw error;
-//     }
-// }
 
 export async function updateBio(id,newBio) {
     console.log(id,newBio)
@@ -47,26 +35,29 @@ export async function updateBio(id,newBio) {
     }
 }
 
-// export async function addUser() {
-//     const user={
-//         name:"nasos",
-//         surname:"fykas",
-//         email:"fykoulinos@gmail.com",
-//         password:"2",
-//         number:"0004567891",
-//         AMKA:"0987654321",
-//         gender:false,
-//         role:false,
-//         bio:"naso's bio.",
-//         newUser:true
-//     }
-        
-    
-//     try {
-//         const docRef = await addDoc(collection(db, "users"), user);
-//         console.log("Document written with ID: ", docRef.id);
-//     } catch (error) {
-//         console.error("Error adding user: ", error);
-//         throw error;
-//     }
-// }
+export async function registerUser(userData) {
+    const auth = getAuth();
+
+    try {
+        // Step 1: Create a new user in Firebase Authentication
+        const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
+        const user = userCredential.user;
+
+        // Step 2: Add user details to Firestore, including the UID from Auth
+        const newData = {
+            uid: user.uid, // Authenticated user's UID
+            email: userData.email, // Authenticated user's email
+            ...userData, // Other data passed to the function
+            
+        };
+
+        await addDoc(collection(db, "users"), newData);
+
+        console.log("User registered and added to Firestore:", newData);
+
+        // return newData; // Return the user data for further use
+    } catch (error) {
+        console.error("Error registering user:", error.message);
+        throw error; // Re-throw to handle in calling code
+    }
+}

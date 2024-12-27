@@ -39,8 +39,6 @@ function AccountEdit(){
     
 
     const validateEmails = () => {
-
-        
         if (newEmail !=repeatNewEmail && newEmail.length != 0 && repeatNewEmail.length != 0) {
             setEmailMessage("Οι διευθύνσεις email πρέπει να ταυτίζονται.");
         }

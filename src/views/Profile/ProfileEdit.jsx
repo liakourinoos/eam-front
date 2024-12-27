@@ -24,7 +24,7 @@ function ParentProfileEdit(){
         onSuccess:()=>{
             console.log("Bio updated successfully")
             refetch(); // Use the captured refetch function
-            console.log("ASS")
+        
         }
     });
 
