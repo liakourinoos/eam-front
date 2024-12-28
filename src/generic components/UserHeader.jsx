@@ -45,7 +45,7 @@ function UserHeader({main_page="/",role,id}){
                 </Link>
                 {/* user info */}
                 <div className='h-full w-1/3 items-center   flex justify-end gap-3 pr-3 '>
-                    <Link    to={`${role? `/nannyprofile/${id}` : `/parentprofile${id}` }`} className={`h-full w-full p-2 flex items-center justify-end gap-3 `}
+                    <Link    to={`${role?  `/parentprofile${id}` :`/nannyprofile/${id}` }`} className={`h-full w-full p-2 flex items-center justify-end gap-3 `}
                             onMouseEnter={() => toggleHover(true)}
                             onMouseLeave={() => toggleHover(false)}
                     >

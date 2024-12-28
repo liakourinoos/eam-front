@@ -32,8 +32,11 @@ const router = createBrowserRouter([
   {path: '/parentapplications', element: <ParentApplications/>},
   {path: '/applicationform', element: <ApplicationForm/>},
 
-   // Dynamic route for ParentProfile
+
+  // Dynamic routes 
   // { path: '/parentprofile/:id', element: <ParentProfile /> },
+  { path: '/viewapplication/:id', element: <ApplicationForm action="Προβολή Αίτησης"/>},
+  { path: '/editapplication/:id', element: <ApplicationForm action="Επεξεργασία Αίτησης"/>},
   { path: '/nannyprofile/:id', element:<NannyProfile/>}
 ]);
 const queryClient = new QueryClient();

@@ -3,11 +3,24 @@ import { VscNewFile } from "react-icons/vsc";
 import { useState } from "react";
 import {  FaRegQuestionCircle } from 'react-icons/fa';
 import FinalApplication from "./FinalApplication";
-
+import {useAuth} from '../../customHooks'
+import { fetchAllFinalApplications } from "../../FetchFunctions";
+import { useQuery } from "@tanstack/react-query";
 
 function ParentFinalApplications() {
 
+    const {userData} = useAuth();
+
     const [sortBy,setSortBy] = useState("date-desc")
+
+    const {data:applications,isLoading} = useQuery({
+        queryFn:()=>fetchAllFinalApplications(userData?.id),
+        queryKey:['finalApplications',userData?.id],
+        enabled:!!userData
+
+    })
+
+    
 
     return (
         <div className="w-full py-2 ">
@@ -48,25 +61,16 @@ function ParentFinalApplications() {
 
             {/* data */}
             <div className='w-11/12 mx-auto h-full flex flex-col mb-5  gap-2 items-center justify-start overflow-y-scroll mt-2'>
-                <FinalApplication code="1234567890" firstName="Γιάννης" lastName="Παπαδόπουλος" status="Εγκρίθηκε" finalDate="12/12/2021"/>       
-                <FinalApplication code="1234567890" firstName="Γιάννης" lastName="Παπαδόπουλος" status="Εγκρίθηκε" finalDate="12/12/2021"/>       
-                <FinalApplication code="1234567890" firstName="Γιάννης" lastName="Παπαδόπουλος" status="Εγκρίθηκε" finalDate="12/12/2021"/>       
-                <FinalApplication code="1234567890" firstName="Γιάννης" lastName="Παπαδόπουλος" status="Εγκρίθηκε" finalDate="12/12/2021"/>       
-                <FinalApplication code="1234567890" firstName="Γιάννης" lastName="Παπαδόπουλος" status="Εγκρίθηκε" finalDate="12/12/2021"/>       
-                <FinalApplication code="1234567890" firstName="Γιάννης" lastName="Παπαδόπουλος" status="Εγκρίθηκε" finalDate="12/12/2021"/>       
-                <FinalApplication code="1234567890" firstName="Γιάννης" lastName="Παπαδόπουλος" status="Εγκρίθηκε" finalDate="12/12/2021"/>       
-                <FinalApplication code="1234567890" firstName="Γιάννης" lastName="Παπαδόπουλος" status="Εγκρίθηκε" finalDate="12/12/2021"/>       
-                <FinalApplication code="1234567890" firstName="Γιάννης" lastName="Παπαδόπουλος" status="Εγκρίθηκε" finalDate="12/12/2021"/>       
-                <FinalApplication code="1234567890" firstName="Γιάννης" lastName="Παπαδόπουλος" status="Εγκρίθηκε" finalDate="12/12/2021"/>       
-                <FinalApplication code="1234567890" firstName="Γιάννης" lastName="Παπαδόπουλος" status="Εγκρίθηκε" finalDate="12/12/2021"/>       
-                <FinalApplication code="1234567890" firstName="Γιάννης" lastName="Παπαδόπουλος" status="Εγκρίθηκε" finalDate="12/12/2021"/>   <FinalApplication code="1234567890" firstName="Γιάννης" lastName="Παπαδόπουλος" status="Εγκρίθηκε" finalDate="12/12/2021"/>       
-                <FinalApplication code="1234567890" firstName="Γιάννης" lastName="Παπαδόπουλος" status="Εγκρίθηκε" finalDate="12/12/2021"/>       
-                <FinalApplication code="1234567890" firstName="Γιάννης" lastName="Παπαδόπουλος" status="Εγκρίθηκε" finalDate="12/12/2021"/>       
-                <FinalApplication code="1234567890" firstName="Γιάννης" lastName="Παπαδόπουλος" status="Εγκρίθηκε" finalDate="12/12/2021"/>       
-                <FinalApplication code="1234567890" firstName="Γιάννης" lastName="Παπαδόπουλος" status="Εγκρίθηκε" finalDate="12/12/2021"/>       
-                <FinalApplication code="1234567890" firstName="Γιάννης" lastName="Παπαδόπουλος" status="Εγκρίθηκε" finalDate="12/12/2021"/>   
+                {isLoading && <span className="loading loading-lg mt-32"></span>
+                }
+                {!isLoading && Array.isArray(applications) && 
+                    applications.map((app,idx)=>(
+                        <FinalApplication key={idx} code={app.id} firstName={app.nannyName} lastName={app.nannySurname} status={app.status} finalDate={app.finalizedAt}/>
+                    ))
+                }
 
- 
+
+
             </div>
 
 

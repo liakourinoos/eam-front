@@ -1,13 +1,11 @@
-import { useState,useContext } from "react";
-// import Header from "./generic components/Header";
+import { useState } from "react";
 import Footer from "../generic components/Footer.jsx";
-// import NannyNavbar from './generic components/NannyNavbar.jsx'
-import ParentProfileEdit from "../views/Profile/ProfileEdit.jsx";
+import ProfileEdit from "../views/Profile/ProfileEdit.jsx";
 import AccountEdit from "../views/Profile/AccountEdit.jsx";
 import {RenderHeaderNavbar} from '../../global_assets/global_functions.jsx'
 import { useAuth } from "../customHooks.jsx";
 
-function ParentSettings(){
+function NannySettings(){
     const [shownPage,setShownPage]= useState(1);
     const toggleShownPage=(num)=> setShownPage(num)
 
@@ -34,7 +32,7 @@ function ParentSettings(){
                 {/* right div */}
 
                 <div className="w-full   ">
-                    {shownPage ==1 && <ParentProfileEdit />}
+                    {shownPage ==1 && <ProfileEdit />}
                     {shownPage==2 && <AccountEdit  />}
 
 
@@ -53,4 +51,4 @@ function ParentSettings(){
 
 }
 
-export default ParentSettings;
+export default NannySettings;

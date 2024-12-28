@@ -3,14 +3,27 @@ import { VscNewFile } from "react-icons/vsc";
 import { useState } from "react";
 import {  FaRegQuestionCircle } from 'react-icons/fa';
 import DraftApplication from "./DraftApplication";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "../../customHooks";
+import { fetchAllDraftApplications } from "../../FetchFunctions";
+
 
 function ParentDraftApplications(){
+    const {userData} = useAuth();
+
+    const {data:applications,isLoading} = useQuery({
+        queryFn:()=>fetchAllDraftApplications(userData?.id),
+        queryKey:['draftApplications',userData?.id],
+        enabled:!!userData
+    })
+
+   
     const [sortBy,setSortBy] = useState("date-desc")
     return(
         <div className="w-full py-2 ">
 
             <div className="h-16 w-11/12 mx-auto flex  items-center justify-between ">
-                <Link className="h-full w-2/12 text-xl bg-pallete-200 font-medium flex items-center gap-4 justify-center rounded-md">
+                <Link to='/applicationform' className="h-full w-2/12 text-xl bg-pallete-200 font-medium flex items-center gap-4 justify-center rounded-md">
                     <VscNewFile className="text-3xl" />
                     <span>Νέα Αίτηση </span>
                 </Link>
@@ -37,14 +50,13 @@ function ParentDraftApplications(){
 
             {/* data */}
             <div className='w-11/12 mx-auto h-full flex flex-col mb-5  gap-2 items-center justify-start overflow-y-scroll mt-2'>
-                <DraftApplication firstName="Γιάννης" lastName="Παπαδόπουλος"/>
-                <DraftApplication firstName="Γιάννης" lastName=""/>
-                <DraftApplication firstName="" lastName="Παπαδόπουλος"/>
-                <DraftApplication firstName="Γιάννης" lastName="Παπαδόπουλος"/>
-                <DraftApplication firstName="Γιάννης" lastName=""/>
-                <DraftApplication firstName="" lastName="Παπαδόπουλος"/> <DraftApplication firstName="Γιάννης" lastName="Παπαδόπουλος"/>
-                <DraftApplication firstName="Γιάννης" lastName=""/>
-                <DraftApplication firstName="" lastName="Παπαδόπουλος"/>
+                {isLoading && <span className="loading loading-lg mt-32"></span>
+                    }
+                    {!isLoading && Array.isArray(applications) && 
+                        applications.map((app,idx)=>(
+                            <DraftApplication key={idx} code={app.id} firstName={app.nannyName} lastName={app.nannySurname}/>
+                        ))
+                    }
 
                 
             </div>

@@ -5,8 +5,23 @@ import "react-datepicker/dist/react-datepicker.css";
 import { FaQuestion } from "react-icons/fa";
 import {hours,days} from '../../../global_assets/global_values.jsx';
 import { MdArrowBackIosNew } from "react-icons/md";
+import { Link } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { useAuth } from "../../customHooks.jsx";
+import { addFinalApplication } from "../../FetchFunctions.jsx";
+
 function FormPage2({ form, setForm, nextFn }) {
-    const [selectedDate, setSelectedDate] = useState(new Date());
+
+    const {userData} = useAuth();
+
+
+    const [selectedDate, setSelectedDate] = useState(() => {
+        if (form.startingDate) {
+            const [day, month, year] = form.startingDate.split('/');
+            return new Date(`${month}/${day}/${year}`); // Convert the string to a Date object
+        }
+        return new Date(); // Default to current date if startingDate is empty or invalid
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -17,25 +32,43 @@ function FormPage2({ form, setForm, nextFn }) {
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
-        setForm(prevState => ({ ...prevState, startingDate: date.toISOString().split('T')[0] }));
+
+        // Format the date as dd/mm/yyyy before storing it as a string
+        const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+        setForm(prevState => ({ ...prevState, startingDate: formattedDate }));
     };
 
     const calculateEndingDate = (startDate, months) => {
         if (!startDate || !months) return "";
-        const date = new Date(startDate);
-        date.setMonth(date.getMonth() + parseInt(months));
-        return date.toISOString().split('T')[0];
+
+        // Parse the startDate (dd/mm/yyyy) into a Date object
+        const [day, month, year] = startDate.split('/');
+        const start = new Date(`${month}/${day}/${year}`); // Use mm/dd/yyyy format for Date
+
+        // Add the months
+        start.setMonth(start.getMonth() + parseInt(months));
+
+        // Format the ending date as dd/mm/yyyy
+        const endDay = start.getDate().toString().padStart(2, '0');
+        const endMonth = (start.getMonth() + 1).toString().padStart(2, '0');
+        const endYear = start.getFullYear();
+
+        return `${endDay}/${endMonth}/${endYear}`;
     };
 
     const formatDate = (dateString) => {
         if (!dateString) return "";
-        const date = new Date(dateString);
-        return new Intl.DateTimeFormat('en-GB').format(date);
+
+        // Parse the dd/mm/yyyy format into a Date object
+        const [day, month, year] = dateString.split('/');
+        const date = new Date(`${month}/${day}/${year}`); // JavaScript Date accepts mm/dd/yyyy format
+
+        return new Intl.DateTimeFormat('en-GB').format(date); // You can use 'en-GB' for the dd/mm/yyyy format
     };
 
     const endingDate = calculateEndingDate(form.startingDate, form.months);
 
-    // const days = ["Δευτέρα", "Τρίτη", "Τετάρτη", "Πέμπτη", "Παρασκευή", "Σάββατο", "Κυριακή"];
+
     
 
     const handleTimeClick = (day, time) => {
@@ -66,13 +99,26 @@ function FormPage2({ form, setForm, nextFn }) {
     };
     
 
+
+    const { mutateAsync: addApplication,isPending} = useMutation({
+        mutationFn: () => addFinalApplication({ ...form, userId: userData?.id }),   
+        onSuccess: () => {
+            nextFn(1); // Move to the next step
+        },
+        onError: (error) => {
+            console.error('Error:', error); // Handle error
+        }
+    });
+    
+
+
     return (
         <div className="w-full">
             {/* progress bar */}
             <ul className="steps w-full my-2 font-medium ">
                 <li className="step step-secondary text-secondary">Στοιχεία Επαγγελματία</li>
                 <li className="step step-secondary text-secondary">Περιοχή και Πρόγραμμα</li>
-                <li className="step">Οριστικοποίηση</li>
+                {!form.cantEdit && <li className="step">Οριστικοποίηση</li>}
             </ul>
 
             <button onClick={()=>nextFn(-1)}
@@ -91,9 +137,10 @@ function FormPage2({ form, setForm, nextFn }) {
                 </div>
                 <input
                     type="text"
-                    className={`w-full h-10 border-2 rounded-md pl-2 mt-1 bg-white border-gray-300`}
+                    className={`w-full font-medium h-10 border-2 rounded-md pl-2 mt-1 ${form.cantEdit ? "bg-gray-300": 'bg-white'} border-gray-300`}
                     value={form.address}
                     name="address"
+                    disabled={form.cantEdit}
                     onChange={handleChange}
                 />
             </div>
@@ -125,7 +172,8 @@ function FormPage2({ form, setForm, nextFn }) {
                                             type="checkbox"
                                             checked={form.schedule.some(slot => slot.day === day && slot.time === time)}
                                             onChange={() => handleTimeClick(day, time)}
-                                            className="checkbox checkbox-secondary"
+                                            className={`checkbox  checkbox-secondary`}
+                                            disabled={form.cantEdit}
                                         />
                                     </td>
                                 ))}
@@ -137,6 +185,7 @@ function FormPage2({ form, setForm, nextFn }) {
                 <div className="w-full flex justify-end my-5"> 
                     <button className="rounded-md bg-white border-2 border-gray-500   font-medium p-2 "
                             onClick={() => setForm(prevState => ({ ...prevState, schedule: [] }))}
+                            disabled={form.cantEdit}
                     >
                         Καθαρισμός Ωρών
                     </button>
@@ -150,12 +199,14 @@ function FormPage2({ form, setForm, nextFn }) {
             <div className="w-1/6 my-5 mx-auto">
                 <p className="text-xl ml-1 mb-1 font-medium">Ημερομηνία Έναρξης</p>
                 <DatePicker selected={selectedDate}
-                            onChange={handleDateChange}
+                            onChange={form.cantEdit ? undefined : handleDateChange}
                             minDate={new Date()}
                             inline
                             disabledKeyboardNavigation
                             dateFormat="yyyy-MM-dd"
-                            className="calendar-only"
+                            className={`calendar-only ${form.cantEdit ? 'disabled-datepicker' : ''}`}
+                            disabled={form.cantEdit} // Disables the DatePicker component
+                            
                 />
             </div>
 
@@ -163,8 +214,9 @@ function FormPage2({ form, setForm, nextFn }) {
                 <p className='text-l font-medium'>Διάστημα Απασχόλησης</p>
                 <select value={form.months} 
                         onChange={handleChange} 
-                        className="select select-bordered rounded-md h-12 border-2 border-gray-300 pl-2 bg-white w-full max-w-xs"
-                        name="months"        
+                        className={`select select-bordered rounded-md bg-white h-12 border-2 border-gray-300 pl-2 w-full max-w-xs`}
+                        name="months" 
+                        disabled={form.cantEdit}       
                 >
                     <option disabled value={""}>Επιλέξτε</option>
                     <option value={1}>1 μήνας</option>
@@ -193,6 +245,7 @@ function FormPage2({ form, setForm, nextFn }) {
                         checked={form.hasAccepted || false}
                         name="hasAccepted"
                         onChange={handleChange}
+                        disabled={form.cantEdit}
                     />
                     <span className="text-lg font-medium">Αποδέχομαι τους <span className="underline" >όρους χρήσης</span></span>
                 </label>
@@ -207,21 +260,30 @@ function FormPage2({ form, setForm, nextFn }) {
                         checked={form.hasSigned || false}
                         name="hasSigned"
                         onChange={handleChange}
+                        disabled={form.cantEdit}
                     />
                     <span className="text-lg font-medium">Ψηφιακή Υπογραφή</span>
                 </label>
             </div>
 
             <div className='w-11/12 mx-auto flex justify-end'>                    
-                <button onClick={()=> nextFn(1)}
-                        className={` border-2 font-medium w-48 border-gray-500 text-md px-2 mr-10 h-14 rounded-md my-3
-                                    ${!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" || form.name==="" || form.surname==="" || form.AMKA==="" || form.schedule.length===0 ? 'bg-gray-300' : 'bg-white' }
-                        `}
-                        disabled={!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" || form.name==="" || form.surname==="" || form.AMKA==="" || form.schedule.length===0}
-                        title={`${!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" || form.name==="" || form.surname==="" || form.AMKA==="" || form.schedule.length===0 ? 'Παρακαλώ συμπληρώστε όλα τα πεδία.' : "" }`}
-                >
-                    Οριστικοποίηση Αίτησης
-                </button>
+                {!form.cantEdit &&
+                    <button onClick={()=>addApplication()}
+                            className={` border-2 font-medium w-48 border-gray-500 text-md px-2 mr-10 h-14 rounded-md my-3
+                                        ${!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" || form.name==="" || form.surname==="" || form.AMKA==="" || form.schedule.length===0 || form.AMKA.length!==11 ? 'bg-gray-300' : 'bg-white' }
+                            `}
+                            disabled={!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" || form.name==="" || form.surname==="" || form.AMKA==="" || form.AMKA.length!==11 || form.schedule.length===0}
+                            title={`${!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" || form.name==="" || form.surname==="" || form.AMKA==="" || form.schedule.length===0 || form.AMKA.length!==11 ? 'Παρακαλώ συμπληρώστε σωστά όλα τα πεδία.' : "" }`}
+                    >
+                        {isPending ? 'Οριστικοποίηση...' :'Οριστικοποίηση Αίτησης'}
+                    </button>
+                }
+                {form.cantEdit && 
+                    <Link to='/parentapplications' className={` border-2 flex items-center justify-center bg-white font-medium w-48 border-gray-500 text-md px-2 mr-10 h-14 rounded-md my-3`}>
+                        Οι Αιτήσεις Μου
+                    </Link>
+
+                }
             </div>
         </div>
     );

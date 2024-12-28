@@ -42,11 +42,14 @@ export const AuthProvider = ({ children }) => {
 
     // Login function
     const login = async (email, password) => {
+        console.log(email,password)
         setLoading(true); 
         try {
             // Firebase sign-in
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            
             const user = userCredential.user; // Extract the user object
+            
             // Query Firestore for user data
             const q = query(collection(db, 'users'), where('uid', '==', user.uid));
             const querySnapshot = await getDocs(q);
@@ -54,6 +57,7 @@ export const AuthProvider = ({ children }) => {
             if (!querySnapshot.empty) {
                 const docSnap = querySnapshot.docs[0];
                 const userData = { ...docSnap.data() , id: docSnap.id}; // Enrich user data
+                
                 return userData; // Return the enriched user data
             } else {
                 console.error("No user document found for uid:", user.uid);

@@ -1,7 +1,7 @@
 import { useState,useEffect } from "react";
 import { FaEye,FaEyeSlash } from "react-icons/fa6";
 import {useAuth } from "../../customHooks"
-import { updateSkype,updateNumber,updateUserEmailWithBetterErrorHandling,updateUserPassword} from "../../FetchFunctions";
+import { updateSkype,updateNumber,updateUserEmail,updateUserPassword} from "../../FetchFunctions";
 import { useMutation } from "@tanstack/react-query";
 
 function AccountEdit(){
@@ -111,7 +111,7 @@ function AccountEdit(){
     },[skype])
 
     const {mutateAsync:changeEmail,isPending:isEmailPending} = useMutation({
-        mutationFn:() => updateUserEmailWithBetterErrorHandling(userData?.password, newEmail),
+        mutationFn:() => updateUserEmail(userData?.password, newEmail),
         onSuccess:()=>{
             console.log("Email updated successfully")
             refetch(); // Use the captured refetch function

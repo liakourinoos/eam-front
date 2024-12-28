@@ -38,7 +38,7 @@ function FormPage1({ form, setForm, nextFn }) {
             <ul className="steps w-full my-2 font-medium">
                 <li className="step step-secondary text-secondary">Στοιχεία Επαγγελματία</li>
                 <li className="step">Περιοχή και Πρόγραμμα</li>
-                <li className="step">Οριστικοποίηση</li>
+                {!form.cantEdit && <li className="step">Οριστικοποίηση</li>}
             </ul>
 
             <p className="text-3xl font-medium my-20 text-center">Στοιχεία Επαγγελματία</p>
@@ -49,9 +49,10 @@ function FormPage1({ form, setForm, nextFn }) {
 
                 <input
                     type="text"
-                    className={`w-full h-10 border-2 rounded-md pl-2 mt-1 bg-white ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full font-medium h-10 border-2 rounded-md pl-2 mt-1 ${form.cantEdit ? "bg-gray-300": 'bg-white'}  ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
                     value={form.name}
                     name="name"
+                    disabled={form.cantEdit}
                     onChange={handleChange}
                 />
             </div>
@@ -62,9 +63,10 @@ function FormPage1({ form, setForm, nextFn }) {
 
                 <input
                     type="text"
-                    className={`w-full h-10 border-2 rounded-md pl-2 mt-1 bg-white ${errors.surname ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full font-medium h-10 border-2 rounded-md pl-2 mt-1 ${form.cantEdit ? "bg-gray-300": 'bg-white'} ${errors.surname ? 'border-red-500' : 'border-gray-300'}`}
                     value={form.surname}
                     name="surname"
+                    disabled={form.cantEdit}
                     onChange={handleChange}
                 />
             </div>
@@ -75,9 +77,11 @@ function FormPage1({ form, setForm, nextFn }) {
 
                 <input
                     type="text"
-                    className={`w-full h-10 border-2 rounded-md pl-2 mt-1 bg-white ${errors.AMKA ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full font-medium h-10 border-2 rounded-md pl-2 mt-1 ${form.cantEdit ? "bg-gray-300": 'bg-white'} ${errors.AMKA ? 'border-red-500' : 'border-gray-300'}`}
                     value={form.AMKA}
                     name="AMKA"
+                    disabled={form.cantEdit}
+
                     onChange={handleChange}
                 />
             </div>

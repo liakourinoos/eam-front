@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { FaEye } from "react-icons/fa";
+import { Link } from 'react-router-dom';
 
 function FinalApplication({code,firstName,lastName,status,finalDate}) {
     return(
@@ -26,11 +27,11 @@ function FinalApplication({code,firstName,lastName,status,finalDate}) {
 
             {/* view button */}
             <div className='w-1/5 flex justify-center '>
-                <button className='w-2/3 bg-pallete-200 h-14 rounded-md border-2 border-gray-300 flex gap-2 items-center justify-center px-2'>
+                <Link to={`/viewapplication/${code}`} className='w-2/3 bg-pallete-200 h-14 rounded-md border-2 border-gray-300 flex gap-2 items-center justify-center px-2'>
                     <FaEye className='text-3xl'/>
-                    <p>Προβολή</p>
+                    Προβολή
 
-                </button>
+                </Link>
             </div>
 
         </div>

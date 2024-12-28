@@ -30,7 +30,7 @@ function NannyProfile(){
     // Query only if the id is different from myData.id
     const { data: usrData, isLoading: isUserLoading } = useQuery({
         queryKey: ['user', id],
-        queryFn: () => fetchUser(id),
+        queryFn: () => fetchUser(id,myData?.role),
         enabled: !skipFetch, // Only run the query if we should fetch data
         retry: 0,
     });
@@ -77,8 +77,8 @@ function NannyProfile(){
             </div>
         )
 
-
-    if(!loading && !isUserLoading && !usrData ){
+    //de brethike o xristis
+    if(!loading && !isUserLoading && !userData ){
         console.log(myData)
         return(
             <div className='w-full h-screen bg-white'> 

@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import { FaEye } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
+import { Link } from 'react-router-dom';
 
-
-function DraftApplication({firstName,lastName}){
+function DraftApplication({code,firstName,lastName}){
     return(
     
 
@@ -17,16 +17,16 @@ function DraftApplication({firstName,lastName}){
 
             {/* view button */}
             <div className='w-1/2 flex gap-7 justify-center '>
-                <button className='w-1/3 bg-pallete-200 h-14 rounded-md border-2 border-gray-300 flex gap-2 items-center justify-center px-2'>
-                    <FaEye className='text-3xl'/>
-                    <p>Προβολή</p>
+                <Link to={`/viewapplication/${code}`} className='w-1/3 bg-pallete-200 h-14 rounded-md border-2 border-gray-300 flex gap-2 items-center justify-center px-2'>
+                        <FaEye className='text-3xl'/>
+                        Προβολή
 
-                </button>
-                <button className='w-1/3 bg-pallete-200 h-14 rounded-md border-2 border-gray-300 flex gap-2 items-center justify-center px-2'>
-                    <MdEdit className='text-3xl'/>
-                    <p>Επεξεργασία</p>
+                </Link>
+                <Link to={`/editapplication/${code}`} className='w-1/3 bg-pallete-200 h-14 rounded-md border-2 border-gray-300 flex gap-2 items-center justify-center px-2'>
+                        <MdEdit className='text-3xl'/>
+                        Επεξεργασία
 
-                </button>
+                </Link>
             </div>
 
         </div>
@@ -37,8 +37,8 @@ function DraftApplication({firstName,lastName}){
 export default DraftApplication;
 
 DraftApplication.propTypes = {
-
-    firstName: PropTypes.string.isRequired,
+    code: PropTypes.string.isRequired,
+    firstName: PropTypes.string,
     lastName: PropTypes.string,
 
 };

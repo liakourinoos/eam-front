@@ -165,7 +165,8 @@ function Search() {
                         </div>
 
                         {/* Calendar */}
-                        <div>
+                        <div className="w-60 flex mt-2 flex-col gap-1">
+                            <p className="text-l">Ημερομηνία Έναρξης</p>
                             <DatePicker
                                 selected={selectedDate}
                                 onChange={(date) => setSelectedDate(date)}
