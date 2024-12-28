@@ -4,6 +4,7 @@ import ProfileEdit from "../views/Profile/ProfileEdit.jsx";
 import AccountEdit from "../views/Profile/AccountEdit.jsx";
 import {RenderHeaderNavbar} from '../../global_assets/global_functions.jsx'
 import { useAuth } from "../customHooks.jsx";
+import AvailabilityAndSkills from "../views/Profile/AvailabilityAndSkills.jsx";
 
 function NannySettings(){
     const [shownPage,setShownPage]= useState(1);
@@ -26,6 +27,12 @@ function NannySettings(){
                     <button className={`${shownPage==2 ? "text-red-500 underline":" text-black" } font-medium text-lg  `}
                             onClick={()=>toggleShownPage(2)}
                     >Στοιχεία Λογαριασμού</button>
+                    <button className={`${shownPage==3 ? "text-red-500 underline":" text-black" } font-medium text-lg  `}
+                            onClick={()=>toggleShownPage(3)}
+                    >Πιστοποιητικά</button>
+                    <button className={`${shownPage==4 ? "text-red-500 underline":" text-black" } font-medium text-lg  `}
+                            onClick={()=>toggleShownPage(4)}
+                    >Διαθεσιμότητα & Εξοικιώσεις</button>
 
                 </div>
 
@@ -35,6 +42,7 @@ function NannySettings(){
                     {shownPage ==1 && <ProfileEdit />}
                     {shownPage==2 && <AccountEdit  />}
 
+                    {shownPage==4 && <AvailabilityAndSkills  />}
 
 
 

@@ -9,6 +9,8 @@ import { cities,area,geitonia } from "../../global_assets/global_values.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import { RenderHeaderNavbar } from "../../global_assets/global_functions.jsx";
 import {useAuth} from '../customHooks.jsx'
+import {fetchNannies} from '../FetchFunctions.jsx'
+import {  useQuery } from '@tanstack/react-query';
 
 function Search() {
 
@@ -51,9 +53,24 @@ function Search() {
     const [selectedDate, setSelectedDate] = useState(null);
     const today = new Date();
 
-    const { userData } = useAuth();
+    const { userData,loading } = useAuth();
 
 
+    const {data,isLoading} = useQuery({
+        queryFn:()=>fetchNannies(),
+        queryKey: ['nannies'],
+        enabled: !!userData
+    })
+
+    if(loading || isLoading) 
+        return(
+            <div className="w-full h-screen bg-white flex items-center justify-center">
+                <span className="loading loading-spinner loading-lg"></span>
+            </div>
+        )
+
+    
+    if(!loading && !isLoading)
     return (
         <div className="">
         
@@ -183,11 +200,10 @@ function Search() {
 
                 {/* Right div - results */}
                 <div className="w-2/3 h-full overflow-y-auto p-5">
-                    <OfferProfile />
-                    <OfferProfile />
-                    <OfferProfile />
-                    <OfferProfile />
-                    <OfferProfile />
+                    {data?.map((nanny,idx)=>(
+                        <OfferProfile key={idx} id={nanny?.id} name={nanny?.name} surname={nanny?.surname} bio={nanny?.bio} rating={nanny?.rating} img={nanny?.img} ratingCount={nanny?.ratingCount}/>
+
+                    ))}
 
                 </div>
             </div>

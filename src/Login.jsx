@@ -36,8 +36,8 @@ function Login() {
     } finally {
       console.log("handleLogin finished"); // Debugging exit point
     }
-    // setPassword(""); // Clear password field after login
-    // setEmail("")
+    setPassword(""); // Clear password field after login
+    setEmail("")
 
   };
   

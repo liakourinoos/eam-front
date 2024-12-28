@@ -1,5 +1,5 @@
 import Footer from '../generic components/Footer.jsx'
-import {hours,days,availabilityMatrix} from '../../global_assets/global_values.jsx'
+import {hours,days} from '../../global_assets/global_values.jsx'
 import { Link } from 'react-router-dom';
 import { FaCheck, FaFile } from 'react-icons/fa6';
 import { FaFemale, FaMale, FaRegQuestionCircle } from 'react-icons/fa';
@@ -25,15 +25,20 @@ function NannyProfile(){
     const [emptyStars,setEmptyStars]=useState(0);
 
     // Check if the id from the URL is the same as myData.id to avoid unnecessary fetching
-    const skipFetch = myData && myData.id === id;
+    const skipFetch = myData?.id === id;
 
-    // Query only if the id is different from myData.id
     const { data: usrData, isLoading: isUserLoading } = useQuery({
-        queryKey: ['user', id],
-        queryFn: () => fetchUser(id,myData?.role),
-        enabled: !skipFetch, // Only run the query if we should fetch data
+        queryKey: ['nannyProfile', id],
+        queryFn: () => fetchUser(id),
+        enabled: !!id && !skipFetch,
         retry: 0,
+        cacheTime: 0, // Do not keep in cache
+        staleTime: 0, // Always treat the data as stale
+        refetchOnMount: true, // Refetch on component mount
+        refetchOnWindowFocus: true, // Refetch on window focus
+        refetchInterval: false, // Prevent refetch at regular intervals
     });
+    
 
     const userData = skipFetch ? myData : usrData;
 
@@ -76,10 +81,19 @@ function NannyProfile(){
                 <span className="loading loading-spinner loading-lg"></span>
             </div>
         )
+    
+        // if(!loading && !isUserLoading){
+        //     console.log("usr:")
+        //     console.log(usrData)
+        //     console.log("usEr" )
+        //     console.log(userData)
+        //     console.log("my" )
+        //     console.log(myData)
 
-    //de brethike o xristis
-    if(!loading && !isUserLoading && !userData ){
-        console.log(myData)
+        // }
+
+    //de brethike o xristis me to ID auto kai to role nanny KAI DEN EIMAI EGW.
+    if (!loading && !isUserLoading && (!usrData || (usrData?.id !== myData?.id && usrData?.role !== false))) {        
         return(
             <div className='w-full h-screen bg-white'> 
                 {RenderHeaderNavbar(myData)}
@@ -91,14 +105,16 @@ function NannyProfile(){
             </div>
         )
     }
-    
-    if(!loading && !isUserLoading && userData) 
+
+
+    //check if i visited my own profile or a nanny profile.
+    if(!loading && !isUserLoading && (id === myData?.id || userData?.role === false))
         return(
-        <div className="w-full">
+        <div className="w-full bg-white">
             {RenderHeaderNavbar(myData)}
 
             {/* main page */}
-            <div className=' w-full bg-gray-200 flex'>
+            <div className=' w-full  bg-white flex'>
 
                {/* Left div, nanny info */}
                 <div className="w-4/6 pb-2 ">
@@ -140,6 +156,7 @@ function NannyProfile(){
                                     {Array.from({ length: emptyStars }, (_, idx) => (
                                         <FaRegStar key={`empty-${idx}`} className="text-black" />
                                     ))}
+                                    <p className='ml-2'>({userData?.ratingCount})</p>
                                 </div>
                             </div>
                         </div>
@@ -244,16 +261,16 @@ function NannyProfile(){
                         </thead>
                         <tbody>
                             {/* Iterate over hours to create rows */}
-                            {hours.map((hour, hourIdx) => (
+                            {hours.map((time, hourIdx) => (
                                 <tr key={hourIdx} className="text-center border-y-2 hover:bg-gray-100">
                                     {/* First column for the time slot */}
-                                    <td className="text-center cursor-default font-normal">{hour}</td>
+                                    <td className="text-center cursor-default font-normal">{time}</td>
                                     {/* Iterate over days for each hour */}
                                     {days.map((day, dayIdx) => (
                                         <td key={dayIdx} className="border-2 border-x">
                                             {/* Check if the current day and hour exists in the availabilityMatrix */}
                                             {userData?.availabilityMatrix.some(
-                                                (entry) => entry.day === day && entry.hour === hour
+                                                (entry) => entry.day === day && entry.time === time
                                             ) ? (
                                                 <FaCheck className="text-green-800 font-medium mx-auto" />
                                             ) : (
@@ -271,14 +288,9 @@ function NannyProfile(){
                         <p className=' font-medium'>Εξοικιωμένος/η με:</p>
                         <div className='bg-gray-400 shadow-md py-1 shadow-gray-600 pl-2 w-full h-44 overflow-y-auto rounded-md'>
                             <ul className='list-disc pl-4'>
-                                <li>Dogs</li>
-                                <li>Cats</li>
-                                <li>Cooking</li>
-                                <li>Dogs</li>
-                                <li>Cats</li>
-                                <li>Cooking</li><li>Dogs</li>
-                                <li>Cats</li>
-                                <li>Cooking</li>
+                                {userData?.skills.map((skill,idx)=>(
+                                    <li key={idx}>{skill}</li>
+                                ))}
 
 
                             </ul>
@@ -298,6 +310,7 @@ function NannyProfile(){
 
 
     );
+
 }
 
 export default NannyProfile;

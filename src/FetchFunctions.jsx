@@ -46,34 +46,29 @@ export async function updateUserPassword(password,newPassword) {
 }
 
 
-export async function fetchUser(id,role) {
+export async function fetchUser(id) {
     const res = [];
-    console.log(user)
+    console.log(id)
         try {
-            // Query to find the user document based on UID field
-            const q = query(collection(db, 'users'),
-                where('userId', '==', id),
-                // where('status', 'in', ['Εγκρίθηκε', 'Εκκρεμεί']), //or
-                where('role', '==' , role)
-            );
-            const querySnapshot = await getDocs(q); // Get documents matching the query
-            if (!querySnapshot.empty) {
-                
-                querySnapshot.forEach((doc) => {
-                    applications.push({ id: doc.id, ...doc.data() });
-                });
-                
-            } else {
+             // Get the document reference based on the user id
+            const docRef = doc(db, "users", id);
+            // Fetch the document snapshot
+            const docSnap = await getDoc(docRef);
+            // Check if the document exists
+            if (docSnap.exists()) {
+                return { id: docSnap.id, ...docSnap.data() };
+            }
+            else{
                 console.error('No document found for userId:', id);
             }
-        }catch(error){
-            console.error('Error fetching user data: ', error);
         }
-        finally{
-            console.log(res)
-            return res;
+        catch(error){
+                console.error('Error fetching user data: ', error);
         }
-    
+        
+        console.log(res)
+        return res;
+        
 }
 
 export async function updateBio(id,newBio) {
@@ -85,6 +80,64 @@ export async function updateBio(id,newBio) {
         // Update the 'bio' field in the document
         await updateDoc(docRef, {
             bio: newBio,
+        });
+
+        console.log(`Document with ID ${id} updated successfully.`);
+    } catch (error) {
+        console.error("Error updating document:", error);
+    }
+}
+
+export async function updateSchedule(id,schedule){
+    try {
+        // Directly reference the document using the document ID
+        const docRef = doc(db, "users", id); // `id` is the document ID
+
+        // Update the 'bio' field in the document
+        await updateDoc(docRef, {
+            availabilityMatrix: schedule,
+        });
+
+        console.log(`Document with ID ${id} updated successfully.`);
+    } catch (error) {
+        console.error("Error updating document:", error);
+    }
+}
+
+export async function fetchNannies(){
+    console.log("called..")
+    const result=[]
+    try {
+        const q = query(collection(db, 'users'),
+            where('role', '==', false)
+        );
+        const querySnapshot = await getDocs(q); // Get documents matching the query
+        if (!querySnapshot.empty) {
+            querySnapshot.forEach((doc) => {
+                result.push({ id: doc.id, ...doc.data() });
+            });
+            
+        } else {
+            console.error('No nannies found..');
+        }
+    }catch(error){
+        console.error('Error fetching nannies');
+    }
+
+    console.log("before exit...")
+    return result;
+
+}
+
+
+export async function updateSkills(id,skills){
+    try {
+        // Directly reference the document using the document ID
+        const docRef = doc(db, "users", id); // `id` is the document ID
+
+        // Update the 'bio' field in the document
+        await updateDoc(docRef, {
+            skills: skills,
         });
 
         console.log(`Document with ID ${id} updated successfully.`);
