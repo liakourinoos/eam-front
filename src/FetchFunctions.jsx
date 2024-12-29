@@ -216,7 +216,8 @@ export async function fetchAllFinalApplications(userId){
             const q = query(collection(db, 'applications'),
                 where('userId', '==', userId),
                 where('status', 'in', ['Εγκρίθηκε', 'Εκκρεμεί']), //or
-                where('type', '==' , 'final')
+                where('type', '==' , 'final'),
+                where('archived', '==', false)
             );
             const querySnapshot = await getDocs(q); // Get documents matching the query
             if (!querySnapshot.empty) {
@@ -399,5 +400,80 @@ export async function addDraftApplication(data){
     } catch (error) {
         console.error('Error adding application:', error);  // Catch and log any errors
         return { success: false, message: 'Error creating application' };
+    }
+}
+
+export async function fetchAllFinalOffers(userId){
+    const offers = [];
+    try {
+        // Query to find the user document based on UID field
+        const q = query(collection(db, 'offers'),
+            where('userId', '==', userId),
+            where('type', '==' , 'final'),
+            where('archived', '==', false)
+        );
+        const querySnapshot = await getDocs(q); // Get documents matching the query
+        if (!querySnapshot.empty) {                
+            querySnapshot.forEach((doc) => {
+                offers.push({ id: doc.id, ...doc.data() });
+            });                
+        } else {
+            console.error('No document found for userId:', userId);
+        }
+    }catch(error){
+        console.error('Error fetching user data: ', error);
+    }
+    finally{
+        console.log(offers)
+        return offers;
+    }
+}
+
+
+
+export async function fetchAllDraftOffers(userId){
+    const offers = [];
+    try {
+        // Query to find the user document based on UID field
+        const q = query(collection(db, 'offers'),
+            where('userId', '==', userId),
+            where('type', '==' , 'draft'),
+            where('archived', '==', false)
+        );
+        const querySnapshot = await getDocs(q); // Get documents matching the query
+        if (!querySnapshot.empty) {                
+            querySnapshot.forEach((doc) => {
+                offers.push({ id: doc.id, ...doc.data() });
+            });                
+        } else {
+            console.error('No document found for userId:', userId);
+        }
+    }catch(error){
+        console.error('Error fetching user data: ', error);
+    }
+    finally{
+        console.log(offers)
+        return offers;
+    }
+}
+
+
+export async function archiveOffer(id){
+    console.log(id)
+    try {
+        const docRef = doc(db, 'offers', id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            // Update existing document
+            await updateDoc(docRef, { archived: true });
+            return { success: true, message: 'Offer archived successfully' };
+        } else {
+            // Handle missing document
+            return { success: false, message: `No offer found with ID: ${id}` };
+        }
+    } catch (error) {
+        console.error('Error archiving offer:', error.message);
+        return { success: false, message: 'Error archiving offer' };
     }
 }

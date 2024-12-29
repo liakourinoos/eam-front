@@ -21,7 +21,7 @@ export const RenderHeaderNavbar=(usrData, page=1)=>{
         return (
             <>
                 <UserHeader role={usrData?.role} id={usrData?.id}/>
-                <NannyNavbar/>
+                <NannyNavbar page={page}/>
             </>
         )
     }

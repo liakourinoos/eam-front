@@ -20,7 +20,8 @@ import ParentPayment from './ParentComponents/ParentPayment.jsx'
 import ParentApplications from './ParentComponents/ParentApplications.jsx'
 import ApplicationForm from '../src/views/Parent/ApplicationForm.jsx'
 import NannySettings from './NannyComponents/NannySetting.jsx';
-
+import NannyOffers from './NannyComponents/NannyOffers.jsx';
+import OfferForm from './views/Nanny/OfferForm.jsx';
 
 const router = createBrowserRouter([
   {path: '/', element: <App/>},
@@ -33,16 +34,27 @@ const router = createBrowserRouter([
   {path:'/contact' , element:<Contact/>},
   {path: '/parentpayments', element: <ParentPayment/>},
   {path: '/parentapplications', element: <ParentApplications/>},
-  {path: '/applicationform', element: <ApplicationForm/>},
-
+  {path: '/nannyoffers', element: <NannyOffers/>},
 
   // Dynamic routes 
+
+  //profiles
   { path: '/parentprofile/:id', element: <ParentProfile /> },
+  { path: '/nannyprofile/:id', element:<NannyProfile/>},
+
+  //Parent Applications
+  { path: '/applicationform', element: <ApplicationForm/>},
   { path: '/viewapplication/:id', element: <ApplicationForm action="Προβολή Αίτησης"/>},
   { path: '/editapplication/:id', element: <ApplicationForm action="Επεξεργασία Αίτησης"/>},
-  { path: '/nannyprofile/:id', element:<NannyProfile/>}
+
+  //Nanny Offers
+  { path: '/offerform', element: <OfferForm/>},
+  { path: '/viewoffer/:id', element: <OfferForm action="Προβολή Αγγελίας"/>},
+  { path: '/editoffer/:id', element: <OfferForm action="Επεξεργασία Αγγελίας"/>},
+
+  
 ]);
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

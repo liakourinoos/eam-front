@@ -96,7 +96,7 @@ function NannyProfile(){
     if (!loading && !isUserLoading && (!usrData || (usrData?.id !== myData?.id && usrData?.role !== false))) {        
         return(
             <div className='w-full h-screen bg-white'> 
-                {RenderHeaderNavbar(myData)}
+                {RenderHeaderNavbar(myData,0)}
                 <div className='h-screen bg-white flex flex-col gap-5 items-center justify-center text-3xl font-medium'>
                     <p >Δε βρέθηκε ο χρήστης.</p>
                     <Link to='/' className='text-blue-500 ml-2'>Επιστροφή στην αρχική σελίδα.</Link>
@@ -111,7 +111,7 @@ function NannyProfile(){
     if(!loading && !isUserLoading && (id === myData?.id || userData?.role === false))
         return(
         <div className="w-full bg-white">
-            {RenderHeaderNavbar(myData)}
+            {RenderHeaderNavbar(myData,0)}
 
             {/* main page */}
             <div className=' w-full  bg-white flex'>
@@ -247,7 +247,7 @@ function NannyProfile(){
                 {/* right div, available hours and skills */}
                 <div className='w-2/6   px-2'>
                     <p className='font-medium text-xl'>Εβδομαδιαίες Διαθέσιμες ώρες</p>
-                    <table className="table-auto w-full my-1 rounded-md text-xs bg-slate-400 border-collapse shadow-sm shadow-gray-700">
+                    <table className="table-auto w-full my-1 rounded-md text-xs bg-slate-200 border-collapse shadow-sm shadow-gray-700">
                         <thead>
                             <tr className="bg-gray-300 rounded-md">
                                 <th className="px-2 py-1 text-center"></th>
@@ -262,12 +262,12 @@ function NannyProfile(){
                         <tbody>
                             {/* Iterate over hours to create rows */}
                             {hours.map((time, hourIdx) => (
-                                <tr key={hourIdx} className="text-center border-y-2 hover:bg-gray-100">
+                                <tr key={hourIdx} className="text-center border-y-2 border-slate-400 hover:bg-gray-100">
                                     {/* First column for the time slot */}
                                     <td className="text-center cursor-default font-normal">{time}</td>
                                     {/* Iterate over days for each hour */}
                                     {days.map((day, dayIdx) => (
-                                        <td key={dayIdx} className="border-2 border-x">
+                                        <td key={dayIdx} className="border-2 border-slate-400 border-x">
                                             {/* Check if the current day and hour exists in the availabilityMatrix */}
                                             {userData?.availabilityMatrix.some(
                                                 (entry) => entry.day === day && entry.time === time
@@ -284,9 +284,9 @@ function NannyProfile(){
                     </table>
                     
                     {/* skills */}
-                    <div className='w-2/3 p-2   '>
-                        <p className=' font-medium'>Εξοικιωμένος/η με:</p>
-                        <div className='bg-gray-400 shadow-md py-1 shadow-gray-600 pl-2 w-full h-44 overflow-y-auto rounded-md'>
+                    <div className='w-2/3 p-2  mt-5 '>
+                        <p className=' font-medium'>{userData?.gender? "Εξοικιωμένος" : "Εξοικιωμένη"} με:</p>
+                        <div className='bg-white shadow-md py-1 shadow-gray-700 pl-2 w-full h-44 overflow-y-auto rounded-md'>
                             <ul className='list-disc pl-4'>
                                 {userData?.skills.map((skill,idx)=>(
                                     <li key={idx}>{skill}</li>
