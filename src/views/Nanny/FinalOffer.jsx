@@ -5,6 +5,7 @@ import { MdDelete } from "react-icons/md";
 import { useMutation } from '@tanstack/react-query';
 import { archiveOffer} from '../../FetchFunctions'
 import { queryClient } from '../../main'; // Adjust the import path as needed.
+
 function FinalOffer({code,finalDate}) {
     
 

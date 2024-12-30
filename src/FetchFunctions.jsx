@@ -127,7 +127,7 @@ export async function updateSchedule(id,schedule){
 }
 
 export async function fetchNannies(){
-    console.log("called..")
+    // console.log("called..")
     const result=[]
     try {
         const q = query(collection(db, 'users'),
@@ -321,12 +321,12 @@ export async function addFinalApplication( data ) {
     const today = new Date();
     const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
     console.log(formattedDate)
+    let docRef;
     try {
         //first, check if there are any applications with that id that have type "draft" to remove them
         if(data.id){
             //remove the document with that id and replace it with the actual data below
-            const docRef = doc(db, 'applications', data.id);
-
+            docRef = doc(db, 'applications', data.id);
             // Delete the document
             await deleteDoc(docRef);
 
@@ -348,7 +348,32 @@ export async function addFinalApplication( data ) {
         };
 
         const applicationsCollection = collection(db, 'applications');
-        await addDoc(applicationsCollection, applicationData);  // Adds the document
+        docRef = await addDoc(applicationsCollection, applicationData);  // Adds the document
+
+        //find the nannyId by quering in users using data.AMKA
+        const q = query(collection(db, 'users'),
+            where('AMKA', '==', data.AMKA)
+        );
+        const querySnapshot = await getDocs(q); // Get documents matching the query
+        let nannyId = ""
+        if (!querySnapshot.empty) {
+            querySnapshot.forEach((doc) => {
+                nannyId = doc.id;
+            });
+        }
+
+        // make the proper notification from parent to nanny
+        const notificationData = {
+            senderId: data.userId,
+            receiverId: nannyId,
+            type: 'jobOffer',
+            createdAt: formattedDate,
+            applicationId:docRef.id,
+            // read: false
+        };
+
+        const notificationsCollection = collection(db, 'notifications');
+        await addDoc(notificationsCollection, notificationData);  // Adds the document
     
         return { success: true, message: 'Application created successfully' };
     } catch (error) {
@@ -606,3 +631,189 @@ export async function updateUserInfo(id,field,data){
     }
 }
 
+export async function fetchNotifications(userId){
+    // console.log("called..")
+    const result=[]
+    try {
+        const q = query(collection(db, 'notifications'),
+            where('receiverId', '==', userId)
+        );
+        const querySnapshot = await getDocs(q); // Get documents matching the query
+        if (!querySnapshot.empty) {
+            querySnapshot.forEach((doc) => {
+                result.push({ id: doc.id, ...doc.data() });
+            });
+            
+        } else {
+            console.error('No nannies found..');
+        }
+
+        // fetch contact requests too
+        const q1 = query(collection(db, 'contactRequests'),
+            where('receiverId', '==', userId)
+        );
+        const querySnapshot1 = await getDocs(q1); // Get documents matching the query
+        if (!querySnapshot1.empty) {
+            querySnapshot1.forEach((doc) => {
+                result.push({ id: doc.id, ...doc.data() });
+            });
+            
+        // console.log(result)
+        } else {
+            console.error('No nannies found..');
+        }
+    }catch(error){
+        console.error('Error fetching nannies');
+    }
+
+    console.log(result)
+    return result;
+}
+
+
+export async function fetchJobNotification(id) {
+    try {
+        // Fetch notification by id
+        const docRef = doc(db, 'notifications', id);
+        const docSnap = await getDoc(docRef);
+        if (!docSnap.exists()) {
+            console.error(`Notification with id ${id} not found.`);
+            throw new Error(`Notification with id ${id} not found.`);
+        }
+        const data = docSnap.data();
+
+        // Verify senderId and applicationId
+        if (!data.senderId || !data.applicationId) {
+            throw new Error("Missing senderId or applicationId in the notification data.");
+        }
+        const senderId=data.senderId;
+        // Fetch sender's name and surname using document ID
+        const senderDocRef = doc(db, 'users', data.senderId);
+        const senderDocSnap = await getDoc(senderDocRef);
+        let senderName = "", senderSurname = "",img="",gender="";
+        if (senderDocSnap.exists()) {
+            const senderData = senderDocSnap.data();
+            senderName = senderData.name || "";
+            senderSurname = senderData.surname || "";
+            img=senderData.img || "";
+            gender=senderData.gender || "";
+            
+        } else {
+            console.error(`User with id ${data.senderId} not found.`);
+        }
+
+        // Fetch application details using document ID
+        const appDocRef = doc(db, 'applications', data.applicationId);
+        const appDocSnap = await getDoc(appDocRef);
+        let schedule = [], startingDate = "", months = "", address = "",finalizedAt="";
+        if (appDocSnap.exists()) {
+            const appData = appDocSnap.data();
+            schedule = appData.schedule || [];
+            startingDate = appData.startingDate || "";
+            months = appData.months || "";
+            address = appData.address || "";
+            finalizedAt=appData.finalizedAt || "";
+        } else {
+            console.error(`Application with id ${data.applicationId} not found.`);
+        }
+       
+        // Return structured data
+        return {
+            senderId,
+            senderName,
+            senderSurname,
+            img,
+            gender,
+            finalizedAt,
+            schedule,
+            startingDate,
+            months,
+            address
+        };
+
+    } catch (error) {
+        console.error("Fetching failed:", error);
+        throw error;
+    }
+}
+export async function fetchContactRequestNotification(id) {
+    try {
+        // Fetch notification by id
+        const docRef = doc(db, 'contactRequests', id);
+        console.log("Fetching document from contactRequests with ID:", id);
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+            console.error(`Document with id ${id} not found in contactRequests.`);
+            throw new Error(`Document with id ${id} not found in contactRequests.`);
+        }
+
+        const data = docSnap.data();
+        // console.log("Document data fetched from contactRequests:", data);
+
+        // Verify senderId and applicationId
+        if (!data.senderId ) {
+            console.error("Notification data is missing senderId or applicationId:", data);
+            throw new Error("Missing senderId or applicationId in the notification data.");
+        }
+
+        const senderId = data.senderId;
+        console.log("Sender ID:", senderId);
+
+        // Fetch sender's name and surname using document ID
+        const senderDocRef = doc(db, 'users', senderId);
+        const senderDocSnap = await getDoc(senderDocRef);
+        let senderName = "", senderSurname = "", img = "", gender = "";
+
+        if (senderDocSnap.exists()) {
+            const senderData = senderDocSnap.data();
+            // console.log("Sender document data:", senderData);
+
+            senderName = senderData.name || "";
+            senderSurname = senderData.surname || "";
+            img = senderData.img || "";
+            gender = senderData.gender || "";
+        } else {
+            console.error(`User with id ${senderId} not found in users collection.`);
+        }
+        // Return structured data
+        return {
+            senderId,
+            senderName,
+            senderSurname,
+            img,
+            gender,
+            createdAt: data.createdAt,
+        };
+    } catch (error) {
+        console.error("Fetching failed:", error);
+        throw error;
+    }
+}
+
+
+export async function addContactRequest(data){
+    const today = new Date();
+    const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+    console.log(data)
+    try{
+        const contactData = {
+            senderId: data.senderId,
+            receiverId: data.receiverId,
+            status: "pending",
+            createdAt: formattedDate,
+            contactType: data.contactType,
+            contactInfo: data.contactInfo,
+            type:"contactRequest"
+        };
+
+        const contactsCollection = collection(db, 'contactRequests');
+        await addDoc(contactsCollection, contactData);  // Adds the document
+
+        return { success: true, message: 'Contact request sent successfully' };
+
+    }
+    catch(error){
+
+    }
+}

@@ -22,6 +22,7 @@ import ApplicationForm from '../src/views/Parent/ApplicationForm.jsx'
 import NannySettings from './NannyComponents/NannySetting.jsx';
 import NannyOffers from './NannyComponents/NannyOffers.jsx';
 import OfferForm from './views/Nanny/OfferForm.jsx';
+import Notifications from './generic components/Notifications.jsx';
 
 const router = createBrowserRouter([
   {path: '/', element: <App/>},
@@ -31,12 +32,13 @@ const router = createBrowserRouter([
   {path: '/about', element: <About/>},
   {path: '/parentsettings',element:<ParentSettings/>},
   {path: '/nannysettings', element:<NannySettings/>},
-  {path:'/contact' , element:<Contact/>},
   {path: '/parentpayments', element: <ParentPayment/>},
   {path: '/parentapplications', element: <ParentApplications/>},
   {path: '/nannyoffers', element: <NannyOffers/>},
-
+  {path: '/notifications', element: <Notifications/>},
   // Dynamic routes 
+  {path:'/contact/:id' , element:<Contact/>},
+
 
   //profiles
   { path: '/parentprofile/:id', element: <ParentProfile /> },

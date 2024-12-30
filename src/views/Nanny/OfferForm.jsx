@@ -13,6 +13,7 @@ import { useQuery,useMutation } from '@tanstack/react-query';
 
 function OfferForm({action="Δημιουργία Νέας Αγγελίας"}){
     const nav=useNavigate();
+    
     const {id} = useParams();
 
     const { userData } = useAuth();

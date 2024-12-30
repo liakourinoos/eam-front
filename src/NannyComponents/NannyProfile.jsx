@@ -82,16 +82,6 @@ function NannyProfile(){
                 <span className="loading loading-spinner loading-lg"></span>
             </div>
         )
-    
-        // if(!loading && !isUserLoading){
-        //     console.log("usr:")
-        //     console.log(usrData)
-        //     console.log("usEr" )
-        //     console.log(userData)
-        //     console.log("my" )
-        //     console.log(myData)
-
-        // }
 
     //de brethike o xristis me to ID auto kai to role nanny KAI DEN EIMAI EGW.
     if (!loading && !isUserLoading && (!usrData || (usrData?.id !== myData?.id && usrData?.role !== false))) {        
@@ -163,7 +153,7 @@ function NannyProfile(){
                         </div>
 
                         {/* Right section: contact button, ONLY visible when Im not in my own profile */}
-                        { id!==userData?.id && <Link to={`${userData ? '/contact' : '/login'}`} className="w-1/5  bg-pallete-300 text-gray-50  text-3xl flex items-center justify-center rounded-md font-medium h-1/2 ml-auto mr-4">
+                        { id!==myData?.id && <Link to={`${userData ? `/contact/${userData?.id}` : '/login'}`} className="w-1/5  bg-pallete-400 text-gray-50  text-3xl flex items-center justify-center rounded-md font-medium h-1/2 ml-auto mr-4">
                             Επικοινωνία
                         </Link>}
                     </div>

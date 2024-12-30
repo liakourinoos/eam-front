@@ -1,22 +1,61 @@
-import {useContext,useState}  from 'react'
+import {useContext,useEffect,useState}  from 'react'
 import {useAuth } from '../customHooks.jsx'
 import { RenderHeaderNavbar } from '../../global_assets/global_functions.jsx';
 import Footer from '../generic components/Footer.jsx'
-import {Link, useNavigate} from 'react-router-dom'
+import {Link, useNavigate, useParams} from 'react-router-dom'
 import { MdPhone,MdEmail } from "react-icons/md";
 import { IoChevronBack } from "react-icons/io5";
 import { LiaSkype } from "react-icons/lia";
+import { useMutation } from '@tanstack/react-query';
+import {addContactRequest} from '../FetchFunctions.jsx'
 
 function Contact(){
-    const { userData } = useAuth();
+
+    const {id} = useParams();
+
+
+    const { userData,loading } = useAuth();
 
     const [selectedOption, setSelectedOption] = useState('0');
     const toggleSelectedOption =(option)=>{
         setSelectedOption(option);
     }
 
+    const {mutateAsync:sendRequest,isPending} = useMutation({
+        mutationFn:()=>addContactRequest(data),
+        onError:(error)=>console.log(error),
+
+    })
+
+    const [data,setData] = useState({
+        senderId:userData?.id,
+        receiverId:id,
+        contactType: selectedOption==='1' ? 'phone' : selectedOption==='2' ? 'email' : 'skype',
+        status: 'pending',
+        contactInfo: selectedOption==='1' ? userData?.number : selectedOption==='2' ? userData?.email : userData?.skype
+    })
+
+
+    useEffect(()=>{
+        if(!loading){
+            setData({...data, senderId:userData?.id})
+        }    
+    },[userData,loading])
+
+
     const nav=useNavigate();
 
+
+    if(loading){
+        return(
+            <div className='w-full h-screen bg-white flex items-center justify-center'>
+                <span className='loading loading-lg'></span>
+
+            </div>
+        )
+    }
+
+    if(!loading && userData)
     return(
         <div className='w-full h-screen flex flex-col'>
             {RenderHeaderNavbar(userData)}
@@ -43,8 +82,9 @@ function Contact(){
                 {/* options div */}
                 <div className="w-full flex flex-grow font-medium items-center justify-center gap-14">
                     <div className="group w-1/12 flex flex-col items-center gap-2">
-                        <div className={`${selectedOption==='1' && 'border-2 border-pallete-600'} h-36 cursor-pointer w-full rounded-md flex flex-col items-center justify-center gap-3 bg-pallete-300 group-hover:border-2 group-hover:border-gray-700`}
-                             onClick={()=>toggleSelectedOption('1')}>
+                        <div    className={`${selectedOption==='1' && 'border-2 border-pallete-600'} h-36 cursor-pointer w-full rounded-md flex flex-col items-center justify-center gap-3 bg-pallete-300 group-hover:border-2 group-hover:border-gray-700`}
+                                onClick={()=>{toggleSelectedOption('1'); setData({...data, contactType:'phone', contactInfo:userData?.number})}}
+                        >
                             <MdPhone className='text-6xl'/>
                             <p className='text-center'>Τηλεφωνικά</p>
                         </div>
@@ -54,8 +94,9 @@ function Contact(){
                     </div>
 
                     <div className="group w-1/12 flex flex-col items-center gap-2">
-                        <div className={`${selectedOption==='2' && 'border-2 border-pallete-600'} h-36 cursor-pointer w-full rounded-md flex flex-col items-center justify-center gap-3 bg-pallete-300 group-hover:border-2 group-hover:border-gray-700`}
-                             onClick={()=>toggleSelectedOption('2')}>
+                        <div    className={`${selectedOption==='2' && 'border-2 border-pallete-600'} h-36 cursor-pointer w-full rounded-md flex flex-col items-center justify-center gap-3 bg-pallete-300 group-hover:border-2 group-hover:border-gray-700`}
+                                onClick={()=>{toggleSelectedOption('2'); setData({...data, contactType:'email', contactInfo:userData?.email})}}
+                        >
                             <MdEmail className='text-6xl'/>
                             <p className='text-center'>Ηλεκτρονικά</p>
                         </div>
@@ -65,8 +106,8 @@ function Contact(){
                     </div>
 
                     <div className={` group w-1/12 flex flex-col items-center gap-2`}>
-                        <div className={`${selectedOption==='3' && 'border-2 border-pallete-600'} ${userData?.skype.length >0 ? 'bg-pallete-300' : 'bg-gray-400'} h-36 cursor-pointer w-full rounded-md flex flex-col items-center justify-center gap-3  group-hover:border-2 group-hover:border-gray-700`}
-                             onClick={userData?.skype.length >0 ? ()=> toggleSelectedOption('3') : undefined  }>
+                        <div    className={`${selectedOption==='3' && 'border-2 border-pallete-600'} ${userData?.skype.length >0 ? 'bg-pallete-300' : 'bg-gray-400'} h-36 cursor-pointer w-full rounded-md flex flex-col items-center justify-center gap-3  group-hover:border-2 group-hover:border-gray-700`}
+                                onClick={userData?.skype.length >0 ? ()=> {toggleSelectedOption('3'); setData({...data, contactType:'skype', contactInfo:userData?.skype}) }: undefined  }>
                             <LiaSkype className='text-6xl'/>
                             <p className='text-center'>Skype</p>
                         </div>
@@ -81,8 +122,10 @@ function Contact(){
                 {/* confirm button */}
                 <div className='w-full h-1/12 flex justify-end px-32'>
                     <button className={`text-xl font-medium rounded-md p-3 ${selectedOption==='0' ? 'bg-gray-400' : 'bg-pallete-300'}`}
-                            disabled={selectedOption==='0'}>
-                        Επιβεβαίωση
+                            disabled={selectedOption==='0'}
+                            onClick={()=>sendRequest()}
+                            >
+                        {isPending ? <span className='loading loading-sm'></span> : "Επιβεβαίωση" }
                     </button>
                 </div>
             </div>
