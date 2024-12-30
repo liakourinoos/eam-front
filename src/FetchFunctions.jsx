@@ -88,6 +88,28 @@ export async function updateBio(id,newBio) {
     }
 }
 
+
+export async function updatePic(id,newImg) {
+    console.log(id,newImg)
+    try {
+        // Directly reference the document using the document ID
+        const docRef = doc(db, "users", id); // `id` is the document ID
+
+        // Update the 'bio' field in the document
+        await updateDoc(docRef, {
+            img: newImg,
+        });
+
+        console.log(`Document with ID ${id} updated successfully.`);
+    } catch (error) {
+        console.error("Error updating document:", error);
+    }
+}
+
+
+
+
+
 export async function updateSchedule(id,schedule){
     try {
         // Directly reference the document using the document ID
@@ -241,25 +263,6 @@ export async function fetchAllFinalApplications(userId){
 
 }
 
-export async function fetchFinalApplication(id){
-    console.log(id)
-    try {
-        // Get the document reference based on the user id
-        const docRef = doc(db, "applications", id);
-        // Fetch the document snapshot
-        const docSnap = await getDoc(docRef);
-        // Check if the document exists
-        if (docSnap.exists()) {
-            // Return the data as an object
-            return { id: docSnap.id, ...docSnap.data() };
-        } else {
-            throw new Error('Application not found');
-        }
-    } catch (error) {
-        console.error("Error fetching final application:", error);
-        throw error; // Propagate the error so the calling component can handle it
-    }
-}
 
 
 export async function fetchAllDraftApplications(userId){
@@ -293,7 +296,7 @@ export async function fetchAllDraftApplications(userId){
 
 }
 
-export async function fetchDraftApplication(id){
+export async function fetchApplication(id){
     console.log(id)
     try {
         // Get the document reference based on the user id
@@ -457,6 +460,45 @@ export async function fetchAllDraftOffers(userId){
     }
 }
 
+export async function addFinalOffer( data ) {
+    console.log(data)
+    const today = new Date();
+    const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+    console.log(formattedDate)
+
+    const applicationData = {
+        town:data.town,
+        rows:data.rows,
+        startingDate: data.startingDate,  // Keep it as a string or convert to timestamp
+        months: data.months,
+        userId: data.userId,
+        finalizedAt:formattedDate,
+        type:'final',
+        archived:false,
+        childAge: data.childAge || "null",
+    };
+
+    try {
+        //first, check if there are any offers with that id that have type "draft" to update them
+        if(data.id){
+            //remove the document with that id and replace it with the actual data below
+            const docRef = doc(db, 'offers', data.id);
+
+            //update the document
+            await updateDoc(docRef, applicationData);
+
+        }
+        //else, create the document
+        const applicationsCollection = collection(db, 'offers');
+        await addDoc(applicationsCollection, applicationData);  // Adds the document
+    
+        return { success: true, message: 'Offer created successfully' };
+    } catch (error) {
+        console.error('Error adding application:', error);  // Catch and log any errors
+        return { success: false, message: 'Error creating Offer' };
+    }
+}
+
 
 export async function archiveOffer(id){
     console.log(id)
@@ -477,3 +519,90 @@ export async function archiveOffer(id){
         return { success: false, message: 'Error archiving offer' };
     }
 }
+
+
+export async function fetchOffer(id){
+    console.log(id)
+    try {
+        // Get the document reference based on the user id
+        const docRef = doc(db, "offers", id);
+        // Fetch the document snapshot
+        const docSnap = await getDoc(docRef);
+        // Check if the document exists
+        if (docSnap.exists()) {
+            // Return the data as an object
+            return { id: docSnap.id, ...docSnap.data() };
+        } else {
+            throw new Error('Application not found');
+        }
+    } catch (error) {
+        console.error("Error fetching final application:", error);
+        throw error; // Propagate the error so the calling component can handle it
+    }
+}
+
+export async function addDraftOffer(data){
+    console.log(data)
+    const today = new Date();
+    const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+    console.log(formattedDate)
+    // Prepare the application data
+
+    const applicationData = {
+        town:data.town,
+        rows:data.rows,
+        startingDate: data.startingDate,  // Keep it as a string or convert to timestamp
+        months: data.months,
+        userId: data.userId,
+        finalizedAt:formattedDate,
+        type:'draft',
+        archived:false,
+        childAge: data.childAge || "null",
+    };
+    try {
+        
+
+        //first, check if there are any applications with that id that have type "draft" to update them
+        if (data.id){
+            // Check if document exists before updating
+            const docRef = doc(db, 'offers', data.id);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                // Update existing document
+                await updateDoc(docRef, applicationData);
+                return { success: true, message: 'Draft application updated successfully' };
+            } else {
+                // Handle missing document
+                return { success: false, message: `No draft application found with ID: ${data.id}` };
+            }
+        } else { // Add a new draft offer
+            
+            const offersCollection = collection(db, 'offers');
+            const newDocRef = await addDoc(offersCollection, applicationData);
+            return { success: true, message: 'New draft application created successfully', id: newDocRef.id };
+        }
+    
+    } catch (error) {
+        console.error('Error adding application:', error);  // Catch and log any errors
+        return { success: false, message: 'Error creating application' };
+    }
+}
+
+
+
+export async function updateUserInfo(id,field,data){
+    try {
+        // Directly reference the document using the document ID
+        const docRef = doc(db, "users", id); // `id` is the document ID
+
+        await updateDoc(docRef, {
+            [field]: data,
+        });
+
+        console.log(`Document with ID ${id} updated successfully.`);
+    } catch (error) {
+        console.error("Error updating document:", error);
+    }
+}
+

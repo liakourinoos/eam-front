@@ -28,3 +28,15 @@ export const RenderHeaderNavbar=(usrData, page=1)=>{
 
 
 }
+
+export const downloadFile = (name) => {
+    const content = "Ενδεικτικό Αρχείο"; // Content of the dummy file
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" }); // Create a Blob
+    const nameWithoutExtension = name.split('.').slice(0, -1).join('.') || name;
+    const url = URL.createObjectURL(blob); // Create a temporary URL for the Blob
+    const link = document.createElement("a"); // Create a link element
+    link.href = url;
+    link.download = `${nameWithoutExtension}.txt`; // Set the filename for the downloaded file
+    link.click(); // Trigger the download
+    URL.revokeObjectURL(url); // Clean up the temporary URL
+};

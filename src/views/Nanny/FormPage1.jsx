@@ -156,6 +156,7 @@ function FormPage1({ form, setForm, nextFn }) {
                                                     setForm({ ...form, rows: updatedRows });
                                                 }}
                                                 className="ml-2 my-1 size-6 checkbox checkbox-secondary"
+                                                disabled={form.cantEdit}
                                         />
                                             <label htmlFor={`neighborhood-${idx}`} className=" ml-2">{geitonia}</label>
                                     </div>
@@ -189,12 +190,12 @@ function FormPage1({ form, setForm, nextFn }) {
                 ))}
             </div>
             {/* //check if there are more areas to add */}
-            { area.find((a) => a.city === form.town)?.areas.length > selectedAreas.length   &&
+            { area.find((a) => a.city === form.town)?.areas.length > selectedAreas.length   && !form.cantEdit &&
 
                     <button onClick={() => {
                                 const updatedRows = [
                                     ...form.rows,
-                                    { index: form.rows.length + 1, area: "", neighborhood: [], canHost: "" }
+                                    { index: form.rows.length , area: "", neighborhood: [], canHost: "" }
                                 ];
                                 setForm({ ...form, rows: updatedRows });
                             }}

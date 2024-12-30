@@ -8,7 +8,7 @@ import FormPage1 from './FormPage1.jsx';
 import FormPage2 from './FormPage2.jsx';
 import FormPage3 from './FormPage3.jsx';
 import { useParams } from 'react-router-dom';
-import { fetchFinalApplication,addDraftApplication } from '../../FetchFunctions.jsx';
+import { fetchOffer, addDraftOffer } from '../../FetchFunctions.jsx';
 import { useQuery,useMutation } from '@tanstack/react-query';
 
 function OfferForm({action="Δημιουργία Νέας Αγγελίας"}){
@@ -31,16 +31,16 @@ function OfferForm({action="Δημιουργία Νέας Αγγελίας"}){
     
 
     const {data,isLoading}=useQuery({
-        queryFn:()=>fetchFinalApplication(id),
-        queryKey:['application',id],
+        queryFn:()=>fetchOffer(id),
+        queryKey:['offers',id],
         retry:false,
         enabled:action==="Προβολή Αγγελίας" || action==="Επεξεργασία Αγγελίας" && !!id
     })
 
     const {mutateAsync:addDraft,isPending} = useMutation({
-        mutationFn:()=>addDraftApplication({...formState,userId:userData.id}),
+        mutationFn:()=>addDraftOffer({...formState,userId:userData.id}),
         retry:false,
-        onSuccess:()=>nav("/parentapplications")
+        onSuccess:()=>nav("/nannyoffers")
     })
 
 
@@ -52,7 +52,7 @@ function OfferForm({action="Δημιουργία Νέας Αγγελίας"}){
             setFormState({
                 ...formState,
                 town: isEdit || isView ? data?.town ?? "": "",
-                rows: isEdit || isView ? data?.rows ?? [ {index:1, area:"",neighborhood:[],canHost:""} ] : [ {index:1, area:"",neighborhood:[],canHost:""} ],
+                rows: isEdit || isView ? data?.rows ?? [ {index:0, area:"",neighborhood:[],canHost:""} ] : [ {index:0, area:"",neighborhood:[],canHost:""} ],
                 // location: isEdit || isView ? data?.location ?? []: [],
                 // neighborhood: isEdit || isView ? data?.neighborhood ?? [] : [],
                 startingDate: isEdit || isView ? data?.startingDate ?? "" : "",

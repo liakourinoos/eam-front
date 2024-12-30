@@ -33,38 +33,25 @@ export const hours = [
 ];
 export const days = ["ΔΕΥ", "ΤΡΙ", "ΤΕΤ", "ΠΕΜ", "ΠΑΡ", "ΣΑΒ", "ΚΥΡ"];
 
-// Randomly predefined availability matrix (7 days x 24 hours)
-// export const availabilityMatrix = [
-//     {day:'ΔΕΥ',hour:"12:00"},
-//     {day:'ΤΡΙ',hour:"12:00"},
-//     {day:'ΤΕΤ',hour:"14:00"},
-//     {day:'ΠΕΜ',hour:"09:00"},
-//     {day:'ΠΑΡ',hour:"18:00"},
-//     {day:'ΣΑΒ',hour:"20:00"},
-//     {day:'ΚΥΡ',hour:"07:00"},
-//     {day:'ΤΡΙ',hour:"21:00"},
-//     {day:'ΔΕΥ',hour:"08:00"},
-//     {day:'ΔΕΥ',hour:"15:00"},
-//     {day:'ΤΡΙ',hour:"10:00"},
-//     {day:'ΤΡΙ',hour:"16:00"},
-//     {day:'ΤΕΤ',hour:"11:00"},
-//     {day:'ΤΕΤ',hour:"17:00"},
-//     {day:'ΠΕΜ',hour:"13:00"},
-//     {day:'ΠΕΜ',hour:"19:00"},
-//     {day:'ΠΑΡ',hour:"09:00"},
-//     {day:'ΠΑΡ',hour:"14:00"},
-//     {day:'ΣΑΒ',hour:"12:00"},
-//     {day:'ΣΑΒ',hour:"16:00"},
-//     {day:'ΚΥΡ',hour:"10:00"},
-//     {day:'ΚΥΡ',hour:"15:00"},
-//     {day:'ΔΕΥ',hour:"20:00"},
-//     {day:'ΤΡΙ',hour:"22:00"},
-//     {day:'ΤΕΤ',hour:"23:00"},
-//     {day:'ΠΕΜ',hour:"06:00"},
-//     {day:'ΠΑΡ',hour:"07:00"},
-//     {day:'ΣΑΒ',hour:"08:00"},
-//     {day:'ΚΥΡ',hour:"09:00"},
-//     {day:'ΔΕΥ',hour:"11:00"},
-//     {day:'ΤΡΙ',hour:"13:00"},
-//     {day:'ΤΕΤ',hour:"15:00"}
-// ];
+export const educationTitles=[
+    "Πτυχίο Προσχολικής Αγωγής και Εκπαίδευσης",
+    "Πτυχίο Βρεφονηπιοκομίας",
+    "Πτυχίο στις Επιστήμες της Αγωγής (με κατεύθυνση Προσχολικής Εκπαίδευσης)",
+    "Πτυχίο Κοινωνικής Εργασίας",
+    "Βοηθός Βρεφονηπιοκόμου",
+    "Προσχολική Αγωγή Δραστηριοτήτων Δημιουργίας και Έκφρασης",
+    "Προσχολική Αγωγή Ημερήσιας Φροντίδας Παιδιών με Ειδικές Ανάγκες"
+]
+
+export const certificateTitles = [
+    "Πιστοποίηση Πρώτων Βοηθειών (First Aid Certification)",
+    "Πιστοποίηση Καρδιοαναπνευστικής Αναζωογόνησης (ΚΑΡΠΑ) (Cardiopulmonary Resuscitation - CPR Certification)",
+    "Πιστοποίηση Αντιμετώπισης Παιδικών Ατυχημάτων (Child Injury Prevention Certification)",
+    "Πιστοποίηση Σχολής Βρεφοκόμων (Infant Care Training Certification)",
+    "Πιστοποίηση Διατροφής και Υγείας για Παιδιά (Nutrition and Health for Children Certification)",
+    "Πιστοποίηση Συμπεριφορικής Διαχείρισης Παιδιών (Child Behavior Management Certification)",
+    "Πιστοποίηση Αναπτυξιακής Ψυχολογίας για Παιδιά (Child Development Psychology Certification)",
+    "Πιστοποίηση για Διδασκαλία Αγγλικών σε Παιδιά (English Language Teaching for Children Certification)",
+    "Πιστοποίηση Υγιεινής και Ασφάλειας Στην Φροντίδα Παιδιών (Childcare Hygiene and Safety Certification)",
+    "Πιστοποίηση Προσχολικής Αγωγής (Preschool Education Certification)"
+];

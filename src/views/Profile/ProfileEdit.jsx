@@ -1,8 +1,9 @@
 import { MdAddPhotoAlternate } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
 // import PropTypes from 'prop-types';
 import {useAuth} from '../../customHooks.jsx'
 import { useEffect,useState } from "react";
-import { updateBio } from "../../FetchFunctions.jsx";
+import { updateBio,updatePic } from "../../FetchFunctions.jsx";
 import { set } from "date-fns";
 import { useMutation } from "@tanstack/react-query";
 function ParentProfileEdit(){
@@ -11,7 +12,10 @@ function ParentProfileEdit(){
     const { userData,loading,refetch } = useAuth(); 
     
     const [bio,setBio] = useState("");
-    
+    const [picChange,setPicChange] = useState(false);
+
+    const[imgUrl,setImgUrl] = useState("")
+
     useEffect(() => {
         if(userData){
             // console.log(userData);
@@ -24,6 +28,17 @@ function ParentProfileEdit(){
         onSuccess:()=>{
             console.log("Bio updated successfully")
             refetch(); // Use the captured refetch function
+        
+        }
+    });
+
+    const {mutateAsync:changePic} = useMutation({
+        mutationFn:() => updatePic(userData?.id, imgUrl),
+        onSuccess:()=>{
+            console.log("Pic updated successfully")
+            refetch(); // Use the captured refetch function
+            setPicChange(false);
+            setImgUrl("");
         
         }
     });
@@ -46,21 +61,37 @@ function ParentProfileEdit(){
                 <p className="text-3xl font-bold ">Το Προφίλ Μου</p>
                 <div className='flex flex-col items-center gap-2 relative '>
                     <img id="pfp" src={userData?.img} className='size-36 border-2 object-cover rounded-full' ></img>
-                    <input className='text-xs w-4/5 border-2 hidden '
-                        // onChange={handleMediaChange} 
-                        type="file"
-                        // ref={fileInputRef} 
-                        accept="image/*"
-                    ></input>   
+                    
                     <div    
-                    //    onClick={handleDivClick} 
-                            className={`absolute inset-0 flex items-center text-2xl justify-center cursor-pointer text-white 
-                                        bg-black bg-opacity-70 opacity-30 hover:opacity-100 rounded-full`}
+                        onClick={()=>{setPicChange(!picChange);}}
+                        className={`absolute inset-0 flex items-center text-2xl justify-center cursor-pointer text-white 
+                                        bg-black bg-opacity-50 opacity-70 hover:opacity-100 rounded-full`}
                     >
-                        <MdAddPhotoAlternate/>
+                        <MdEdit/>
                     </div> 
+                    
                 </div>
+                {picChange && 
+                    <div className="w-1/3 font-medium h-20 mx-auto flex flex-col gap-1 mb-3 items-center  justify-center">
+                        <p>URL νέας εικόνας προφίλ:</p>
+                        <input  className="bg-white h-10 w-1/2 rounded-md border-2 pl-2   border-gray-400 px-1"
+                                placeholder="https://jdm-restoration.com/cdn/shop/collections/jzx100_1350x902.jpg?v=1679301822"
+                                value={imgUrl}
+                                onChange={(e)=>setImgUrl(e.target.value)}
+                        />
+                        <button className={`${userData?.img!== imgUrl && imgUrl.length===0 ? "bg-gray-200" : "bg-pallete-300" }  w-32 font-medium h-10 px-2 text-center rounded-md`}
+                                onClick={()=>changePic()}
+                                disabled={!userData?.uid || isPending || userData?.img == imgUrl || imgUrl.length===0}
+                        >
 
+                            {isPending ? <span className="loading loading-md"></span> : "Αποθήκευση"}
+                        </button>
+
+
+                    </div>
+                                        
+                                        
+                }
                 {/* fields that cannot be modified for name,surname etc */}
                 <div className="w-1/2 px-auto h-1/2  flex flex-col  items-center"> 
                     <div >

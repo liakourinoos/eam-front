@@ -35,7 +35,7 @@ function FinalOffer({code,finalDate}) {
 
             {/* view button */}
             <div className='w-1/3 flex justify-center px-2 gap-2 '>
-                <Link to={`/viewapplication/${code}`} className='w-2/3 bg-pallete-200 h-14 rounded-md border-2 border-gray-300 flex gap-2 items-center justify-center px-2'>
+                <Link to={`/viewoffer/${code}`} className='w-2/3 bg-pallete-200 h-14 rounded-md border-2 border-gray-300 flex gap-2 items-center justify-center px-2'>
                     <FaEye className='text-3xl'/>
                     Προβολή
                 </Link>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import Footer from "../generic components/Footer.jsx";
 import ProfileEdit from "../views/Profile/ProfileEdit.jsx";
 import AccountEdit from "../views/Profile/AccountEdit.jsx";
+import Certifications from "../views/Profile/Certifications.jsx";
 import {RenderHeaderNavbar} from '../../global_assets/global_functions.jsx'
 import { useAuth } from "../customHooks.jsx";
 import AvailabilityAndSkills from "../views/Profile/AvailabilityAndSkills.jsx";
@@ -41,7 +42,7 @@ function NannySettings(){
                 <div className="w-full   ">
                     {shownPage ==1 && <ProfileEdit />}
                     {shownPage==2 && <AccountEdit  />}
-
+                    {shownPage==3 && <Certifications  />}
                     {shownPage==4 && <AvailabilityAndSkills  />}
 
 

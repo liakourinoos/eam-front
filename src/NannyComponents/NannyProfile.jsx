@@ -12,9 +12,10 @@ import NannyReview from '../views/Nanny/NannyReview.jsx'
 import { useParams } from 'react-router-dom';
 import { fetchUser } from '../FetchFunctions.jsx';
 import { useQuery } from '@tanstack/react-query';
+import { downloadFile } from '../../global_assets/global_functions.jsx';
 
 function NannyProfile(){
-
+   
 
     const { userData:myData,loading } = useAuth();
 
@@ -170,8 +171,9 @@ function NannyProfile(){
                     {/* bio section */}
                     <div className='w-2/4 ml-4  mt-10 '>
                         <p className='text-xl pl-2 font-medium'>Σύντομη Περιγραφή</p>
-                        <div className='rounded-md px-2 py-1 bg-gray-300 w-full'>
-                            <p>{userData?.bio}</p>
+                        <div className='rounded-md pl-6 pr-2  py-1 bg-gray-100 w-full'>
+                            {(!userData?.bio || userData?.bio?.length===0) && <p className='text-gray-600'>Δε βρέθηκε περιγραφή.</p>}
+                            {userData?.bio && <p>{userData?.bio}</p>}
 
                         </div>
                     </div>
@@ -179,25 +181,29 @@ function NannyProfile(){
                     {/* studies section */}
                     <div className='w-2/4 ml-4  mt-8 '>
                         <p className='text-xl pl-2 font-medium flex cursor-default items-center gap-2 '  title='Επαληθευμένο από εμάς.'>Σπουδές <FaRegQuestionCircle/></p>
-                        <div className='rounded-md px-2 py-1 bg-gray-300 w-full'>
+                        <div className='rounded-md px-2 py-1 bg-gray-100 w-full'>
                             <ul className='list-disc pl-4'>
-                                <li>AEI βρεφονηπιοκομίας Αθηνών</li>
-                                <li>βαριεμαι γαμω ειναι καργα βαρετο και νυσταζω!!</li>
+                                { (!userData?.education || userData?.education?.length ===0 ) && <p className='text-gray-600'>Δε βρέθηκαν σπουδές.</p>}
+                                {userData?.education?.map((edu,idx)=>(
+                                    <li key={idx}>{edu.title}</li>    
+                                ))}
 
                             </ul>
 
                         </div>
                     </div>
 
-                    {/* certificates section */}
+                    {/*  certificates section */} 
                     <div className='w-2/4 ml-4  mt-8 '>
                         <p className='text-xl pl-2 font-medium flex cursor-default items-center gap-2 '  title='Επαληθευμένο από εμάς.'>Πιστοποιήσεις<FaRegQuestionCircle/></p>
-                        <div className='rounded-md px-2 py-1 bg-gray-300 w-full'>
+                        <div className='rounded-md px-2 py-1 bg-gray-100 w-full'>
                             <ul className='list-disc pl-4'>
-                                <li>Πρώτων Βοηθειών</li>
-                                <li>Καρδιοπνευμονική Αναζωογόνηση (ΚΑΡΠΑ)</li>
-                                <li>Πιστοποίηση Παιδικής Διατροφής</li>
-
+                                {(!userData?.certificates || userData?.certificates?.length ===0 )  && <p className='text-gray-600'>Δε βρέθηκαν πιστοποιήσεις.</p>}
+                                {userData?.certificates?.map((cert,idx)=>(
+                                    <li key={idx} >
+                                        {cert.title}
+                                    </li>  
+                                ))}
                             </ul>
                         </div>
                     </div>
@@ -205,17 +211,19 @@ function NannyProfile(){
                     {/* systatikes epistoles */}
                     <div className='w-2/4 ml-4  mt-8 '>
                         <p className='text-xl pl-2 font-medium flex cursor-default items-center gap-2 '  title='Επαληθευμένο από εμάς.'>Συστατικές Επιστολές</p>
-                        <div className='rounded-md px-2 py-1 bg-gray-300 w-full'>
-                            <div className='w-2/5 px-2 my-1 bg-gray-400 flex items-center gap-1 pl-1 rounded-md'>
-                                <FaFile/> <span className='font-medium text-lg'>Επιστολή_1.txt</span>
-                            </div>
-                            <div className='w-2/5 px-2 my-1 bg-gray-400 flex items-center gap-1 pl-1 rounded-md'>
-                                <FaFile/> <span className='font-medium text-lg'>Επιστολή_1.txt</span>
-                            </div>
-                            <div className='w-2/5 px-2 my-1 bg-gray-400 flex items-center gap-1 pl-1 rounded-md'>
-                                <FaFile/> <span className='font-medium text-lg'>Επιστολή_1.txt</span>
-                            </div>
-                            
+                        <div className='rounded-md px-2 py-1 bg-gray-100 w-full'>
+                            {(!userData?.letters || userData?.letters.length === 0 ) && <p className='text-gray-600'>Δε βρέθηκαν συστατικές επιστολές.</p>}
+                            {userData?.letters?.map((lett,idx)=>(
+                                    <li key={idx} className="flex my-1 items-center">
+                                        <span className="mr-2 text-3xl">•</span>
+                                        <button title={`${lett.name} (DUMMY ΑΡΧΕΊΟ)`}
+                                            className=" overflow-x-auto  bg-white py-2  px-3 rounded-md shadow-sm shadow-gray-600"
+                                            onClick={() => downloadFile(lett.name)}
+                                        >
+                                            {lett.name}
+                                        </button>
+                                </li>  
+                            ))}
                         </div>
                     </div>
                 
@@ -245,7 +253,7 @@ function NannyProfile(){
 
 
                 {/* right div, available hours and skills */}
-                <div className='w-2/6   px-2'>
+                <div className='w-2/6 mr-10 mt-10  px-2'>
                     <p className='font-medium text-xl'>Εβδομαδιαίες Διαθέσιμες ώρες</p>
                     <table className="table-auto w-full my-1 rounded-md text-xs bg-slate-200 border-collapse shadow-sm shadow-gray-700">
                         <thead>
@@ -286,8 +294,9 @@ function NannyProfile(){
                     {/* skills */}
                     <div className='w-2/3 p-2  mt-5 '>
                         <p className=' font-medium'>{userData?.gender? "Εξοικιωμένος" : "Εξοικιωμένη"} με:</p>
-                        <div className='bg-white shadow-md py-1 shadow-gray-700 pl-2 w-full h-44 overflow-y-auto rounded-md'>
+                        <div className='bg-gray-100 shadow-md py-1 shadow-gray-700 pl-2 w-full h-44 overflow-y-auto rounded-md'>
                             <ul className='list-disc pl-4'>
+                                {(!userData?.skills || userData?.skills?.length===0) && <p className='font-medium mt-2  text-gray-600'>Δε βρέθηκαν εξοικιώσεις του χρήστη</p>}
                                 {userData?.skills.map((skill,idx)=>(
                                     <li key={idx}>{skill}</li>
                                 ))}

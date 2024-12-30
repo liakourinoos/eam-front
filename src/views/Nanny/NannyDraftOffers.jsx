@@ -54,7 +54,7 @@ function NannyDraftOffers(){
                     }
                     {!isLoading && Array.isArray(offers) && 
                         offers.map((app,idx)=>(
-                            <DraftOffer key={idx} code={app.id} firstName={app.nannyName} lastName={app.nannySurname}/>
+                            <DraftOffer key={idx} code={app.id} />
                         ))
                     }
 

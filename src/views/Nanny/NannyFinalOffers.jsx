@@ -75,7 +75,6 @@ function NannyFinalOffers() {
                     ))
                 }
 
-                <FinalOffer  code={"123"} finalDate={"02/02/2002"}/>
 
             </div>
 

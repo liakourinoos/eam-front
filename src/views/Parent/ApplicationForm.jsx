@@ -8,7 +8,7 @@ import FormPage1 from './FormPage1.jsx';
 import FormPage2 from './FormPage2.jsx';
 import FormPage3 from './FormPage3.jsx';
 import { useParams } from 'react-router-dom';
-import { fetchFinalApplication,addDraftApplication } from '../../FetchFunctions.jsx';
+import { fetchApplication,addDraftApplication } from '../../FetchFunctions.jsx';
 import { useQuery,useMutation } from '@tanstack/react-query';
 
 function ApplicationForm({action="Δημιουργία Νέας Αίτησης"}){
@@ -32,7 +32,7 @@ function ApplicationForm({action="Δημιουργία Νέας Αίτησης"}
     
 
     const {data,isLoading}=useQuery({
-        queryFn:()=>fetchFinalApplication(id),
+        queryFn:()=>fetchApplication(id),
         queryKey:['application',id],
         retry:false,
         enabled:action==="Προβολή Αίτησης" || action==="Επεξεργασία Αίτησης" && !!id

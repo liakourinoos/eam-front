@@ -6,7 +6,7 @@ import { MdArrowBackIosNew } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "../../customHooks.jsx";
-import { addFinalApplication } from "../../FetchFunctions.jsx";
+import { addFinalOffer } from "../../FetchFunctions.jsx";
 
 function FormPage2({ form, setForm, nextFn }) {
 
@@ -60,15 +60,15 @@ function FormPage2({ form, setForm, nextFn }) {
     
 
 
-    // const { mutateAsync: addApplication,isPending} = useMutation({
-    //     mutationFn: () => addFinalApplication({ ...form, userId: userData?.id }),   
-    //     onSuccess: () => {
-    //         nextFn(1); // Move to the next step
-    //     },
-    //     onError: (error) => {
-    //         console.error('Error:', error); // Handle error
-    //     }
-    // });
+    const { mutateAsync: addOffer,isPending} = useMutation({
+        mutationFn: () => addFinalOffer({ ...form, userId: userData?.id }),   
+        onSuccess: () => {
+            nextFn(1); // Move to the next step
+        },
+        onError: (error) => {
+            console.error('Error:', error); // Handle error
+        }
+    });
     
 
 
@@ -137,7 +137,7 @@ function FormPage2({ form, setForm, nextFn }) {
                         name="childAge" 
                         disabled={form.cantEdit}       
                 >
-                    <option disabled value={""}>Επιλέξτε</option>
+                    <option disabled value={"null"}>Επιλέξτε</option>
                     <option value={"0-1"}>0-1 ετών</option>
                     <option value={"1-3"}>1-3 ετών</option>
                     <option value={"3-5"}>3-5 ετών</option>
@@ -145,10 +145,6 @@ function FormPage2({ form, setForm, nextFn }) {
                 </select>
             </div>
 
-            {/* <p className="font-medium text-lg my-5 text-center">
-                Απασχόληση από <span className="mx-1 text-xl underline">{formatDate(form.startingDate)}</span> 
-                έως <span className="mx-1 text-xl underline ">{formatDate(endingDate)}</span> 
-            </p> */}
 
             {/* accept terms */}
             <div className="w-1/3 my-10 mx-auto">
@@ -183,8 +179,8 @@ function FormPage2({ form, setForm, nextFn }) {
             <div className='w-11/12 mx-auto flex justify-end'>                    
                 {!form.cantEdit &&
                     <button 
-                            // onClick={()=>addApplication()}
-                            onClick={()=>{console.log(form); nextFn(1)}}
+                            onClick={()=>addOffer()}
+                            // onClick={()=>{console.log(form); nextFn(1)}}
                             className={` border-2 font-medium w-48 border-gray-500 text-md px-2 mr-10 h-14 rounded-md my-3
                                         ${!checkInputs() ? 'bg-gray-300' : 'bg-white' }
                             `}
@@ -196,7 +192,7 @@ function FormPage2({ form, setForm, nextFn }) {
                     </button>
                 }
                 {form.cantEdit && 
-                    <Link to='/parentapplications' className={` border-2 flex items-center justify-center bg-white font-medium w-48 border-gray-500 text-md px-2 mr-10 h-14 rounded-md my-3`}>
+                    <Link to='/nannyoffers' className={` border-2 flex items-center justify-center bg-white font-medium w-48 border-gray-500 text-md px-2 mr-10 h-14 rounded-md my-3`}>
                         Οι Αιτήσεις Μου
                     </Link>
 

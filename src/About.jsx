@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import Footer from './generic components/Footer.jsx';
 import Header from './generic components/Header.jsx';
 import './App.css';
-
+import { useAuth } from './customHooks.jsx';
+import { RenderHeaderNavbar } from '../global_assets/global_functions.jsx';
 function App() {
+  const { userData,loading } = useAuth();
   const [isVisible, setIsVisible] = useState(false);
 
   // Show the button when the user scrolls down
@@ -29,9 +31,17 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  if(loading)
+    return(
+      <div className='w-full h-screen flex justify-center items-center bg-white'> 
+        <span className='loading loading-lg'></span>
+      </div>
+    )
+
+  if(!loading && userData)
     return (
     <div className='w-full h-screen flex flex-col justify-between bg-white'>
-        <Header />
+        {RenderHeaderNavbar(userData,0)}
         {/* main page */}
         <div className="w-full  flex-grow relative bg-white">
             <p className='ml-32 text-3xl font-bold mt-10 mb-2'>Εγχειρίδιο Χρήσης</p>
