@@ -4,35 +4,7 @@ import {cities,area,geitonia} from "../../../global_assets/global_values.jsx";
 import { MdOutlineRemoveCircleOutline } from "react-icons/md";
 import { MdAddCircleOutline } from "react-icons/md";
 function FormPage1({ form, setForm, nextFn }) {
-    const [errors, setErrors] = useState({
-        name: "",
-        surname: "",
-        AMKA: ""
-    });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setForm(prevState => ({ ...prevState, [name]: value }));
-
-        // // Validate input
-        // let error = "";
-        // if (name === "name" || name === "surname") {
-        //     if (/\d/.test(value)) {
-        //         error = "Δεν επιτρέπονται αριθμοί.";
-        //     } else if (/\s/.test(value)) {
-        //         error = "Επιτρέπονται μόνο χαρακτήρες αλφάβητου.";
-        //     }
-        // } else if (name === "AMKA") {
-        //     if (!/^\d*$/.test(value)) {
-        //         error = "Επιτρέπονται μόνο αριθμοί.";
-        //     }
-        //     else if( value.length !== 11 && value.length !== 0){
-        //         error = "Το ΑΜΚΑ πρέπει να αποτελείται από 11 ψηφία.";
-        //     }
-        // }
-
-        // setErrors(prevState => ({ ...prevState, [name]: error }));
-    };
 
     const [selectedAreas,setSelectedAreas] = useState([form.rows.map(row => row.area)]);
 

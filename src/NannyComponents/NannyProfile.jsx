@@ -87,7 +87,7 @@ function NannyProfile(){
     },[]);
 
 
-    if (loading || isUserLoading || !myData) {
+    if (loading || isUserLoading ) {
         return (
             <div className="w-full bg-white h-screen flex items-center justify-center">
                 <span className="loading loading-spinner loading-lg"></span>

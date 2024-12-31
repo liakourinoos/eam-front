@@ -123,10 +123,10 @@ function Search() {
                         {/* Other Filters */}
                         <div className="flex flex-col items-center">
                             <p className='text-l w-60'>Απασχόληση επαγγελματία στην οικία μου</p>
-                            <select value={atMyHouse} onChange={(e)=>setAtMyHouse(e.target.value)} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                            <select value={neighborhood==="" ? "" : atMyHouse} onChange={(e)=>setAtMyHouse(e.target.value==="true")} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
-                                <option>Ναι</option>
-                                <option>Όχι</option>
+                                { neighborhood!=="" && <option value={true}>Ναι</option>}
+                                { neighborhood!=="" && <option value={false}>Όχι</option>}
                             </select>
                         </div>
 

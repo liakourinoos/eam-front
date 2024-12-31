@@ -1,4 +1,4 @@
-import { collection, addDoc,deleteDoc ,getDocs,query, where,doc, updateDoc,getDoc,runTransaction,Timestamp} from "firebase/firestore";
+import { collection, addDoc,deleteDoc ,getDocs,query, where,doc,orderBy, updateDoc,getDoc,runTransaction,Timestamp} from "firebase/firestore";
 import { db,auth } from "../firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { getAuth, reauthenticateWithCredential, EmailAuthProvider, updateEmail,updatePassword } from "firebase/auth";
@@ -262,7 +262,8 @@ export async function fetchAllFinalApplications(userId){
                 where('userId', '==', userId),
                 where('status', 'in', ['Εγκρίθηκε', 'Εκκρεμεί']), //or
                 where('type', '==' , 'final'),
-                where('archived', '==', false)
+                where('archived', '==', false),
+                orderBy('exactDate', 'desc') // Sort by most recent
             );
             const querySnapshot = await getDocs(q); // Get documents matching the query
             if (!querySnapshot.empty) {
@@ -277,10 +278,9 @@ export async function fetchAllFinalApplications(userId){
         }catch(error){
             console.error('Error fetching user data: ', error);
         }
-        finally{
-            console.log(applications)
-            return applications;
-        }
+        console.log(applications)
+        return applications;
+        
     
     
 
@@ -344,16 +344,10 @@ export async function addFinalApplication( data ) {
     const today = new Date();
     const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
     console.log(formattedDate)
+    const exactDate = Timestamp.now();
     let docRef;
     try {
-        //first, check if there are any applications with that id that have type "draft" to remove them
-        if(data.id){
-            //remove the document with that id and replace it with the actual data below
-            docRef = doc(db, 'applications', data.id);
-            // Delete the document
-            await deleteDoc(docRef);
-
-        }
+        const applicationsCollection = collection(db, 'applications');
 
         // Prepare the application data
         const applicationData = {
@@ -367,11 +361,22 @@ export async function addFinalApplication( data ) {
             nannyAMKA: data.AMKA,
             userId: data.userId,
             finalizedAt:formattedDate,
-            type:'final'
+            exactDate : exactDate,
+            type:'final',
+            archived:false
         };
 
-        const applicationsCollection = collection(db, 'applications');
-        docRef = await addDoc(applicationsCollection, applicationData);  // Adds the document
+        //first, check if there are any applications with that id that have type "draft" to update them. else, we create the draft from the beginning
+        if(data.id){
+            //replace it with the actual data below
+            docRef = doc(db, 'applications', data.id);
+            await updateDoc(docRef, applicationData); 
+        }
+        else{
+            // create the document
+            docRef = await addDoc(applicationsCollection, applicationData);
+        }
+
 
         //find the nannyId by quering in users using data.AMKA
         const q = query(collection(db, 'users'),
@@ -392,8 +397,7 @@ export async function addFinalApplication( data ) {
             type: 'jobOffer',
             createdAt: formattedDate,
             applicationId:docRef.id,
-            exactDate:Timestamp.now(),
-            // read: false
+            exactDate:exactDate,
         };
 
         const notificationsCollection = collection(db, 'notifications');
@@ -412,6 +416,7 @@ export async function addDraftApplication(data){
     const today = new Date();
     const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
     console.log(formattedDate)
+    const exactDate = Timestamp.now();
     try {
         // Prepare the application data
         const applicationData = {
@@ -425,6 +430,8 @@ export async function addDraftApplication(data){
             nannyAMKA: data.AMKA || "",
             userId: data.userId || "",
             finalizedAt: formattedDate,
+            exactDate : exactDate,
+            archived:false,
             type: 'draft'
         };
 
@@ -514,7 +521,7 @@ export async function addFinalOffer( data ) {
     const today = new Date();
     const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
     console.log(formattedDate)
-
+    const exactDate = Timestamp.now();
     const applicationData = {
         town:data.town,
         rows:data.rows,
@@ -525,7 +532,7 @@ export async function addFinalOffer( data ) {
         type:'final',
         archived:false,
         childAge: data.childAge || "null",
-        exactDate:Timestamp.now()
+        exactDate:exactDate
     };
 
     try {
@@ -596,6 +603,7 @@ export async function addDraftOffer(data){
     const today = new Date();
     const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
     console.log(formattedDate)
+    const exactDate = Timestamp.now();
     // Prepare the application data
 
     const applicationData = {
@@ -607,6 +615,8 @@ export async function addDraftOffer(data){
         finalizedAt:formattedDate,
         type:'draft',
         archived:false,
+        exactDate : exactDate,
+
         childAge: data.childAge || "null",
     };
     try {
@@ -830,6 +840,7 @@ export async function addContactRequest(data){
     const today = new Date();
     const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
     console.log(data)
+    const exactDate = Timestamp.now();
     try{
         const contactData = {
             senderId: data.senderId,
@@ -839,7 +850,7 @@ export async function addContactRequest(data){
             contactType: data.contactType,
             contactInfo: data.contactInfo,
             type:"contactRequest",
-            exactDate:Timestamp.now(),
+            exactDate:exactDate,
         };
 
         const contactsCollection = collection(db, 'contactRequests');

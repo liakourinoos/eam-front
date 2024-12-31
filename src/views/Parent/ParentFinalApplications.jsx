@@ -16,7 +16,7 @@ function ParentFinalApplications() {
     const {data:applications,isLoading} = useQuery({
         queryFn:()=>fetchAllFinalApplications(userData?.id),
         queryKey:['finalApplications',userData?.id],
-        enabled:!!userData
+        // enabled:!!userData
 
     })
 
