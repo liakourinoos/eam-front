@@ -12,7 +12,7 @@ function ParentNavbar({page=1}){
             <Link to='/parentapplications'  onClick={()=>setSelectedPage(2)} className={`cursor-pointer ${selectedPage==2?"text-red-600 underline" : 'text-black'}`}>Αιτήσεις</Link>
             <Link to='/notifications' onClick={()=>setSelectedPage(3)} className={`cursor-pointer ${selectedPage==3?"text-red-600 underline" : 'text-black'}`}>Ειδοποιήσεις</Link>
             <Link to='/parentpayments' onClick={()=>setSelectedPage(4)} className={`cursor-pointer ${selectedPage==4?"text-red-600 underline" : 'text-black'}`}>Πληρωμές</Link>
-            <Link  onClick={()=>setSelectedPage(5)} className={`cursor-pointer ${selectedPage==5?"text-red-600 underline" : 'text-black'}`}>Ιστορικό</Link>
+            <Link to='/reviews'  onClick={()=>setSelectedPage(5)} className={`cursor-pointer ${selectedPage==5?"text-red-600 underline" : 'text-black'}`}>Ιστορικό</Link>
 
     
         </div>

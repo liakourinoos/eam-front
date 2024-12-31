@@ -28,10 +28,11 @@ function Notifications(){
 
     if(!loading && !isNotifsLoading ){
         return(
-            <div className="w-full h-screen bg-white  flex flex-col">
+            <div className="w-full min-h-screen bg-white  flex flex-col">
                 {RenderHeaderNavbar(userData, userData?.role? 3: 2)}
-                <div className="flex-grow overflow-y-auto w-full pt-10 rounded-md bg-white" >
+                <div className="flex-grow  w-full  rounded-md bg-white" >
                     {notifs.map((notif, index) => (
+                        
                         <Notification key={index} id={notif?.id} type={notif?.type}/>  
                         
                     ))}

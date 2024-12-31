@@ -24,6 +24,7 @@ import NannyOffers from './NannyComponents/NannyOffers.jsx';
 import OfferForm from './views/Nanny/OfferForm.jsx';
 import Notifications from './generic components/Notifications.jsx';
 import ParentOrNannySignUp from './NannyOrParentSignUp.jsx';
+import Reviews from './generic components/Reviews.jsx';
 
 const router = createBrowserRouter([
   {path: '/', element: <App/>},
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
   {path: '/notifications', element: <Notifications/>},
   {path: '/signupparent', element: <SignUp role={true} />},
   {path: '/signupnanny', element: <SignUp role={false} />},
+  {path: '/reviews', element: <Reviews/>},
 
   // Dynamic routes 
   {path:'/contact/:id' , element:<Contact/>},

@@ -8,11 +8,13 @@ import {useAuth } from '../customHooks.jsx'
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 // import { MdStarBorder } from 'react-icons/md';
 import {RenderHeaderNavbar} from '../../global_assets/global_functions.jsx'
-import NannyReview from '../views/Nanny/NannyReview.jsx'
 import { useParams } from 'react-router-dom';
 import { fetchUser } from '../FetchFunctions.jsx';
 import { useQuery } from '@tanstack/react-query';
 import { downloadFile } from '../../global_assets/global_functions.jsx';
+import { fetchNannyReviews } from '../FetchFunctions.jsx';
+import Review from '../views/Reviews/Review.jsx';
+
 
 function NannyProfile(){
    
@@ -21,28 +23,37 @@ function NannyProfile(){
 
     const { id } = useParams();
     
-    const [fullStars,setFullStars]=useState(0);
-    const [halfStars,setHalfStars]=useState(0); ;
-    const [emptyStars,setEmptyStars]=useState(0);
+    
 
     // Check if the id from the URL is the same as myData.id to avoid unnecessary fetching
     const skipFetch = myData?.id === id;
 
     const { data: usrData, isLoading: isUserLoading } = useQuery({
-        queryKey: ['nannyProfile', id],
+        queryKey: [`nannyProfile`,id ],
         queryFn: () => fetchUser(id),
-        enabled: !!id && !skipFetch,
-        retry: 0,
+        enabled: id && !skipFetch,
+        retry: 1,
         cacheTime: 0, // Do not keep in cache
-        staleTime: 0, // Always treat the data as stale
-        refetchOnMount: true, // Refetch on component mount
-        refetchOnWindowFocus: true, // Refetch on window focus
-        refetchInterval: false, // Prevent refetch at regular intervals
+        // staleTime: 0, // Always treat the data as stale
+        // refetchOnMount: true, // Refetch on component mount
+        // refetchOnWindowFocus: true, // Refetch on window focus
+        // refetchInterval: false, // Prevent refetch at regular intervals
     });
-    
+
 
     const userData = skipFetch ? myData : usrData;
 
+    const {data:reviews,isLoading:isReviewsLoading}=useQuery({
+        queryFn:()=>fetchNannyReviews(userData?.id),
+        queryKey:["reviews", userData?.id],
+        retry: 1,
+    });
+    
+
+    
+    const [fullStars,setFullStars]=useState(0);
+    const [halfStars,setHalfStars]=useState(0); ;
+    const [emptyStars,setEmptyStars]=useState(0);
 
     useEffect(()=>{
         if(userData?.rating){
@@ -76,15 +87,21 @@ function NannyProfile(){
     },[]);
 
 
-    if(loading || isUserLoading)
+    if (loading || isUserLoading || !myData) {
         return (
             <div className="w-full bg-white h-screen flex items-center justify-center">
                 <span className="loading loading-spinner loading-lg"></span>
             </div>
         )
+    }
 
     //de brethike o xristis me to ID auto kai to role nanny KAI DEN EIMAI EGW.
-    if (!loading && !isUserLoading && (!usrData || (usrData?.id !== myData?.id && usrData?.role !== false))) {        
+    if (!skipFetch && (!usrData || (usrData?.id !== myData?.id && usrData?.role !== false))) {       
+        // console.log("got into not found.")
+        // console.log(skipFetch?"my profile" :"other profile")
+        // console.log(usrData)
+        // console.log(myData)
+        // console.log(userData)
         return(
             <div className='w-full h-screen bg-white'> 
                 {RenderHeaderNavbar(myData,0)}
@@ -99,7 +116,7 @@ function NannyProfile(){
 
 
     //check if i visited my own profile or a nanny profile.
-    if(!loading && !isUserLoading && (id === myData?.id || userData?.role === false))
+    if (id === myData?.id || userData?.role === false) 
         return(
         <div className="w-full bg-white">
             {RenderHeaderNavbar(myData,0)}
@@ -111,12 +128,12 @@ function NannyProfile(){
                 <div className="w-4/6 pb-2 ">
 
                     {/* Breadcrumbs */}
-                    <div className="breadcrumbs pl-5 text-md">
+                    {/* <div className="breadcrumbs pl-5 text-md">
                         <ul>
                             <li><Link to="/search">Αναζήτηση</Link></li>
                             <li className='font-medium'>Προφίλ Επαγγελματία</li>
                         </ul>
-                    </div>
+                    </div> */}
 
                     {/* Div for nanny name, pfp and contact button */}
                     <div className="my-4 px-2 w-full h-40  flex items-center justify-between"> 
@@ -221,12 +238,18 @@ function NannyProfile(){
 
                 <p className='text-2xl mx-auto w-fit font-medium'>Πρόσφατες Αξιολογήσεις Γονέων </p>
 
-                <div className='w-full  mt-5 mb-3  flex flex-col items-center gap-4'>
-                    <NannyReview name='Maria' surname='Pap' rating={5} date='99/99/99999' review='good nanny!'/>
-                    <NannyReview name='Maria' surname='Pap' rating={4} date='99/99/99999' review='could be better'/>
+                <div className='w-full   mt-5 flex flex-col items-center '>
+                    {isReviewsLoading && <div className="w-full flex-grow  flex items-center justify-center"> <span className="loading loading-lg"></span> </div>}
+                    {!isReviewsLoading && reviews.length === 0 && <p>Δε βρέθηκαν αξιολογήσεις.</p>}
+                    {!isReviewsLoading && reviews.length > 0 && 
+                        reviews.map((review,index)=>(
+                            <Review    key={index} seenFrom="nanny" review={review} 
+                                            nannyName={userData?.name} nannySurname={userData?.surname} 
+                                            nannyId={userData?.id} />
 
-                    <NannyReview name='Maria' surname='Pap' rating={2} date='99/99/99999' review={"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"}/>
-                    <NannyReview name='Maria' surname='Pap' rating={1} date='99/99/99999' review='would not recommend!'/>
+                    ))}
+                
+
 
                 </div>
                         {/* Scroll to top button */}
@@ -310,6 +333,7 @@ function NannyProfile(){
 
     );
 
+    
 }
 
 export default NannyProfile;

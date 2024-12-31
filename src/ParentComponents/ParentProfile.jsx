@@ -8,26 +8,27 @@ import { fetchUser } from '../FetchFunctions.jsx';
 import { useQuery } from '@tanstack/react-query';
 function ParentProfile() {
     const {id}= useParams();
+
     const { userData:myData , loading } = useAuth();
 
-    const skipFetch = myData?.id === id || !id;
+    const skipFetch = myData?.id === id ;
 
     const { data: usrData, isLoading: isUserLoading } = useQuery({
         queryKey: ['parentProfile', id],
         queryFn: () => fetchUser(id),
-        enabled: !!id && !skipFetch,
-        retry: 0,
-        cacheTime: 0, // Do not keep in cache
-        staleTime: 0, // Always treat the data as stale
-        refetchOnMount: true, // Refetch on component mount
-        refetchOnWindowFocus: true, // Refetch on window focus
-        refetchInterval: false, // Prevent refetch at regular intervals
+        enabled: id && !skipFetch,
+        retry: 1,
+        cacheTime: 0, // Do not keep in cache        
+        // staleTime: 0, // Always treat the data as stale
+        // refetchOnMount: true, // Refetch on component mount
+        // refetchOnWindowFocus: true, // Refetch on window focus
+        // refetchInterval: false, // Prevent refetch at regular intervals
     });
 
-    const userData = skipFetch ? myData : usrData || myData;
+    const userData = skipFetch ? myData : usrData ;
 
 
-    if(loading || isUserLoading){
+    if (loading || isUserLoading || !myData) {
         return (
             <div className="w-full bg-white h-screen flex items-center justify-center">
                 <span className="loading loading-spinner loading-lg"></span>
@@ -36,7 +37,7 @@ function ParentProfile() {
     }
     
     //den brika xristi me to ID auto i kai na brika, den exei to role tou gonea, error.
-    if (!loading && !isUserLoading && (!usrData || (usrData?.id !== myData?.id && usrData?.role !== true))) {        
+    if (!skipFetch && (!usrData || (usrData?.id !== myData?.id && usrData?.role !== true))) {       
         return(
             <div className='w-full h-screen bg-white'> 
                 {RenderHeaderNavbar(myData,0)}
@@ -49,22 +50,22 @@ function ParentProfile() {
         )
     }   
     //an einai to profile mou i psaxnw kapoion allon gonea, should render the userData 
-    if (!loading && !isUserLoading && (id === myData?.id || (usrData && usrData?.role === true))) {        
+    if (id === myData?.id || userData?.role === true) {        
         return (
             <div className="w-full min-h-screen flex flex-col bg-white">
                 {/* Header */}
                 {RenderHeaderNavbar(myData,0)}
                 {/* Breadcrumbs */}
-                <div className="breadcrumbs pl-5 text-md">
+                {/* <div className="breadcrumbs pl-5 text-md">
                     <ul>
                         <li><Link to="/">Αρχική Σελίδα</Link></li>
                         <li className='font-medium'>Προφίλ Κηδεμόνα</li>
                     </ul>
-                </div>
+                </div> */}
                 {/* Profile Section */}
                 <div className="flex-grow w-full flex flex-col">
                     {/* Profile Title */}
-                    <p className="text-center font-bold text-4xl mx-auto ">
+                    <p className="text-center font-bold mt-10 text-4xl mx-auto ">
                         Προφίλ Κηδεμόνα
                     </p>
 

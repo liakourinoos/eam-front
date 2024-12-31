@@ -8,58 +8,7 @@ import { RenderHeaderNavbar } from "../global_assets/global_functions.jsx";
 import {useAuth} from './customHooks.jsx'
 function App() {
 
-//   const [formSections, setFormSections] = useState([
-//     { row: 1, city: "", area: "", neighborhood: "", canHost: "Όχι" },
-//   ]);
 
-//   return(
-//     <div className="w-full  flex  bg-yellow-300">
-//         <div className="w-full pb-10 mx-auto mt-20 bg-blue-400">
-//             {formSections.map((formSection, index) => (
-//               <div key={index} className='mt-20 ml-20 pl-2'>
-
-//                 {index!==0 && 
-//                   <button onClick={() => setFormSections(formSections.filter((_, i) => i !== index))}
-//                           className='bg-white w-32 mt-5 mb-4 h-14 rounded-md'
-//                   >
-//                     Αφαίρεση φόρμας
-//                   </button>
-//                 }
-
-//                 <p>Πόλη</p>
-//                 <input type="text" value={formSection.city} onChange={(e) => setFormSections(formSections.map((formSection, i) => (i === index ? { ...formSection, city: e.target.value } : formSection)))} 
-//                        className='bg-white' 
-//                 />
-
-//                 <p>Περιοχή</p>
-//                 <input type="text" value={formSection.area} onChange={(e) => setFormSections(formSections.map((formSection, i) => (i === index ? { ...formSection, area: e.target.value } : formSection)))} 
-//                        className='bg-white'
-//                 />
-
-//                 <p>Γειτονιά</p>
-//                 <input type="text" value={formSection.neighborhood} onChange={(e) => setFormSections(formSections.map((formSection, i) => (i === index ? { ...formSection, neighborhood: e.target.value } : formSection)))} 
-//                        className='bg-white'
-//                 />
-
-//                 <p>Μπορεί να φιλοξενήσει</p>
-//                 <select value={formSection.canHost} onChange={(e) => setFormSections(formSections.map((formSection, i) => (i === index ? { ...formSection, canHost: e.target.value } : formSection)))} 
-//                         className='bg-white'
-//                 >
-//                   <option value="Όχι">Όχι</option>
-//                   <option value="Ναι">Ναι</option>
-//                 </select>
-
-//               </div>
-//             ))}
-
-//             <button onClick={() => setFormSections([...formSections, { row: formSections.length + 1, city: "", area: "", neighborhood: "", canHost: "Όχι" }])}
-//                     className='w-32 h-16 rounded-md bg-white ml-60 mt-10'
-//             >
-//               Προσθήκη και άλλου
-//             </button>
-//         </div>
-//     </div>
-// );
 
   const images = [
     'https://images.pexels.com/photos/6974310/pexels-photo-6974310.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', // Image 1

@@ -852,3 +852,107 @@ export async function addContactRequest(data){
 
     }
 }
+
+
+// epistrefei ta reviews pou ekanan oi goneis gia tin ntanta
+export async function fetchNannyReviews(nannyId){
+    
+    // console.log("id:"+nannyId)
+    const results=[];
+    try{
+        const reviewRes=[];
+        // fetch all reviews for that user
+        const q = query(collection(db, 'parentReviews'),
+            where('nannyId', '==', nannyId)
+        );
+        const querySnapshot = await getDocs(q); // Get documents matching the query
+        if (!querySnapshot.empty) {
+            querySnapshot.forEach((doc) => {
+                reviewRes.push({ id: doc.id, ...doc.data() });
+            });
+            
+        } else {
+            console.error('No nannies found..');
+        }
+
+        //get details of each parent
+        for(let i=0;i<reviewRes.length;i++){
+            const parentDocRef = doc(db, 'users', reviewRes[i].parentId);
+            const parentDocSnap = await getDoc(parentDocRef);
+            let personName = "", personSurname = "",img="";
+            if (parentDocSnap.exists()) {
+                const parentData = parentDocSnap.data();
+                personName = parentData.name || "";
+                personSurname = parentData.surname || "";
+                img=parentData.img || "";
+                results.push({ id: reviewRes[i].id, ...reviewRes[i],personName,personSurname,img });
+            } else {
+                console.error(`User with id ${reviewRes[i].personId} not found.`);
+            }
+        }
+
+
+    }
+    catch(error){
+        // console.log(error.message)
+        throw new error
+    }
+    console.log(results)
+
+    return results;
+
+}
+
+
+
+// epistrefei ta reviews pou ekanan oi gones se ntantades
+export async function fetchParentReviews(parentId){
+    // console.log(parentId);
+    
+    // fetch reviews from parents
+    const results=[];
+    
+    try{
+        const reviewRes=[];
+        // fetch all reviews for that user
+        const q = query(collection(db, 'parentReviews'),
+            where('parentId', '==', parentId)
+        );
+        const querySnapshot = await getDocs(q); // Get documents matching the query
+        if (!querySnapshot.empty) {
+            querySnapshot.forEach((doc) => {
+                reviewRes.push({ id: doc.id, ...doc.data() });
+            });
+            
+        } else {
+            console.error('No nannies found..');
+        }
+        // console.log("reviews: ")
+        // console.log(reviewRes)
+
+        //fetch the nanny info from the reviews through the 'users' collection
+        for(let i=0;i<reviewRes.length;i++){
+            const nannyDocRef = doc(db, 'users', reviewRes[i].nannyId);
+            const nannyDocSnap = await getDoc(nannyDocRef);
+            let personName = "", personSurname = "",img="";
+            if (nannyDocSnap.exists()) {
+                const nannyData = nannyDocSnap.data();
+                personName = nannyData.name || "";
+                personSurname = nannyData.surname || "";
+                img=nannyData.img || "";
+                results.push({ id: reviewRes[i].id, ...reviewRes[i],personName,personSurname,img });
+            } else {
+                console.error(`User with id ${reviewRes[i].personId} not found.`);
+            }
+        }
+    }
+    catch(error){
+        throw new error
+    }
+    console.log(results)
+    return results;
+
+
+
+
+}

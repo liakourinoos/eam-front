@@ -36,7 +36,7 @@ function Notification({ id, type }){
     if(isJobLoading || isRequestLoading)
         // skeleton for loading
         return (
-            <div className="rounded-md bg-gray-200 mx-auto mb-5 w-2/3 flex items-center h-32">
+            <div className="rounded-md bg-gray-200 mx-auto my-5 w-2/3 flex items-center h-32">
             {/* Left side, profile and info */}
             <div className="w-3/4 h-full rounded-l-md flex items-center space-x-3 px-4">
                 {/* Skeleton for image */}
@@ -60,7 +60,7 @@ function Notification({ id, type }){
 
     if (((!isJobLoading && type==="jobOffer") || (!isRequestLoading && type==="contactRequest")) ) {
         return(
-            <div className='rounded-md bg-gray-200 mx-auto mb-5 w-2/3 flex items-center h-32'>
+            <div className='rounded-md bg-gray-200 mx-auto my-5 w-2/3 flex items-center h-32'>
                 
                 {/* left side, profile and info */}
                 <div className='w-3/4 h-full rounded-l-md flex items-center'>
