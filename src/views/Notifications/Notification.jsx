@@ -65,9 +65,9 @@ function Notification({ id, type }){
                 {/* left side, profile and info */}
                 <div className='w-3/4 h-full rounded-l-md flex items-center'>
                     {/* img div */}
-                    <div className='h-full w-1/6 flex items-center px-3 py-1'>
+                    <div className='h-full w-1/6 flex items-center px-5  py-1'>
                         <img    src={type==="jobOffer" ? job?.img : request?.img}
-                                className='h-full rounded-full'                            
+                                className='h-full mx-auto object-cover  rounded-full'                            
                         />
                     </div>
                     {/* name and date */}
@@ -95,8 +95,8 @@ function Notification({ id, type }){
                 {/* right side, action buttons */}
                 <div className='w-1/4 h-full rounded-r-md font-medium flex items-center justify-center gap-4 pr-4 '>
                     
-                        <button className='h-1/2 w-full  bg-red-400 rounded-md'>Απόρριψη</button>
-                        <button className='h-1/2 w-full bg-green-400 rounded-md'>Αποδοχή</button>
+                        <button className='h-1/2 w-full text-xl  bg-red-400 rounded-md'>Απόρριψη</button>
+                        <button className='h-1/2 w-full text-xl bg-green-400 rounded-md'>Αποδοχή</button>
                 </div>
 
 

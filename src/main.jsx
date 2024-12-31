@@ -8,7 +8,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './index.css'
 // components 
 import App from './App.jsx'
-import Search from './ParentComponents/Search.jsx'
+import Search from './Search.jsx'
 import Login from './Login.jsx'
 import SignUp from './SignUp.jsx'
 import About from './About.jsx'
@@ -23,12 +23,13 @@ import NannySettings from './NannyComponents/NannySetting.jsx';
 import NannyOffers from './NannyComponents/NannyOffers.jsx';
 import OfferForm from './views/Nanny/OfferForm.jsx';
 import Notifications from './generic components/Notifications.jsx';
+import ParentOrNannySignUp from './NannyOrParentSignUp.jsx';
 
 const router = createBrowserRouter([
   {path: '/', element: <App/>},
   {path: '/search', element: <Search/>},
   {path: '/login', element: <Login/>},
-  {path: '/signup', element: <SignUp/>},
+  {path: '/signup', element: <ParentOrNannySignUp/>},
   {path: '/about', element: <About/>},
   {path: '/parentsettings',element:<ParentSettings/>},
   {path: '/nannysettings', element:<NannySettings/>},
@@ -36,6 +37,9 @@ const router = createBrowserRouter([
   {path: '/parentapplications', element: <ParentApplications/>},
   {path: '/nannyoffers', element: <NannyOffers/>},
   {path: '/notifications', element: <Notifications/>},
+  {path: '/signupparent', element: <SignUp role={true} />},
+  {path: '/signupnanny', element: <SignUp role={false} />},
+
   // Dynamic routes 
   {path:'/contact/:id' , element:<Contact/>},
 

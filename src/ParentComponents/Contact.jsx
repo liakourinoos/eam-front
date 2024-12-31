@@ -24,6 +24,7 @@ function Contact(){
     const {mutateAsync:sendRequest,isPending} = useMutation({
         mutationFn:()=>addContactRequest(data),
         onError:(error)=>console.log(error),
+        onSuccess:()=>setSuccessMessage(true)
 
     })
 
@@ -42,6 +43,18 @@ function Contact(){
         }    
     },[userData,loading])
 
+    const [successMessage,setSuccessMessage] = useState(false)
+    const duration = 2000;
+    useEffect(()=>{
+        if(successMessage){//make it appear for 3 seconds
+            const timer = setTimeout(() => {
+                setSuccessMessage(false); // Hide the alert after the duration
+            }, duration);
+            // Cleanup the timer on component unmount
+            return () => clearTimeout(timer);
+        }
+    },[successMessage,duration] )
+
 
     const nav=useNavigate();
 
@@ -55,9 +68,24 @@ function Contact(){
         )
     }
 
-    if(!loading && userData)
+
+    if(!loading )
     return(
         <div className='w-full h-screen flex flex-col'>
+            {successMessage && <div role="alert" className="alert alert-success fixed top-32 left-1/2 transform -translate-x-1/2 w-1/2 flex items-center justify-center  p-4 rounded shadow">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 shrink-0 stroke-current"
+                    fill="none"
+                    viewBox="0 0 24 24">
+                    <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Το αίτημά σας στάλθηκε!</span>
+            </div>}
             {RenderHeaderNavbar(userData)}
             <div className='flex-grow pb-5 flex flex-col bg-pallete-50'>
 

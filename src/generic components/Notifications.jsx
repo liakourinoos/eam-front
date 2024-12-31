@@ -18,7 +18,7 @@ function Notifications(){
     });
 
 
-    if(loading)
+    if(loading || isNotifsLoading)
         return(
             <div className="w-full h-screen bg-white flex items-center justify-center">
                 <span className="loading loading-lg"></span>
@@ -26,7 +26,7 @@ function Notifications(){
             </div>
         );
 
-    if(!loading && !isNotifsLoading && userData){
+    if(!loading && !isNotifsLoading ){
         return(
             <div className="w-full h-screen bg-white  flex flex-col">
                 {RenderHeaderNavbar(userData, userData?.role? 3: 2)}

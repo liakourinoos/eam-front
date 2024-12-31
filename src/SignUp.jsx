@@ -6,8 +6,15 @@ import { FaEye,FaEyeSlash } from "react-icons/fa";
 import { useEffect } from "react";
 import { registerUser } from "./FetchFunctions";
 import { useMutation } from "@tanstack/react-query";
+import { greekFemaleNames,greekFemaleSurnames,greekMaleNames,greekMaleSurnames } from "../global_assets/global_values";
+import PropTypes from 'prop-types';
 
-function SignUp(){
+SignUp.propTypes={
+    role:PropTypes.bool.isRequired
+}
+
+
+function SignUp({role}){
     const nav=useNavigate();
     
     const [signUpMessage,setSignUpMessage] = useState("")
@@ -16,25 +23,13 @@ function SignUp(){
         email:"",
         password:"",
         number:"",
-        AMKA:"12345678910",
-        bio:"added from function",
-        name:"Ntanta",
-        surname:"Kati",
-        gender:false,
-        role:false,
+        bio:"",
+        name:"",
+        surname:"",
+        gender:"",
+        role:role,
         newUser:true,
         img:"https://us-tuna-sounds-images.voicemod.net/9508b716-9458-4d69-9508-54c06cc48caa-1728958336005.jpeg",
-        availabilityMatrix:[
-            {day:'ΔΕΥ',hour:"12:00"},
-            {day:'ΤΡΙ',hour:"12:00"},
-            {day:'ΤΕΤ',hour:"14:00"},
-            {day:'ΠΕΜ',hour:"09:00"},
-            {day:'ΠΑΡ',hour:"18:00"},
-            {day:'ΣΑΒ',hour:"20:00"},
-            {day:'ΚΥΡ',hour:"07:00"},
-            {day:'ΤΡΙ',hour:"21:00"},
-            {day:'ΔΕΥ',hour:"08:00"},
-        ]
 
     });
 
@@ -64,15 +59,13 @@ function SignUp(){
                 email:"",
                 password:"",
                 number:"",
-                AMKA:"12345678910",
-                bio:"added from function",
-                name:"Kaggelos",
-                surname:"Paulidis",
-                gender:true,
-                role:true,
+                bio:"",
+                name:"",
+                surname:"",
+                gender:"",
+                role:role,
                 newUser:true,
-                img:"https://us-tuna-sounds-images.voicemod.net/9508b716-9458-4d69-9508-54c06cc48caa-1728958336005.jpeg"
-        
+                img:"https://us-tuna-sounds-images.voicemod.net/9508b716-9458-4d69-9508-54c06cc48caa-1728958336005.jpeg",
             })
         
         },
@@ -101,6 +94,29 @@ function SignUp(){
         }
     },[SignUpData.password,repeatPassword])
 
+    useEffect(() => {
+        const FemaleNameIdx = Math.floor(Math.random() * greekFemaleNames.length);
+        const FemaleSurnameIdx = Math.floor(Math.random() * greekFemaleSurnames.length);
+        const MaleNameIdx = Math.floor(Math.random() * greekMaleNames.length);
+        const MaleSurnameIdx = Math.floor(Math.random() * greekMaleSurnames.length);
+    
+        if (SignUpData.gender === true) { // Male gender
+            setSignUpData((prevData) => ({
+                ...prevData,
+                name: greekMaleNames[MaleNameIdx],
+                surname: greekMaleSurnames[MaleSurnameIdx],
+            }));
+            console.log("Male name and surname set:", greekMaleNames[MaleNameIdx], greekMaleSurnames[MaleSurnameIdx]);
+        } else if (SignUpData.gender === false) { // Female gender
+            setSignUpData((prevData) => ({
+                ...prevData,
+                name: greekFemaleNames[FemaleNameIdx],
+                surname: greekFemaleSurnames[FemaleSurnameIdx],
+            }));
+            console.log("Female name and surname set:", greekFemaleNames[FemaleNameIdx], greekFemaleSurnames[FemaleSurnameIdx]);
+        }
+    }, [SignUpData.gender]); // Dependency remains SignUpData.gender
+    
 
 
     return(
@@ -183,6 +199,26 @@ function SignUp(){
                         
                     
                     </div>
+
+                    <div className="w-1/4  mt-5 ">
+                        <p className="text-xl ml-1 font-medium ">Φύλο</p>
+                        <select className="w-full h-10 border-2 bg-white rounded-md pl-2 mt-1"
+                                value={SignUpData.gender}
+                                onChange={(e)=>setSignUpData({...SignUpData, gender: e.target.value === "true" ? true : e.target.value === "false" ? false : "" })}
+                        >
+                            <option value={""} disabled> Επιλέξτε</option>
+                            <option value={true}>Αρσενικό</option>
+                            <option value={false}>Θηλυκό</option>
+
+
+
+
+                        </select>
+                        
+                    
+                    </div>
+
+
 
                     
 

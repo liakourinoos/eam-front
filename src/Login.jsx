@@ -25,7 +25,11 @@ function Login() {
   
       if (user) {
         setMessage(`Welcome back, ${user.email}`);
+        
+        // not sure where im supposed to redirect...
         nav("/"); // Uncomment when ready to redirect
+
+
       } else {
         setMessage("Unexpected error: Login failed without errors.");
       }

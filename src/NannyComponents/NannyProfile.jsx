@@ -153,7 +153,7 @@ function NannyProfile(){
                         </div>
 
                         {/* Right section: contact button, ONLY visible when Im not in my own profile */}
-                        { id!==myData?.id && <Link to={`${userData ? `/contact/${userData?.id}` : '/login'}`} className="w-1/5  bg-pallete-400 text-gray-50  text-3xl flex items-center justify-center rounded-md font-medium h-1/2 ml-auto mr-4">
+                        { id!==myData?.id && <Link to={`${myData ? `/contact/${userData?.id}` : '/login'}`} className="w-1/5  bg-pallete-400 text-gray-50  text-3xl flex items-center justify-center rounded-md font-medium h-1/2 ml-auto mr-4">
                             Επικοινωνία
                         </Link>}
                     </div>

@@ -1,4 +1,4 @@
-import { collection, addDoc,deleteDoc ,getDocs,query, where,doc, updateDoc,getDoc} from "firebase/firestore";
+import { collection, addDoc,deleteDoc ,getDocs,query, where,doc, updateDoc,getDoc,runTransaction,Timestamp} from "firebase/firestore";
 import { db,auth } from "../firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { getAuth, reauthenticateWithCredential, EmailAuthProvider, updateEmail,updatePassword } from "firebase/auth";
@@ -212,24 +212,47 @@ export async function registerUser(userData) {
         const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
         const user = userCredential.user;
 
-        // Step 2: Add user details to Firestore, including the UID from Auth
-        const newData = {
-            uid: user.uid, // Authenticated user's UID
-            email: userData.email, // Authenticated user's email
-            ...userData, // Other data passed to the function
-            
-        };
+        // Step 2: Use a Firestore transaction to assign the global counter value
+        const counterDocRef = doc(db, "metadata", "globalCounter");
+        const usersCollectionRef = collection(db, "users");
 
-        await addDoc(collection(db, "users"), newData);
+        const newData = await runTransaction(db, async (transaction) => {
+            const counterDoc = await transaction.get(counterDocRef);
 
-        console.log("User registered and added to Firestore:", newData);
+            if (!counterDoc.exists()) {
+                throw new Error("Global counter document does not exist.");
+            }
 
-        // return newData; // Return the user data for further use
+            // Get the current counter value and increment it
+            const currentCounter = counterDoc.data().value;
+            const updatedCounter = currentCounter + 1;
+
+            // Update the global counter in the metadata collection
+            transaction.update(counterDocRef, { value: updatedCounter });
+
+            // Create the new user data with the counter value
+            const userDataWithCounter = {
+                uid: user.uid, // Authenticated user's UID
+                email: userData.email, // Authenticated user's email
+                AMKA: currentCounter.toString(), // Assign the current counter value
+                ...userData, // Other data passed to the function
+            };
+
+            // Add the new user to the users collection
+            const userDocRef = doc(usersCollectionRef);
+            transaction.set(userDocRef, userDataWithCounter);
+
+            return userDataWithCounter;
+        });
+
+        console.log("User registered and added to Firestore with counter:", newData);
+        return newData; // Return the user data for further use
     } catch (error) {
         console.error("Error registering user:", error.message);
         throw error; // Re-throw to handle in calling code
     }
 }
+
 
 export async function fetchAllFinalApplications(userId){
     const applications = [];
@@ -369,6 +392,7 @@ export async function addFinalApplication( data ) {
             type: 'jobOffer',
             createdAt: formattedDate,
             applicationId:docRef.id,
+            exactDate:Timestamp.now(),
             // read: false
         };
 
@@ -501,6 +525,7 @@ export async function addFinalOffer( data ) {
         type:'final',
         archived:false,
         childAge: data.childAge || "null",
+        exactDate:Timestamp.now()
     };
 
     try {
@@ -666,7 +691,16 @@ export async function fetchNotifications(userId){
         console.error('Error fetching nannies');
     }
 
+    // Sort the result array by 'exactDate' in descending order (latest first)
+    result.sort((a, b) => {
+        // Ensure 'exactDate' is a valid Timestamp and compare the time
+        const dateA = a.exactDate instanceof Date ? a.exactDate : a.exactDate.toDate();
+        const dateB = b.exactDate instanceof Date ? b.exactDate : b.exactDate.toDate();
+        return dateB - dateA; // Sorting in descending order (latest first)
+    });
+    
     console.log(result)
+
     return result;
 }
 
@@ -716,7 +750,7 @@ export async function fetchJobNotification(id) {
         } else {
             console.error(`Application with id ${data.applicationId} not found.`);
         }
-       
+
         // Return structured data
         return {
             senderId,
@@ -804,7 +838,8 @@ export async function addContactRequest(data){
             createdAt: formattedDate,
             contactType: data.contactType,
             contactInfo: data.contactInfo,
-            type:"contactRequest"
+            type:"contactRequest",
+            exactDate:Timestamp.now(),
         };
 
         const contactsCollection = collection(db, 'contactRequests');

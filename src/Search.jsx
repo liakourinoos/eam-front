@@ -1,15 +1,15 @@
 
-import Footer from '../generic components/Footer.jsx'
-import OfferProfile from "../views/Search/OfferProfile.jsx";
+import Footer from './generic components/Footer.jsx'
+import OfferProfile from "./views/Search/OfferProfile.jsx";
 import { useState, useEffect,useContext } from "react";
 // for calendar
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { cities,area,geitonia } from "../../global_assets/global_values.jsx";
+import { cities,area,geitonia } from "../global_assets/global_values.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
-import { RenderHeaderNavbar } from "../../global_assets/global_functions.jsx";
-import {useAuth} from '../customHooks.jsx'
-import {fetchNannies} from '../FetchFunctions.jsx'
+import { RenderHeaderNavbar } from "../global_assets/global_functions.jsx";
+import {useAuth} from './customHooks.jsx'
+import {fetchNannies} from './FetchFunctions.jsx'
 import {  useQuery } from '@tanstack/react-query';
 
 function Search() {
@@ -59,7 +59,7 @@ function Search() {
     const {data,isLoading} = useQuery({
         queryFn:()=>fetchNannies(),
         queryKey: ['nannies'],
-        enabled: !!userData
+        // enabled: !!userData
     })
 
     if(loading || isLoading) 
