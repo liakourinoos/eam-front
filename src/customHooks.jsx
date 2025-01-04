@@ -2,7 +2,7 @@ import { useState, useEffect, useContext, createContext } from 'react';
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase'; // Ensure this is the correct path to your Firebase config
-
+import { useQueryClient } from '@tanstack/react-query';
 const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -13,6 +13,8 @@ export const AuthProvider = ({ children }) => {
     const [userData, setUserData] = useState(null); // For storing user data
     const [loading, setLoading] = useState(true); // For loading state
     const auth = getAuth();
+    const queryClient = useQueryClient(); // Access the React Query client
+
 
     // When the app loads, check if the user is already logged in
     useEffect(() => {
@@ -79,6 +81,7 @@ export const AuthProvider = ({ children }) => {
         try {
             await signOut(auth);
             setUserData(null); // Clear user data on logout
+            queryClient.clear(); // Clear all cached queries and mutations
         } catch (error) {
             console.error('Error during logout:', error);
         } finally {

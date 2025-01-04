@@ -14,9 +14,12 @@ function OfferProfile({id,name,surname,rating,ratingCount,bio,img}) {
             <div className="w-full h-full flex flex-col pl-2">
 
                 {/* box 1: name and ratings */}
-                <div className="w-full  flex justify-between pr-1">                
-                    <span className="text-xl font-medium">{name} {surname}</span>
-                    <span title={`βαθμολογία: ${rating}/5`} className="text-xl font-medium">{rating} ({ratingCount}) </span>
+                <div className="w-full  flex justify-between pr-1 text-xl font-medium">                
+                    <span >{name} {surname}</span>
+                    <div>
+                        <span title={`βαθμολογία: ${rating}/5`} className="text-xl font-medium">{rating}  </span>
+                        <span title={`${ratingCount} ${ratingCount!==1?'χρήστες έχουν ' : 'χρήστης έχει'} αξιολογήσει την νταντά.`}>({ratingCount})</span>
+                    </div>
                 </div>
 
                 {/* box2: bio */}

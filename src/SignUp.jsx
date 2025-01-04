@@ -30,6 +30,12 @@ function SignUp({role}){
         role:role,
         newUser:true,
         img:"https://us-tuna-sounds-images.voicemod.net/9508b716-9458-4d69-9508-54c06cc48caa-1728958336005.jpeg",
+        availabilityMatrix:[],
+        skills:[],
+        rating:0,
+        ratingCount:0,
+        experience:0
+
 
     });
 
@@ -66,6 +72,12 @@ function SignUp({role}){
                 role:role,
                 newUser:true,
                 img:"https://us-tuna-sounds-images.voicemod.net/9508b716-9458-4d69-9508-54c06cc48caa-1728958336005.jpeg",
+                availabilityMatrix:[],
+                skills:[],
+                rating:0,
+                ratingCount:0,
+                experience:0
+
             })
         
         },

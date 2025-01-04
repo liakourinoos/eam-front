@@ -14,7 +14,8 @@ function Notifications(){
         queryFn: () => fetchNotifications(userData?.id),
         enabled: !!userData,
         queryKey: ['notifications'],
-        refetchInterval: 20000 
+        refetchInterval: 5000,
+        refetchOnMount:true 
     });
 
 
@@ -26,12 +27,12 @@ function Notifications(){
             </div>
         );
 
-    if(!loading && !isNotifsLoading ){
+    if(!loading && !isNotifsLoading  ){
         return(
             <div className="w-full min-h-screen bg-white  flex flex-col">
                 {RenderHeaderNavbar(userData, userData?.role? 3: 2)}
                 <div className="flex-grow  w-full  rounded-md bg-white" >
-                    {notifs.map((notif, index) => (
+                    {notifs?.map((notif, index) => (
                         
                         <Notification key={index} id={notif?.id} type={notif?.type}/>  
                         

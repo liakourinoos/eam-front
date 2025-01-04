@@ -1,4 +1,4 @@
-import { collection, addDoc,deleteDoc ,getDocs,query, where,doc,orderBy, updateDoc,getDoc,runTransaction,Timestamp} from "firebase/firestore";
+import { collection, addDoc,deleteDoc ,getDocs,query, where,doc,orderBy, updateDoc,getDoc,runTransaction,Timestamp,writeBatch} from "firebase/firestore";
 import { db,auth } from "../firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { getAuth, reauthenticateWithCredential, EmailAuthProvider, updateEmail,updatePassword } from "firebase/auth";
@@ -398,6 +398,7 @@ export async function addFinalApplication( data ) {
             createdAt: formattedDate,
             applicationId:docRef.id,
             exactDate:exactDate,
+            read:false
         };
 
         const notificationsCollection = collection(db, 'notifications');
@@ -683,20 +684,20 @@ export async function fetchNotifications(userId){
             console.error('No nannies found..');
         }
 
-        // fetch contact requests too
-        const q1 = query(collection(db, 'contactRequests'),
-            where('receiverId', '==', userId)
-        );
-        const querySnapshot1 = await getDocs(q1); // Get documents matching the query
-        if (!querySnapshot1.empty) {
-            querySnapshot1.forEach((doc) => {
-                result.push({ id: doc.id, ...doc.data() });
-            });
+    //     // fetch contact requests too
+    //     const q1 = query(collection(db, 'contactRequests'),
+    //         where('receiverId', '==', userId)
+    //     );
+    //     const querySnapshot1 = await getDocs(q1); // Get documents matching the query
+    //     if (!querySnapshot1.empty) {
+    //         querySnapshot1.forEach((doc) => {
+    //             result.push({ id: doc.id, ...doc.data() });
+    //         });
             
-        // console.log(result)
-        } else {
-            console.error('No nannies found..');
-        }
+    //     // console.log(result)
+    //     } else {
+    //         console.error('No nannies found..');
+    //     }
     }catch(error){
         console.error('Error fetching nannies');
     }
@@ -783,7 +784,7 @@ export async function fetchJobNotification(id) {
 export async function fetchContactRequestNotification(id) {
     try {
         // Fetch notification by id
-        const docRef = doc(db, 'contactRequests', id);
+        const docRef = doc(db, 'notifications', id);
         console.log("Fetching document from contactRequests with ID:", id);
         const docSnap = await getDoc(docRef);
 
@@ -802,7 +803,7 @@ export async function fetchContactRequestNotification(id) {
         }
 
         const senderId = data.senderId;
-        console.log("Sender ID:", senderId);
+        // console.log("Sender ID:", senderId);
 
         // Fetch sender's name and surname using document ID
         const senderDocRef = doc(db, 'users', senderId);
@@ -854,7 +855,21 @@ export async function addContactRequest(data){
         };
 
         const contactsCollection = collection(db, 'contactRequests');
-        await addDoc(contactsCollection, contactData);  // Adds the document
+        const docRef= await addDoc(contactsCollection, contactData);  // Adds the document
+
+        // make the proper notification from parent to nanny
+        const notificationData = {
+            senderId: data.senderId,
+            receiverId: data.receiverId,
+            type: 'contactRequest',
+            createdAt: formattedDate,
+            contactRequestId:docRef.id,
+            exactDate:exactDate,
+            read:false
+        };
+
+        const notificationsCollection = collection(db, 'notifications');
+        await addDoc(notificationsCollection, notificationData);  // Adds the document
 
         return { success: true, message: 'Contact request sent successfully' };
 
@@ -966,4 +981,55 @@ export async function fetchParentReviews(parentId){
 
 
 
+}
+
+
+export async function fetchNotificationCount(userId){
+    let count=0;
+    try{
+        const q = query(collection(db, 'notifications'),
+            where('receiverId', '==', userId),
+            where('read', '==', false)
+            
+        );
+        const querySnapshot = await getDocs(q); // Get documents matching the query
+        if (!querySnapshot.empty) {
+            querySnapshot.forEach((doc) => {
+                count++;
+            });
+        } 
+        else {
+            // console.error('No nannies found..');
+        }
+    }
+    catch(error){
+        console.log(error.message)
+    }
+    // console.log(count)
+    return count;
+}
+
+export async function readNotifications(userId) {
+    try {
+        const q = query(
+            collection(db, 'notifications'),
+            where('receiverId', '==', userId),
+            where('read', '==', false)
+        );
+
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            const batch = writeBatch(db); // Use a batch for efficiency
+            querySnapshot.forEach((docSnapshot) => {
+                const docRef = docSnapshot.ref; // Use the snapshot's ref directly
+                batch.update(docRef, { read: true }); // Batch update
+            });
+            await batch.commit(); // Commit all updates
+        } else {
+            console.error('No unread notifications found.');
+        }
+    } catch (error) {
+        console.error('Error updating notifications:', error.message);
+    }
 }

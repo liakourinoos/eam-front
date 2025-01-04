@@ -25,6 +25,9 @@ import OfferForm from './views/Nanny/OfferForm.jsx';
 import Notifications from './generic components/Notifications.jsx';
 import ParentOrNannySignUp from './NannyOrParentSignUp.jsx';
 import Reviews from './generic components/Reviews.jsx';
+import ParentHistory from './ParentComponents/ParentHistory.jsx';
+import NannyHistory  from './NannyComponents/NannyHistory.jsx';
+// import ParentApplicationsHistory from '../src/views/Parent/ParentApplicationsHistory.jsx';
 
 const router = createBrowserRouter([
   {path: '/', element: <App/>},
@@ -41,6 +44,8 @@ const router = createBrowserRouter([
   {path: '/signupparent', element: <SignUp role={true} />},
   {path: '/signupnanny', element: <SignUp role={false} />},
   {path: '/reviews', element: <Reviews/>},
+  {path: '/parenthistory', element: <ParentHistory/>},
+  {path: '/nannyhistory', element: <NannyHistory/>},
 
   // Dynamic routes 
   {path:'/contact/:id' , element:<Contact/>},
@@ -54,6 +59,9 @@ const router = createBrowserRouter([
   { path: '/applicationform', element: <ApplicationForm/>},
   { path: '/viewapplication/:id', element: <ApplicationForm action="Προβολή Αίτησης"/>},
   { path: '/editapplication/:id', element: <ApplicationForm action="Επεξεργασία Αίτησης"/>},
+
+  //Parent History
+  // { path:'/parentapplicationshistory' , element: <></>}
 
   //Nanny Offers
   { path: '/offerform', element: <OfferForm/>},

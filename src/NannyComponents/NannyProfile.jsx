@@ -17,7 +17,7 @@ import Review from '../views/Reviews/Review.jsx';
 
 
 function NannyProfile(){
-   
+
 
     const { userData:myData,loading } = useAuth();
 
@@ -56,11 +56,12 @@ function NannyProfile(){
     const [emptyStars,setEmptyStars]=useState(0);
 
     useEffect(()=>{
-        if(userData?.rating){
+        if(userData?.rating>=0){
             const rating = userData?.rating;
             setFullStars(Math.floor(rating)); // Integer part (e.g., for 4.5, this will be 4)
             setHalfStars(rating % 1 >= 0.5 ? 1 : 0); // Half star if there's a decimal part
             setEmptyStars(5 - Math.floor(rating) - (rating % 1 >= 0.5 ? 1 : 0)); // Remaining stars are empty
+            console.log(5 - Math.floor(rating) - (rating % 1 >= 0.5 ? 1 : 0))
         }
     },[userData])
 
@@ -97,11 +98,7 @@ function NannyProfile(){
 
     //de brethike o xristis me to ID auto kai to role nanny KAI DEN EIMAI EGW.
     if (!skipFetch && (!usrData || (usrData?.id !== myData?.id && usrData?.role !== false))) {       
-        // console.log("got into not found.")
-        // console.log(skipFetch?"my profile" :"other profile")
-        // console.log(usrData)
-        // console.log(myData)
-        // console.log(userData)
+
         return(
             <div className='w-full h-screen bg-white'> 
                 {RenderHeaderNavbar(myData,0)}
@@ -152,7 +149,7 @@ function NannyProfile(){
                                     { !userData?.gender && <FaFemale className='text-xl' title={"Θηλυκό"} />}
                                     {  userData?.gender && <FaMale className='text-xl' title={"Αρσενικό"} /> }
                                 </div>
-                                <p>{userData?.experience} χρόνια εμπειρίας</p>
+                                <p>{userData?.experience} {`${userData?.experience ===1 ?'χρόνος' : 'χρόνια'}`} εμπειρίας</p>
                                 <div className="flex items-center" title={`Βαθμολογία: ${userData?.rating}/5`}>
                                     {/* Render full stars */}
                                     {Array.from({ length: fullStars }, (_, idx) => (
@@ -164,7 +161,7 @@ function NannyProfile(){
                                     {Array.from({ length: emptyStars }, (_, idx) => (
                                         <FaRegStar key={`empty-${idx}`} className="text-black" />
                                     ))}
-                                    <p className='ml-2'>({userData?.ratingCount})</p>
+                                    <p className='ml-2' title={`${userData?.ratingCount} ${userData?.ratingCount!==1?'χρήστες έχουν ' : 'χρήστης έχει'} αξιολογήσει την νταντά.`}>({userData?.ratingCount})</p>
                                 </div>
                             </div>
                         </div>
