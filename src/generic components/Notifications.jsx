@@ -34,7 +34,7 @@ function Notifications(){
                 <div className="flex-grow  w-full  rounded-md bg-white" >
                     {notifs?.map((notif, index) => (
                         
-                        <Notification key={index} id={notif?.id} type={notif?.type}/>  
+                        <Notification key={index} id={notif?.id} type={notif?.type} role={userData?.role}/>  
                         
                     ))}
                 </div>

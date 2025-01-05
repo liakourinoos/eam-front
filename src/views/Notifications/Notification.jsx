@@ -1,7 +1,6 @@
-import Skeleton from '@mui/material/Skeleton';
 import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
-import { fetchJobNotification,fetchContactRequestNotification } from '../../FetchFunctions';
+import { fetchJobNotification,fetchContactRequestNotification, rejectContact,acceptContact } from '../../FetchFunctions';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MdClose } from "react-icons/md";
@@ -9,26 +8,32 @@ import { FaCheck } from "react-icons/fa";
 import {hours, days} from '../../../global_assets/global_values';
 
 //prepei na pairnei tis leptomereies kathe notification
-function Notification({ id, type }){
+function Notification({ id, type ,role}){
+    const [status, setStatus] = useState(null); // Local state for status
 
-    useEffect(()=>{
-        console.log(id,type)    
+//     useEffect(()=>{
+//         console.log(id,type)    
     
-},[])
-    const { data: job, isLoading: isJobLoading } = useQuery({
+// },[])
+
+    const { data: job, isLoading: isJobLoading} = useQuery({
         queryFn: () => fetchJobNotification(id),
         enabled: type==="jobOffer",
         queryKey: ['jobOfferNotif',id],
-        
-        
     });
 
-    const { data:request, isLoading: isRequestLoading } = useQuery({
+    const { data:request, isLoading: isRequestLoading} = useQuery({
         queryFn: () => fetchContactRequestNotification(id),
         enabled: type==="contactRequest",
         queryKey: ['contactRequestNotif',id],
-
     });
+
+    useEffect(()=>{
+        if(request)
+            setStatus(request?.status)
+        if(job)
+            setStatus(job?.status)
+    },[request,job])
 
     const [showModal,setShowModal] = useState(false);
 
@@ -57,8 +62,8 @@ function Notification({ id, type }){
         );
     
 
-
-    if (((!isJobLoading && type==="jobOffer") || (!isRequestLoading && type==="contactRequest")) ) {
+    //notification for nannies
+    if (((!isJobLoading && type==="jobOffer") || (!isRequestLoading && type==="contactRequest")) && !role ) {
         return(
             <div className='rounded-md bg-gray-200 mx-auto my-5 w-2/3 flex items-center h-32'>
                 
@@ -94,9 +99,57 @@ function Notification({ id, type }){
             
                 {/* right side, action buttons */}
                 <div className='w-1/4 h-full rounded-r-md font-medium flex items-center justify-center gap-4 pr-4 '>
-                    
-                        <button className='h-1/2 w-full text-xl  bg-red-400 rounded-md'>Απόρριψη</button>
-                        <button className='h-1/2 w-full text-xl bg-green-400 rounded-md'>Αποδοχή</button>
+                        {/* periptwsi 1 */}
+                        {type==="contactRequest" &&
+                            <>
+                                {status!=="accepted" && 
+                                    <button className={`
+                                            h-1/2 w-1/2 text-xl rounded-md
+                                            ${status==="pending"  && "bg-red-600"}   
+                                            ${status==="rejected" && "bg-red-500"}
+                                            ${status==="accepted" && "bg-red-200"}
+                                        `}
+                                        onClick={()=>{setStatus("rejected"); rejectContact(id); }}
+                                        disabled={status!=="pending"}
+                                    >
+                                        {status==="pending" && 'Απόρριψη'}
+                                        {status==="rejected" && 'Απορρίφθηκε'}
+                                    </button>
+                                }
+                                {status!=="rejected" &&
+                                    <button className={`
+                                                h-1/2 w-1/2 text-xl bg-green-600 rounded-md
+                                                ${status==="pending"  && "bg-green-600"}   
+                                                ${status==="rejected" && "bg-green-200"}
+                                                ${status==="accepted" && "bg-green-400"}
+                                            `}
+                                            onClick={()=>{setStatus("accepted"); acceptContact(id); }}
+                                            disabled={status!=="pending"}
+                                    
+                                    >
+                                        {status==="pending" && 'Αποδοχή'}
+                                        {status==="accepted" && 'Εγκρίθηκε'}   
+                                    </button>
+                                }
+                            </>
+                        }
+                        {/* periptwsi 2 */}
+                        {type==="jobOffers" &&
+                            <>
+                                <button className='h-1/2 w-full text-xl  bg-red-400 rounded-md'
+                                        onClick={()=>{rejectApplication(id)}}
+                                >
+                                    Απόρριψη
+                                </button>
+                                <button className='h-1/2 w-full text-xl bg-green-400 rounded-md'
+
+                                
+                                >
+                                    Αποδοχή    
+                                </button>
+                            </>
+                        }
+
                 </div>
 
 
@@ -172,11 +225,65 @@ function Notification({ id, type }){
             </div>
         );
     }
+
+
+    // notification for parents
+    if (((!isJobLoading && type==="jobOffer") || (!isRequestLoading && type==="contactRequest")) && role ) {
+        return(
+            <div className='rounded-md bg-gray-200 mx-auto my-5 w-2/3 flex items-center h-32'>
+                
+                {/* left side, profile and info */}
+                <div className='w-3/4 h-full rounded-l-md flex items-center'>
+                    {/* img div */}
+                    <div className='h-full w-1/6 flex items-center px-5  py-1'>
+                        <img    src={type==="jobOffer" ? job?.img : request?.img}
+                                className='size-24 mx-auto object-cover rounded-full'                            
+                        />
+                    </div>
+                    {/* name and date */}
+                    <div className='h-full w-5/6 flex flex-col justify-center'>  
+                        <p className='h-1/3  font-semibold pt-2 '>{type==="jobOffer" ? job?.finalizedAt : request.createdAt}</p>
+
+                        {/* periptwsi 1 */}
+                        {type==="jobOffer" && 
+                            <p className='h-2/3 flex items-start pt-2  text-xl font-medium'>
+                                {job?.gender ? "Ο" : "Η"} <Link to={`/nannyprofile/${job?.senderId}`} className='underline mx-1'>{job?.senderName} {job?.senderSurname}</Link> {status==="accepted" ? 'ΑΠΟΔΈΧΤΗΚΕ' :'ΑΠΈΡΡΙΨΕ'} την <button onClick={()=>setShowModal(sm=>!sm)} className="underline ml-1">αίτηση απασχόλησης </button> σας.
+                            </p>
+                        }
+                        {/* periptwsi 2 */}
+                        {type==="contactRequest" &&
+                            <p className='h-2/3 flex items-start pt-2  text-xl font-medium'>
+                                {request?.gender ? "Ο" : "Η"} <Link to={`/nannyprofile/${request?.senderId}`} className='underline mx-1'>{request?.senderName} {request?.senderSurname}</Link> {status==="accepted" ? 'ΑΠΟΔΈΧΤΗΚΕ' :'ΑΠΈΡΡΙΨΕ'} το αίτημα επικοινωνίας σας.
+                            </p>
+                        
+                        }
+
+
+                    </div>
+                </div>
+            
+                {/* right side, action buttons */}
+                <div className='w-1/4 h-full rounded-r-md font-medium flex items-center justify-center gap-4 pr-4 '>
+                        {/* periptwsi payment */}
+                        
+
+                        {/* periptwsi rehire */}
+
+                </div>
+
+
+                
+                
+            </div>
+        )
+    }
+
 }
 
 export default Notification;
 
 Notification.propTypes = {
     id:PropTypes.string.isRequired,
-    type:PropTypes.string.isRequired
+    type:PropTypes.string.isRequired,
+    role:PropTypes.bool.isRequired,
 };

@@ -398,7 +398,8 @@ export async function addFinalApplication( data ) {
             createdAt: formattedDate,
             applicationId:docRef.id,
             exactDate:exactDate,
-            read:false
+            read:false,
+            status:"pending"
         };
 
         const notificationsCollection = collection(db, 'notifications');
@@ -533,7 +534,7 @@ export async function addFinalOffer( data ) {
         type:'final',
         archived:false,
         childAge: data.childAge || "null",
-        exactDate:exactDate
+        exactDate:exactDate,
     };
 
     try {
@@ -773,7 +774,8 @@ export async function fetchJobNotification(id) {
             schedule,
             startingDate,
             months,
-            address
+            address,
+            status:data.status
         };
 
     } catch (error) {
@@ -829,6 +831,8 @@ export async function fetchContactRequestNotification(id) {
             img,
             gender,
             createdAt: data.createdAt,
+            status:data.status
+
         };
     } catch (error) {
         console.error("Fetching failed:", error);
@@ -865,7 +869,8 @@ export async function addContactRequest(data){
             createdAt: formattedDate,
             contactRequestId:docRef.id,
             exactDate:exactDate,
-            read:false
+            read:false,
+            status:"pending"
         };
 
         const notificationsCollection = collection(db, 'notifications');
@@ -1031,5 +1036,203 @@ export async function readNotifications(userId) {
         }
     } catch (error) {
         console.error('Error updating notifications:', error.message);
+    }
+}
+
+
+
+export async function rejectContact(notificationId){
+    const today = new Date();
+    const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+    console.log(formattedDate)
+    const exactDate = Timestamp.now();
+    try{
+        // console.log("aaa"+notificationId)
+
+        //fetch the notification 
+        const docRef1 = doc(db, 'notifications', notificationId);
+        console.log("Fetching document from contactRequests with ID:", notificationId);
+        const docSnap = await getDoc(docRef1);
+        // Get the fields of the notification
+        if (!docSnap.exists()) {
+            console.error(`Notification document with ID ${notificationId} does not exist.`);
+            return;
+        }
+        const notifData = docSnap.data();
+        
+        console.log("notifData:")
+        console.log(notifData)
+
+        // update the status of the notification
+        await updateDoc(docRef1, {
+            status:"rejected"
+        });
+
+
+
+        if (!notifData.
+            contactRequestId) {
+            console.error("applicationId is missing in the notification data:", notifData);
+            return;
+        }
+        // first, get the application id to change its status and make it archived
+        const docRef2 = doc(db, 'contactRequests',notifData.contactRequestId);
+        console.log("Fetching document from contactRequests with ID:", notifData.contactRequestId);
+        const docSnap2 = await getDoc(docRef2);
+        const contactData=docSnap2.data();
+        
+        console.log("RequestData:")
+        console.log(contactData)
+        
+        // update the fields of the application
+        await updateDoc(docRef2, {
+            archived: true,
+            status:"Απερρίφθη"
+        });
+        
+        //send a new notification to the parent about the status of their contact request
+
+
+        // make the proper notification nanny to parent
+        const notificationData = {
+            senderId: notifData.receiverId,
+            receiverId:  notifData.senderId,
+            type: 'contactRequest',
+            createdAt: formattedDate,
+            contactRequestId:notifData.contactRequestId,
+            exactDate:exactDate,
+            read:false,
+            status:"rejected"
+        };
+        const notificationsCollection = collection(db, 'notifications');
+        await addDoc(notificationsCollection, notificationData);  // Adds the document
+    
+    }
+    catch(error){
+        console.log(error.message)
+        
+        
+    }
+}
+
+
+
+export async function acceptContact(notificationId){
+    const today = new Date();
+    const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+    console.log(formattedDate)
+    const exactDate = Timestamp.now();
+    try{
+        // console.log("aaa"+notificationId)
+
+        //fetch the notification 
+        const docRef1 = doc(db, 'notifications', notificationId);
+        console.log("Fetching document from contactRequests with ID:", notificationId);
+        const docSnap = await getDoc(docRef1);
+        // Get the fields of the notification
+        if (!docSnap.exists()) {
+            console.error(`Notification document with ID ${notificationId} does not exist.`);
+            return;
+        }
+        const notifData = docSnap.data();
+        
+        console.log("notifData:")
+        console.log(notifData)
+
+        
+
+        await updateDoc(docRef1, {
+            status:"accepted"
+        });
+
+        if (!notifData.
+            contactRequestId) {
+            console.error("applicationId is missing in the notification data:", notifData);
+            return;
+        }
+        // first, get the application id to change its status and make it archived
+        const docRef2 = doc(db, 'contactRequests',notifData.contactRequestId);
+        console.log("Fetching document from contactRequests with ID:", notifData.contactRequestId);
+        const docSnap2 = await getDoc(docRef2);
+        const contactData=docSnap2.data();
+        
+        console.log("RequestData:")
+        console.log(contactData)
+        
+        // update the fields of the application
+        await updateDoc(docRef2, {
+            archived: true,
+            status:"Εγκρίθηκε"
+        });
+        
+        //send a new notification to the parent about the status of their contact request
+
+
+        // make the proper notification nanny to parent
+        const notificationData = {
+            senderId: notifData.receiverId,
+            receiverId:  notifData.senderId,
+            type: 'contactRequest',
+            createdAt: formattedDate,
+            contactRequestId:notifData.contactRequestId,
+            exactDate:exactDate,
+            read:false,
+            status:"accepted"
+        };
+        const notificationsCollection = collection(db, 'notifications');
+        await addDoc(notificationsCollection, notificationData);  // Adds the document
+    
+    }
+    catch(error){
+        console.log(error.message)
+        
+        
+    }
+}
+
+
+export async function fetchContacts(nannyId) {
+    const result = [];
+    try {
+        // Create the query
+        const q = query(
+            collection(db, 'contactRequests'),
+            where('receiverId', '==', nannyId),
+            where('status', '==', 'Εγκρίθηκε')
+        );
+
+        // Get documents matching the query
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            for (const dc of querySnapshot.docs) { 
+                const docData = dc.data();
+                // console.log(docData.senderId)
+
+                // Fetch parent data like name and surname
+                const docRef1 = doc(db, 'users', docData.senderId);
+                const docSnap = await getDoc(docRef1);
+                const userData=docSnap.data();
+                // console.log(userData)
+
+                if (docSnap.exists()) {
+                    result.push({
+                        id: dc.id,
+                        ...docData,
+                        parentName:userData.name,
+                        parentSurname:userData.surname
+                    });
+                } else {
+                    console.error('Parent data not found for senderId:', docData.senderId);
+                }
+            }
+        } else {
+            console.error('No contacts found for nannyId:', nannyId);
+        }
+    } catch (error) {
+        console.error('Error fetching contacts:', error.message);
+    } finally {
+        console.log('Result:', result);
+        return result;
     }
 }
