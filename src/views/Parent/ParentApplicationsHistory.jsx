@@ -21,19 +21,20 @@ export default function ParentApplicationsHistory() { // Corrected function decl
 return(
         <div className="w-auto flex-grow py-2  bg-gray-200 ">
             
-            <p className="text-center font-bold text-4xl">Οι Αιτήσεις μου</p>
-            <div className="h-16 w-11/12 mx-auto flex justify-end ">
-                <div> 
+            <div className=" w-11/12 mx-auto flex  ">
+                <div className='w-1/3'></div>
+                <p className="text-center font-bold w-1/3 text-4xl my-auto">Οι Αιτήσεις μου</p>
+                <div className='w-1/3  items-center justify-center flex flex-col'> 
                     <p className=' text-lg font-medium'>Ταξινόμηση με βάση</p>
                     <select onChange={(e) => setSortBy(e.target.value)}
                         value={sortBy}
                         className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs"
                     >
-                        <option disabled value={""}>Επιλέξτε</option>
                         <option value={"date-desc"}>Ημερομηνία &#8593;</option>
                         <option value={"date-asc"}>Ημερομηνία &#8595;</option>
                     </select>
                 </div>
+
             </div>
             
             {/* bar */}

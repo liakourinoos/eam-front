@@ -19,9 +19,10 @@ export default function NannyPaymentsHistory() { // Corrected function declarati
     return(
         <div className="w-auto flex-grow py-2  bg-gray-200 ">
             
-            <p className="text-center font-bold text-4xl">Οι Πληρωμές μου</p>
-            <div className="h-16 w-11/12 mx-auto flex justify-end ">
-                <div> 
+            <div className=" w-11/12 mx-auto flex  ">
+                <div className='w-1/3'></div>
+                <p className="text-center font-bold w-1/3 text-4xl my-auto">Οι Πληρωμές μου</p>
+                <div className='w-1/3  items-center justify-center flex flex-col'> 
                     <p className=' text-lg font-medium'>Ταξινόμηση με βάση</p>
                     <select onChange={(e) => setSortBy(e.target.value)}
                         value={sortBy}
@@ -31,18 +32,19 @@ export default function NannyPaymentsHistory() { // Corrected function declarati
                         <option value={"date-asc"}>Ημερομηνία &#8595;</option>
                     </select>
                 </div>
+
             </div>
             
             {/* bar */}
             <div className="w-11/12 mt-5 mx-auto h-16 text-center rounded-md bg-gray-300 border-2 border-gray-500 flex items-center  font-medium text-xl ">
-                <p className="w-1/2 text-start p-10  ">Κωδικός</p>
-                <div className="w-1/2 flex items-center justify-center gap-1 "
+                <p className="w-1/3 text-center  ">Κωδικός</p>
+                <div className="w-1/3 flex items-center justify-center gap-1 "
                     title="Οι ημερομηνίες εμφανίζονται σε μορφή ΗΗ/ΜΜ/ΕΕΕΕ"
                 >
                 <p >Ημερομηνία Πληρωμής</p>
                     <FaRegQuestionCircle    className="text-xl"/>
                 </div>
-                <p className="w-1/2 text-end p-10">Κωδικός Voucher</p>
+                <p className="w-1/3 text-center">Κωδικός Voucher</p>
             </div>
             
 

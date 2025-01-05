@@ -24,7 +24,7 @@ export default function ParentHistory({ initialPage = 1 }) {
 
     if(!loading && userData) {
         return (
-            <div className="w-full  h-screen flex flex-col items-center bg-white">
+            <div className="w-full  min-h-screen flex flex-col items-center bg-white">
                 {RenderHeaderNavbar(userData, 5)}
                 {/* Buttons */}                                                                                        
                 <div className="mt-5 mb-7 space-x-4">
@@ -42,7 +42,7 @@ export default function ParentHistory({ initialPage = 1 }) {
                         </button>
                         <button
                             onClick={() => setSelectedPage(4)}className={`cursor-pointer w-80 ${selectedPage === 4 ? "bg-pallete-400 border-gray-700" : "bg-gray-300 border-gray-400"} text-black py-2 px-6 rounded-lg border border-gray-400 font-bold text-lg  h-20`}>
-                            Επικοινωνία
+                            Επικοινωνίες
                         </button>
                 </div>
                 

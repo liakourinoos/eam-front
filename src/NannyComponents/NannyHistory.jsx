@@ -24,26 +24,30 @@ export default function NannyHistory({ initialPage = 1 }) {
 
     if(!loading && userData) {
         return (
-            <div className="w-full h-screen flex flex-col items-center bg-white">
+            <div className="w-full min-h-screen flex flex-col items-center bg-white">
                 {RenderHeaderNavbar(userData, 5)}
                 {/* Buttons */}
                 <div className="mt-5 mb-7 space-x-4  ">
 
                         <button
-                            onClick={() => setSelectedPage(1)}className={`cursor-pointer w-80 ${selectedPage === 1 ? "bg-pallete-400 border-gray-700" : "bg-gray-300 border-gray-400"}  text-black py-2 px-6 rounded-lg border border-gray-400 font-bold text-lg w-1/6 h-20`}>
-                            Αιτήσεις
+                            onClick={() => setSelectedPage(1)}
+                            className={`cursor-pointer w-80 ${selectedPage === 1 ? "bg-pallete-400 border-gray-700" : "bg-gray-300 border-gray-400"}  text-black py-2 px-6 rounded-lg border border-gray-400 font-semibold text-lg w-1/6 h-20`}>
+                            Αγγελίες
                         </button>
                         <button
-                            onClick={() => setSelectedPage(2)}className={`cursor-pointer w-80 ${selectedPage === 2 ? "bg-pallete-400 border-gray-700" : "bg-gray-300 border-gray-400"} text-black py-2 px-6 rounded-lg border border-gray-400 font-bold text-lg w-1/6 h-20` }>
+                            onClick={() => setSelectedPage(2)}
+                            className={`cursor-pointer w-80 ${selectedPage === 2 ? "bg-pallete-400 border-gray-700" : "bg-gray-300 border-gray-400"} text-black py-2 px-6 rounded-lg border border-gray-400 font-semibold text-lg w-1/6 h-20` }>
                             Συμφωνητικά
                         </button>
                         <button
-                            onClick={() => setSelectedPage(3)}className={`cursor-pointer w-80 ${selectedPage === 3? "bg-pallete-400 border-gray-700" : "bg-gray-300 border-gray-400"} text-black py-2 px-6 rounded-lg border border-gray-400 font-bold text-lg w-1/6 h-20`}>
+                            onClick={() => setSelectedPage(3)}
+                            className={`cursor-pointer w-80 ${selectedPage === 3? "bg-pallete-400 border-gray-700" : "bg-gray-300 border-gray-400"} text-black py-2 px-6 rounded-lg border border-gray-400 font-semibold text-lg w-1/6 h-20`}>
                             Πληρωμές
                         </button>
                         <button
-                            onClick={() => setSelectedPage(4)}className={`cursor-pointer w-80 ${selectedPage === 4 ? "bg-pallete-400 border-gray-700" : "bg-gray-300 border-gray-400"} text-black py-2 px-6 rounded-lg border border-gray-400 font-bold text-lg w-1/6 h-20`}>
-                            Επικοινωνία
+                            onClick={() => setSelectedPage(4)}
+                            className={`cursor-pointer w-80 ${selectedPage === 4 ? "bg-pallete-400 border-gray-700" : "bg-gray-300 border-gray-400"} text-black py-2 px-6 rounded-lg border border-gray-400 font-semibold text-lg w-1/6 h-20`}>
+                            Επικοινωνίες
                         </button>
                 </div>
                 
