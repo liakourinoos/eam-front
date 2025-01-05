@@ -25,7 +25,7 @@ export default function NannyHistory({ initialPage = 1 }) {
     if(!loading && userData) {
         return (
             <div className="w-full min-h-screen flex flex-col items-center bg-white">
-                {RenderHeaderNavbar(userData, 5)}
+                {RenderHeaderNavbar(userData, 4)}
                 {/* Buttons */}
                 <div className="mt-5 mb-7 space-x-4  ">
 

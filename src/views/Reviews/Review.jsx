@@ -43,7 +43,7 @@ export default function Review({seenFrom,nannyName,nannySurname,nannyImg,review}
             
             {/* left div: img */}
             <div className='w-32 h-full flex items-center justify-center'>
-                <img src={seenFrom==="parent" ? nannyImg : review.img  } alt="" className="h-32 objecto-contain rounded-full"/>
+                <img src={seenFrom==="parent" ? nannyImg : review.img  } alt="" className=" h-32 rounded-full"/>
             </div>
             {/* right, all the rest */}
             <div className='w-5/6 h-full flex flex-col pl-2'>

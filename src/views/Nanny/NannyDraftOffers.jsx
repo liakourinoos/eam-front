@@ -49,7 +49,7 @@ function NannyDraftOffers(){
             </div>
 
             {/* data */}
-            <div className='w-11/12 mx-auto h-full flex flex-col mb-5  gap-2 items-center justify-start overflow-y-scroll mt-2'>
+            <div className='w-11/12 mx-auto h-full flex flex-col mb-5  gap-2 items-center justify-start overflow-y-auto mt-2'>
                 {isLoading && <span className="loading loading-lg mt-32"></span>
                     }
                     {!isLoading && Array.isArray(offers) && 

@@ -67,7 +67,7 @@ function Notification({ id, type }){
                     {/* img div */}
                     <div className='h-full w-1/6 flex items-center px-5  py-1'>
                         <img    src={type==="jobOffer" ? job?.img : request?.img}
-                                className='h-full mx-auto object-cover  rounded-full'                            
+                                className='size-24 mx-auto object-cover rounded-full'                            
                         />
                     </div>
                     {/* name and date */}
