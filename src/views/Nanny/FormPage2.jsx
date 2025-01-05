@@ -187,8 +187,8 @@ function FormPage2({ form, setForm, nextFn }) {
                             disabled={!checkInputs()}
                             title={`${ !checkInputs() ? 'Παρακαλώ συμπληρώστε σωστά όλα τα πεδία.' : "" }`}
                     >
-                        {/* {isPending ? 'Οριστικοποίηση...' :'Οριστικοποίηση Αίτησης'} */}
-                        test
+                        {isPending ? 'Οριστικοποίηση...' :'Οριστικοποίηση Αίτησης'}
+                        
                     </button>
                 }
                 {form.cantEdit && 

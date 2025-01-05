@@ -60,6 +60,7 @@ export default {
         },
       },
     },
+    
   },
   plugins: [
     daisyui,
@@ -68,3 +69,4 @@ export default {
     themes: false, // Disable all DaisyUI themes
   },
 };
+
