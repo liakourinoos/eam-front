@@ -81,7 +81,7 @@ function ApplicationForm({action="Δημιουργία Νέας Αίτησης"}
 
     if((action==="Προβολή Αίτησης" && !isLoading && data) || action==="Δημιουργία Νέας Αίτησης" || action==="Επεξεργασία Αίτησης") 
         return(
-            <div className='w-full h-screen flex flex-col bg-pallete-50'>
+            <div className='w-full min-h-screen flex flex-col bg-pallete-50'>
                 {RenderHeaderNavbar(userData,2)}
                 
                 {/* main page */}

@@ -36,7 +36,10 @@ function Login() {
     } catch (error) {
       console.error("Error in handleLogin:", error.message); // Log error details
 
-      if(error.message)  setMessage(error.message); // Update message state
+      if(error.message){
+        if(error.message==="Firebase: Error (auth/invalid-email).") setMessage("Λάθος email ή κωδικός πρόσβασης."); // Update message state
+        else setMessage(error.message);
+      }
     } finally {
       console.log("handleLogin finished"); // Debugging exit point
     }
@@ -49,7 +52,7 @@ function Login() {
 
 
   return (
-    <div className="w-full h-screen flex flex-col overflow-hidden justify-between bg-pink-100 ">
+    <div className="w-full min-h-screen flex flex-col overflow-hidden justify-between bg-pink-100 ">
       <Header />
 
       <div className="w-full h-full overflow-y-auto flex flex-col items-center py-20 ">

@@ -15,7 +15,7 @@ const SlidingImageSlideshow = () => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => prevIndex + 1);
       setIsTransitioning(true);
-    }, 2500);
+    }, 3500);
 
     return () => clearInterval(interval);
   }, []);

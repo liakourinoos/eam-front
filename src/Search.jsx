@@ -152,10 +152,10 @@ function Search() {
 
                         {/* Employment Period Slider */}
                         <div className="w-60 flex flex-col gap-1">
-                            <p className="text-l">Διάστημα Απασχόλησης</p>
-                            <input onChange={handleYearsSlider} type="range" min={0} max={9} value={yearsSlider} className="range range-secondary" step="1" />
+                            <p className="text-l">Διάστημα Απασχόλησης (μήνες)</p>
+                            <input onChange={handleYearsSlider} type="range" min={1} max={9} value={yearsSlider} className="range range-secondary" step="1" />
                             <div className="flex w-full mx-auto justify-between text-xs">
-                                <span>0</span>
+                                {/* <span>0</span> */}
                                 <span>1</span>
                                 <span>2</span>
                                 <span>3</span>
