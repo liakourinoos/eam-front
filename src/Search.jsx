@@ -84,7 +84,7 @@ function Search() {
                         {/* Town Filter */}
                         <div>
                             <p className='text-l'>Πόλη</p>
-                            <select onChange={(e) => { setTown(e.target.value); setLocation("");  }} value={town} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                            <select onChange={(e) => { setTown(e.target.value); setLocation("");setAtMyHouse("")  }} value={town} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
                                 {cities.map((city, idx) =>
                                     <option key={idx} value={city}>{city}</option>
@@ -108,16 +108,28 @@ function Search() {
                         
 
                         {/* Other Filters */}
-                        <div className="flex flex-col items-center">
+                        {/* <div className="flex flex-col items-center">
                             <p className='text-l w-60'>Απασχόληση επαγγελματία στην οικία μου</p>
                             <select value={location==="" ? "" : atMyHouse} onChange={(e)=>setAtMyHouse(e.target.value==="true")} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
                                 { location!=="" && <option value={true}>Ναι</option>}
                                 { location!=="" && <option value={false}>Όχι</option>}
                             </select>
+                        </div> */}
+                        <div className='w-60 flex flex-col gap-2 '>
+                            <p className='text-l'>Απασχόληση επαγγελματία στην οικία μου</p>
+                            
+                            <div className="flex  gap-3 ">
+                                <input type="radio" name="radio-1" className="radio radio-secondary" onClick={()=>setAtMyHouse(true)} disabled={location===""} />
+                                <p>Ναι</p>
+                            </div>
+                            <div className="flex gap-3">
+                                <input type="radio" name="radio-1" className="radio radio-secondary" onClick={()=>setAtMyHouse(false)}  disabled={location===""} />
+                                <p>Όχι</p>
+                            </div>
                         </div>
 
-                        <div>
+                        {/* <div>
                             <p className='text-l'>Ηλικία Παιδιού</p>
                             <select value={childAge} onChange={(e)=>setChildAge(e.target.value)} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
@@ -125,6 +137,22 @@ function Search() {
                                 <option>1-3</option>
                                 <option>3-5</option>
                             </select>
+                        </div> */}
+                        <div className='w-60 flex flex-col gap-2 '>
+                            <p className='text-l'>Ηλικία Παιδιού</p>
+                           
+                            <div className="flex  gap-3 ">
+                                <input type="radio" name="radio-2" className="radio radio-secondary" onClick={()=>setChildAge("0-1")} />
+                                <p>0-1</p>
+                            </div>
+                            <div className="flex gap-3">
+                                <input type="radio" name="radio-2" className="radio radio-secondary" onClick={()=>setChildAge("1-3")} />
+                                <p>1-3</p>
+                            </div>
+                            <div className="flex gap-3">
+                                <input type="radio" name="radio-2" className="radio radio-secondary" onClick={()=>setChildAge("3-5")}/>
+                                <p>3-5</p>
+                            </div>
                         </div>
 
                         {/* Experience Slider */}
@@ -140,14 +168,26 @@ function Search() {
                             </div>
                         </div>
 
-                        <div>
+                        <div className='w-60 flex flex-col gap-2 '>
                             <p className='text-l'>Φύλο</p>
-                            <select value={gender} onChange={(e)=>setGender(e.target.value)} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                            {/* <select value={gender} onChange={(e)=>setGender(e.target.value)} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
                                 <option>Male</option>
                                 <option>Female</option>
                                 <option>Other</option>
-                            </select>
+                            </select> */}
+                            <div className="flex  gap-3 ">
+                                <input type="radio" name="radio-3" className="radio radio-secondary" onClick={()=>setGender("")} />
+                                <p>Άλλο</p>
+                            </div>
+                            <div className="flex gap-3">
+                                <input type="radio" name="radio-3" className="radio radio-secondary" onClick={()=>setGender(true)} />
+                                <p>Αρσενικό</p>
+                            </div>
+                            <div className="flex gap-3">
+                                <input type="radio" name="radio-3" className="radio radio-secondary" onClick={()=>setGender(false)}/>
+                                <p>Θηλυκό</p>
+                            </div>
                         </div>
 
                         {/* Employment Period Slider */}
