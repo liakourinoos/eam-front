@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import {useAuth} from '../customHooks.jsx'
 import PropTypes from 'prop-types';
 import { PiBabyDuotone } from 'react-icons/pi';
+import { GrHelpBook } from "react-icons/gr";
 
 function UserHeader({main_page="/",role,id}){
 
@@ -35,14 +36,22 @@ function UserHeader({main_page="/",role,id}){
         return(
             <div className="h-16 w-full flex justify-between border-b-2 border-black bg-pallete-50" >
                 {/* box for logo and name */}
-                <Link to='/' className="flex w-1/3 items-center h-full">
-                    <PiBabyDuotone className="w-1/6  ml-5 h-full text-pallete-600"/>
-                    <p  className='text-4xl ml-3 font-bold text-pallete-600'>Nanika</p>
-                    {/* language toggle */}
-                    <div>
-                        
-                    </div>
-                </Link>
+                <div className="flex ">
+                    <Link to='/' className="flex pr-5  items-center text-pallete-600 h-full hover:text-pallete-800">
+                        <PiBabyDuotone className=" ml-5 text-6xl " />
+                        <p className='text-4xl ml-3 font-bold '>Nanika</p>
+                        {/* language toggle */}
+                        <div>
+
+                        </div>
+                    </Link>
+
+
+                    <Link to='/about' className="flex h-full text-pallete-600 hover:text-pallete-800 ml-16 gap-1 font-semibold items-center px-2 text-3xl">
+                        <GrHelpBook className="font-bold" />
+                        <span className=''>Βοήθεια</span>
+                    </Link>
+                </div>
                 {/* user info */}
                 <div className='h-full w-1/3 items-center   flex justify-end gap-3 pr-3 '>
                     <Link    to={`${role?  `/parentprofile/${id}` :`/nannyprofile/${id}` }`} className={`h-full w-full p-2 flex items-center justify-end gap-3 `}

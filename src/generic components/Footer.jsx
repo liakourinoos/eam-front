@@ -35,10 +35,10 @@ function Footer() {
             </div>
 
             {/* div3, support, help */}
-            <div className="w-1/3 h-full flex justify-between ">
+            <div className="w-1/3 h-full flex justify-end pr-10 ">
 
                 {/* help */}
-                <Link to='/about' className="my-auto mx-auto"><p className="underline text-black font-bold text-center  ">Εγχειρίδιο Χρήσης</p></Link>
+                {/* <Link to='/about' className="my-auto mx-auto"><p className="underline text-black font-bold text-center  ">Εγχειρίδιο Χρήσης</p></Link> */}
                 <div className="flex flex-col justify-center  px-2 ">
                     <p><span className="font-medium">support:</span> nanika@gmail.com</p>
                     <p><span className="font-medium">Nanika©</span>, 2024-2024</p>

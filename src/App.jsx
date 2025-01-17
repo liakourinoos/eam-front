@@ -19,29 +19,35 @@ function App() {
   // State to keep track of the current image index
   const [currentIndex, setCurrentIndex] = useState(0);
   // useEffect to change the image every 3 seconds
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length); // Cycle through images
+  //   }, 3000); // Change image every 3000ms (3 seconds)
+
+  //   // Cleanup interval on component unmount
+  //   return () => clearInterval(interval);
+  // }, [images.length]);
+
+  const [animationClass, setAnimationClass] = useState('slide-in');
+
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length); // Cycle through images
-    }, 3000); // Change image every 3000ms (3 seconds)
+      setAnimationClass('slide-out');
+      setTimeout(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+        setAnimationClass('slide-in');
+      }, 500); // Duration of slide-out animation
+    }, 3000); // Change image every 5 seconds
 
-    // Cleanup interval on component unmount
     return () => clearInterval(interval);
-  }, [images.length]);
+  }, []);
+
 
   const [town,setTown] = useState("");
   const [location,setLocation] = useState("")
-  const [neighborhood,setNeighborhood] = useState("")
 
 
   const { userData,loading } = useAuth(); // Access the user from the context  
-  const nav=useNavigate();
-
-    useEffect(() => {
-      if (userData) {
-          // Navigate to /search or any other route after user is logged in
-          nav(userData?.role ?"/search":`/nannyoffers`);
-      }
-  }, [userData, nav]); 
 
 
   
@@ -50,28 +56,26 @@ function App() {
                       </div>
 
 
-  if(!loading && !userData) 
+  if(!loading) 
     return(
-      <div className='w-full h-screen overflow-hidden flex flex-col justify-between'>
-        <Header/>
+      <div className='w-full h-screen flex flex-col overflow-hidden justify-between'>
+        {RenderHeaderNavbar(userData,0)}
         {/* main page */}
         <div className="w-full flex flex-grow relative   ">
 
-          {/* Background) */}
-          <div
-            className=" h-full w-3/5 absolute top-0 right-0 z-0"
-          >
-            <div className="w-full h-full">
-              <img
-                src={images[currentIndex]}
-                alt="Background"
-                className="object-cover w-full h-full"
-              />
-            </div>
+         {/* Background */}
+        <div className="h-full w-3/5 absolute top-0 right-0 z-0">
+          <div className="image-container">
+            <img
+              src={images[currentIndex]}
+              alt="Background"
+              className={`object-cover w-full h-full ${animationClass}`}
+            />
           </div>
+        </div>
       {/* main div */}
           <div
-          className="w-full overflow-y-auto h-full flex flex-col  justify-center absolute top-0 left-0 z-10 bg-pink-200"
+          className="w-full  h-full flex flex-col  justify-center absolute top-0 left-0 z-10 bg-pink-200 "
           style={{
             boxShadow: "10px 10px 20px rgba(0, 0, 139, 0.7)", // Apply shadow here
             clipPath: "polygon(0 100%, 0 0, 50% 0, 75% 0, 45% 100%, 50% 100%)",
@@ -81,12 +85,12 @@ function App() {
                   <p className=' ml-32 mt-20 text-5xl font-extrabold'>Βρείτε την φροντίδα που σας αξίζει!</p>
                   
                   {/* input div */}
-                  <div className='pl-20 gap-7 h-full flex flex-col justify-center   '>
+                  <div className='pl-20 gap-7 h-full flex flex-col justify-center items-center pr-36 text-2xl  '>
 
                   {/* Town Filter */}
                     <div>
-                      <p className='text-l'>Πόλη</p>
-                      <select onChange={(e) => { setTown(e.target.value); setLocation(""); setNeighborhood(""); }} value={town} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                      <p className='font-semibold'>Πόλη</p>
+                      <select onChange={(e) => { setTown(e.target.value); setLocation("");  }} value={town} className="select text-xl select-bordered rounded-md h-16  border-2 border-black pl-2 bg-white w-80 max-w-xs">
                       <option disabled value={""}>Επιλέξτε</option>
                         {cities.map((city, idx) =>
                             <option key={idx} value={city}>{city}</option>
@@ -96,8 +100,8 @@ function App() {
 
                     {/* Location Filter */}
                     <div>
-                      <p className='text-l'>Περιοχή</p>
-                      <select onChange={(e) => {  setLocation(e.target.value); setNeighborhood(""); }} value={location} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                      <p className='font-semibold'>Περιοχή</p>
+                      <select onChange={(e) => {  setLocation(e.target.value);  }} value={location} className="select text-xl mt-2 select-bordered rounded-md h-16  border-2 border-black pl-2 bg-white w-80 max-w-xs">
                         <option disabled value={""}>Επιλέξτε</option>
                           {town!=="" && 
                             area.find(a => a.city === town)?.areas.map((area, idx) =>
@@ -106,26 +110,15 @@ function App() {
                       </select>
                     </div>
 
-                          {/* Neighborhood Filter */}
-                          <div>
-                              <p className='text-l'>Γειτονιά</p>
-                              <select onChange={(e) => { setNeighborhood(e.target.value) }} value={neighborhood} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
-                                  <option disabled value={""}>Επιλέξτε</option>
-                                  {location!=="" && 
-                                      geitonia.find(g => g.area === location)?.geitonies.map((geitonia, idx) =>
-                                          <option key={idx} value={geitonia}>{geitonia}</option>
-                                      )
-                                  }
-                              </select>
-                          </div>
+                        
 
 
 
-                    <div className='w-full mb-32 flex justify-end pr-60'>
+                    <div className='w-80 mb-28 mt-2 flex justify-end  '>
                       <Link to={{pathname:'/search',
                                 
                             }} 
-                            state={{selectedTown:town, selectedNeighborhood:neighborhood,selectedLocation:location}}
+                            state={{selectedTown:town,selectedLocation:location}}
                             className='rounded-md flex items-center justify-center text-center text-xl bg-pink-600 w-40 h-12 text-white py-1'>
                         <span>Συνέχεια</span>
                       </Link>

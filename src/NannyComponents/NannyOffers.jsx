@@ -28,7 +28,7 @@ function NannyOffers() {
                 {RenderHeaderNavbar(userData,1)}
 
                 {/* main page */}
-                <div className="w-full  flex-grow  flex flex-col ">
+                <div className="w-full  flex-grow  flex flex-col">
 
                     {/* buttons */}
                     <div className="w-full h-16 font-medium text-xl flex items-center justify-center my-5 gap-10 rounded-md ">
@@ -46,7 +46,7 @@ function NannyOffers() {
                     </div>
 
                     {/* page displayed */}
-                    <div className="flex flex-col flex-grow bg-pallete-50 ">                    
+                    <div className="flex-grow">                    
                         {selectedPage===1 && <NannyFinalOffers/>}
                         {selectedPage===2 && <NannyDraftOffers/>}
                     </div>

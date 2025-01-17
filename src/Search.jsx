@@ -20,13 +20,11 @@ function Search() {
     const { 
         selectedTown = "", 
         selectedLocation = "", 
-        selectedNeighborhood = "" 
     } = loc.state || {};
 
     // States for inputs
     const [town, setTown] = useState(selectedTown);
     const [location, setLocation] = useState(selectedLocation);
-    const [neighborhood, setNeighborhood] = useState(selectedNeighborhood);
     const [atMyHouse,setAtMyHouse]= useState("")
     const [childAge,setChildAge] = useState("");
     const [gender,setGender] = useState("")
@@ -86,7 +84,7 @@ function Search() {
                         {/* Town Filter */}
                         <div>
                             <p className='text-l'>Πόλη</p>
-                            <select onChange={(e) => { setTown(e.target.value); setLocation(""); setNeighborhood(""); }} value={town} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                            <select onChange={(e) => { setTown(e.target.value); setLocation("");  }} value={town} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
                                 {cities.map((city, idx) =>
                                     <option key={idx} value={city}>{city}</option>
@@ -97,7 +95,7 @@ function Search() {
                         {/* Location Filter */}
                         <div>
                             <p className='text-l'>Περιοχή</p>
-                            <select onChange={(e) => {  setLocation(e.target.value); setNeighborhood(""); }} value={location} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                            <select onChange={(e) => {  setLocation(e.target.value); setAtMyHouse("") }} value={location} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
                                 {town!=="" && 
                                     area.find(a => a.city === town)?.areas.map((area, idx) =>
@@ -107,26 +105,15 @@ function Search() {
                             </select>
                         </div>
 
-                        {/* Neighborhood Filter */}
-                        <div>
-                            <p className='text-l'>Γειτονιά</p>
-                            <select onChange={(e) => { setNeighborhood(e.target.value) }} value={neighborhood} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
-                                <option disabled value={""}>Επιλέξτε</option>
-                                {location!=="" && 
-                                    geitonia.find(g => g.area === location)?.geitonies.map((geitonia, idx) =>
-                                        <option key={idx} value={geitonia}>{geitonia}</option>
-                                    )
-                                }
-                            </select>
-                        </div>
+                        
 
                         {/* Other Filters */}
                         <div className="flex flex-col items-center">
                             <p className='text-l w-60'>Απασχόληση επαγγελματία στην οικία μου</p>
-                            <select value={neighborhood==="" ? "" : atMyHouse} onChange={(e)=>setAtMyHouse(e.target.value==="true")} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                            <select value={location==="" ? "" : atMyHouse} onChange={(e)=>setAtMyHouse(e.target.value==="true")} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
-                                { neighborhood!=="" && <option value={true}>Ναι</option>}
-                                { neighborhood!=="" && <option value={false}>Όχι</option>}
+                                { location!=="" && <option value={true}>Ναι</option>}
+                                { location!=="" && <option value={false}>Όχι</option>}
                             </select>
                         </div>
 

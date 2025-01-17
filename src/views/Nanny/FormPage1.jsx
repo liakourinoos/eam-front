@@ -1,6 +1,6 @@
 import { useState,useEffect } from "react";
 import PropTypes from 'prop-types';
-import {cities,area,geitonia} from "../../../global_assets/global_values.jsx";
+import {cities,area} from "../../../global_assets/global_values.jsx";
 import { MdOutlineRemoveCircleOutline } from "react-icons/md";
 import { MdAddCircleOutline } from "react-icons/md";
 function FormPage1({ form, setForm, nextFn }) {
@@ -28,7 +28,7 @@ function FormPage1({ form, setForm, nextFn }) {
             <div className="w-1/5 mx-auto text-xl">
                 <p className=" font-medium mb-pl-2">Πόλη</p>
                 <select value={form.town} 
-                        onChange={(e)=>{setForm({...form, town: e.target.value , rows:[{index:1, area:"",neighborhood:[],canHost:""}]});setSelectedAreas([]); }} //kathe fora pou allazei i poli ta upoloipa trwne reset
+                        onChange={(e)=>{setForm({...form, town: e.target.value , rows:[{index:1, area:"",canHost:""}]});setSelectedAreas([]); }} //kathe fora pou allazei i poli ta upoloipa trwne reset
                         className={`select select-bordered font-medium text-xl rounded-md bg-white h-12 border-2 border-gray-300 pl-2 w-full `}
                         disabled={form.cantEdit}       
                 >
@@ -75,7 +75,7 @@ function FormPage1({ form, setForm, nextFn }) {
                                         const oldArea = row.area; // The previously selected area
                                         
                                         const updatedRows = form.rows.map((r, idx) =>
-                                            idx === index ? { ...r, area: newArea, neighborhood: [] } : r
+                                            idx === index ? { ...r, area: newArea} : r
                                         );
                                 
                                         // Update selectedAreas: remove the old area and add the new one
@@ -105,35 +105,7 @@ function FormPage1({ form, setForm, nextFn }) {
                             </select>
                         </div>
 
-                        {/* geitonia kathe perioxis */}
-                        <p className="text-l font-medium mt-3 pl-2">Γειτονιά/ές</p>
-                        <div  className='h-40 bg-white rounded-md overflow-y-auto  w-full mx-auto border-gray-300 border-2'>
-                            {row.area==="" && <p className="ml-2 text-gray-400 mt-2">Παρακαλούμε επιλέξτε περιοχή.</p>}
-                            {row.area !== "" && 
-                                geitonia.find(g => g.area === row.area)?.geitonies.map((geitonia, idx) => (
-                                    <div key={idx} className=" w-full my-2 flex items-center ">
-                                        <input  type="checkbox"
-                                                id={`neighborhood-${idx}`}
-                                                checked={row.neighborhood.includes(geitonia)} // Check if this neighborhood is selected
-                                                onChange={(e) => {
-                                                    const updatedNeighborhoods = e.target.checked
-                                                        ? [...row.neighborhood, geitonia] // Add neighborhood if checked
-                                                        : row.neighborhood.filter(neighbor => neighbor !== geitonia); // Remove if unchecked
-
-                                                    // Update the row with the new list of neighborhoods
-                                                    const updatedRows = form.rows.map((r, idxRow) =>
-                                                        idxRow === index ? { ...r, neighborhood: updatedNeighborhoods } : r
-                                                    );
-
-                                                    setForm({ ...form, rows: updatedRows });
-                                                }}
-                                                className="ml-2 my-1 size-6 checkbox checkbox-secondary"
-                                                disabled={form.cantEdit}
-                                        />
-                                            <label htmlFor={`neighborhood-${idx}`} className=" ml-2">{geitonia}</label>
-                                    </div>
-                            ))}
-                        </div>
+                        
 
                         {/* μπορει να φιλοξενησει */}
                         <div className="w-full mt-3  mx-auto">
@@ -167,7 +139,7 @@ function FormPage1({ form, setForm, nextFn }) {
                     <button onClick={() => {
                                 const updatedRows = [
                                     ...form.rows,
-                                    { index: form.rows.length , area: "", neighborhood: [], canHost: "" }
+                                    { index: form.rows.length , area: "", canHost: "" }
                                 ];
                                 setForm({ ...form, rows: updatedRows });
                             }}

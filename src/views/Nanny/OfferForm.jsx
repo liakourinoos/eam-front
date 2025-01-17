@@ -81,7 +81,7 @@ function OfferForm({action="Δημιουργία Νέας Αγγελίας"}){
 
     if((action==="Προβολή Αγγελίας" && !isLoading && data) || action==="Δημιουργία Νέας Αγγελίας" || action==="Επεξεργασία Αγγελίας") 
         return(
-            <div className='w-full h-screen flex flex-col bg-pallete-50'>
+            <div className='w-full min-h-screen flex flex-col bg-pallete-50'>
                 {RenderHeaderNavbar(userData,1)}
                 
                 {/* main page */}

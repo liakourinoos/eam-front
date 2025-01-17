@@ -30,7 +30,7 @@ function NannyFinalOffers() {
     },[userData])
 
     return (
-        <div className="w-full py-2 ">
+        <div className="w-full py-2 flex flex-col flex-grow">
             
             {/*  new application and sort by  */}
             <div className="h-16 w-11/12 mx-auto flex  items-center justify-between ">
@@ -74,6 +74,8 @@ function NannyFinalOffers() {
                         <FinalOffer key={idx} code={app.id} finalDate={app.finalizedAt}/>
                     ))
                 }
+
+
 
 
             </div>

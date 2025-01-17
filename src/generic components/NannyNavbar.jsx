@@ -40,16 +40,16 @@ function NannyNavbar({page=1}){
 
     return(
         <div className={`w-full h-12 text-xl border-b-2  border-black font-medium items-center px-auto bg-pallete-50 flex justify-evenly`}>            
-            <Link to='/nannyoffers'  onClick={()=>setSelectedPage(1)} className={`cursor-pointer ${selectedPage==1?"text-red-600 underline" : 'text-black'}`}>Αγγελίες</Link>
+            <Link to='/nannyoffers'  onClick={()=>setSelectedPage(1)} className={`cursor-pointer ${selectedPage==1?"text-pallete-600 underline font-semibold" : 'text-black'}`}>Αγγελίες</Link>
 
             
             <div className="indicator" onClick={()=>{setNotificationsRead(true); setNotifications(0); readNotifs(); setSelectedPage(2); }}>
                 {!isLoading && notifications > 0 &&<span className="indicator-item badge badge-secondary flex items-center justify-center">{notifications}</span>}
-                <Link to='/notifications'  className={`cursor-pointer ${selectedPage==2?"text-red-600 underline" : 'text-black'}`}>Ειδοποιήσεις</Link>
+                <Link to='/notifications'  className={`cursor-pointer ${selectedPage==2?"text-pallete-600 underline font-semibold" : 'text-black'}`}>Ειδοποιήσεις</Link>
             </div>
 
-            <Link to='/reviews' onClick={()=>setSelectedPage(3)} className={`cursor-pointer ${selectedPage==3?"text-red-600 underline" : 'text-black'}`}>Αξιολογήσεις</Link>
-            <Link to='/nannyhistory' onClick={()=>setSelectedPage(4)} className={`cursor-pointer ${selectedPage==4?"text-red-600 underline" : 'text-black'}`}>Ιστορικό</Link>
+            <Link to='/reviews' onClick={()=>setSelectedPage(3)} className={`cursor-pointer ${selectedPage==3?"text-pallete-600 underline font-semibold" : 'text-black'}`}>Αξιολογήσεις</Link>
+            <Link to='/nannyhistory' onClick={()=>setSelectedPage(4)} className={`cursor-pointer ${selectedPage==4?"text-pallete-600 underline font-semibold" : 'text-black'}`}>Ιστορικό</Link>
 
 
         </div>
