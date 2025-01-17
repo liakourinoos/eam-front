@@ -121,11 +121,11 @@ function Search() {
                             <p className='text-l'>Απασχόληση επαγγελματία στην οικία μου</p>
                             
                             <div className="flex  gap-3 ">
-                                <input type="radio" name="radio-1" checked={atMyHouse===true} className="radio radio-secondary" onClick={()=>setAtMyHouse(true)} disabled={location===""} />
+                                <input type="radio" name="radio-1" checked={atMyHouse===true} title={(location==="" || town==="" )  && "Επιλέξτε πρώτα πόλη και περιοχή."}  className="radio radio-secondary" onClick={()=>setAtMyHouse(true)} disabled={location===""} />
                                 <p>Ναι</p>
                             </div>
                             <div className="flex gap-3">
-                                <input type="radio" name="radio-1" checked={atMyHouse===false} className="radio radio-secondary" onClick={()=>setAtMyHouse(false)}  disabled={location===""} />
+                                <input type="radio" name="radio-1" checked={atMyHouse===false} title={ (location==="" || town==="") && "Επιλέξτε πρώτα πόλη και περιοχή."} className="radio radio-secondary" onClick={()=>setAtMyHouse(false)}  disabled={location===""} />
                                 <p>Όχι</p>
                             </div>
                         </div>
