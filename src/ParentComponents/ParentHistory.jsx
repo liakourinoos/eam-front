@@ -30,7 +30,7 @@ export default function ParentHistory({ initialPage = 1 }) {
                 <div className="mt-5 mb-7 space-x-4">
                         <button
                             onClick={() => setSelectedPage(1)}className={`cursor-pointer w-80 ${selectedPage === 1 ? "bg-pallete-400 border-gray-700" : "bg-gray-300 border-gray-400"}  text-black py-2 px-6 rounded-lg border border-gray-400 font-bold text-lg h-20`}>
-                            Αιτήσεις
+                            Συμφωνητικά
                         </button>
                         <button
                             onClick={() => setSelectedPage(2)}className={`cursor-pointer w-80 ${selectedPage === 2 ? "bg-pallete-400 border-gray-700" : "bg-gray-300 border-gray-400"} text-black py-2 px-6 rounded-lg border border-gray-400 font-bold text-lg  h-20` }>

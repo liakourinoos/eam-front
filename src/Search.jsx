@@ -67,7 +67,8 @@ function Search() {
             </div>
         )
 
-    
+        
+
     if(!loading && !isLoading)
     return (
         <div className="">
@@ -84,7 +85,7 @@ function Search() {
                         {/* Town Filter */}
                         <div>
                             <p className='text-l'>Πόλη</p>
-                            <select onChange={(e) => { setTown(e.target.value); setLocation("");setAtMyHouse("")  }} value={town} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                            <select onChange={(e) => { setTown(e.target.value); setLocation(""); setAtMyHouse("");  }} value={town} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
                                 {cities.map((city, idx) =>
                                     <option key={idx} value={city}>{city}</option>
@@ -95,7 +96,7 @@ function Search() {
                         {/* Location Filter */}
                         <div>
                             <p className='text-l'>Περιοχή</p>
-                            <select onChange={(e) => {  setLocation(e.target.value); setAtMyHouse("") }} value={location} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
+                            <select onChange={(e) => {  setLocation(e.target.value); setAtMyHouse(""); }} value={location} className="select select-bordered rounded-md h-12 border-2 border-black pl-2 bg-white w-60 max-w-xs">
                                 <option disabled value={""}>Επιλέξτε</option>
                                 {town!=="" && 
                                     area.find(a => a.city === town)?.areas.map((area, idx) =>
@@ -120,11 +121,11 @@ function Search() {
                             <p className='text-l'>Απασχόληση επαγγελματία στην οικία μου</p>
                             
                             <div className="flex  gap-3 ">
-                                <input type="radio" name="radio-1" className="radio radio-secondary" onClick={()=>setAtMyHouse(true)} disabled={location===""} />
+                                <input type="radio" name="radio-1" checked={atMyHouse===true} className="radio radio-secondary" onClick={()=>setAtMyHouse(true)} disabled={location===""} />
                                 <p>Ναι</p>
                             </div>
                             <div className="flex gap-3">
-                                <input type="radio" name="radio-1" className="radio radio-secondary" onClick={()=>setAtMyHouse(false)}  disabled={location===""} />
+                                <input type="radio" name="radio-1" checked={atMyHouse===false} className="radio radio-secondary" onClick={()=>setAtMyHouse(false)}  disabled={location===""} />
                                 <p>Όχι</p>
                             </div>
                         </div>

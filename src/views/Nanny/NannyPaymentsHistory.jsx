@@ -21,7 +21,7 @@ export default function NannyPaymentsHistory() { // Corrected function declarati
             
             <div className=" w-11/12 mx-auto flex  ">
                 <div className='w-1/3'></div>
-                <p className="text-center font-bold w-1/3 text-4xl my-auto">Οι Πληρωμές μου</p>
+                <p className="text-center font-bold w-1/3 text-4xl my-auto">Ιστορικό Πληρωμών</p>
                 <div className='w-1/3  items-end justify-center flex flex-col'> 
                     <p className=' text-lg font-medium'>Ταξινόμηση με βάση</p>
                     <select onChange={(e) => setSortBy(e.target.value)}
