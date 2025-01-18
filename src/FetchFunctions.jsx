@@ -519,6 +519,33 @@ export async function fetchAllDraftOffers(userId){
     }
 }
 
+
+
+export async function fetchAllArchivedOffers(userId){
+    const offers = [];
+    try {
+        // Query to find the user document based on UID field
+        const q = query(collection(db, 'offers'),
+            where('userId', '==', userId),
+            where('archived', '==', true)
+        );
+        const querySnapshot = await getDocs(q); // Get documents matching the query
+        if (!querySnapshot.empty) {                
+            querySnapshot.forEach((doc) => {
+                offers.push({ id: doc.id, ...doc.data() });
+            });                
+        } else {
+            console.error('No document found for userId:', userId);
+        }
+    }catch(error){
+        console.error('Error fetching user data: ', error);
+    }
+    finally{
+        console.log(offers)
+        return offers;
+    }
+}
+
 export async function addFinalOffer( data ) {
     console.log(data)
     const today = new Date();

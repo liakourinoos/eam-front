@@ -4,7 +4,7 @@ import Footer from '../generic components/Footer.jsx';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import NannyApplicationsHistory from '../views/Nanny/NannyApplicationsHistory.jsx';
+import NannyOffersHistory from '../views/Nanny/NannyOffersHistory.jsx';
 import NannyContactsHistory from '../views/Nanny/NannyContactsHistory.jsx';
 import NannyDealsHistory from '../views/Nanny/NannyDealsHistory.jsx';
 import NannyPaymentsHistory from '../views/Nanny/NannyPaymentsHistory.jsx';
@@ -53,7 +53,7 @@ export default function NannyHistory({ initialPage = 1 }) {
                 
                 {/* Content Displayed Based on Selected Page */}
                 <div className=" w-full flex-col flex-grow flex ">
-                    {selectedPage === 1 && <NannyApplicationsHistory/>}
+                    {selectedPage === 1 && <NannyOffersHistory/>}
                     {selectedPage === 2 && <NannyDealsHistory/>}
                     {selectedPage === 3 && <NannyPaymentsHistory/>}
                     {selectedPage === 4 && <NannyContactsHistory/>}

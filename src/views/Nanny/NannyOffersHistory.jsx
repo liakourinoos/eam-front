@@ -1,16 +1,21 @@
 
-import { useAuth } from '../../customHooks';
+import { useAuth } from '../../customHooks.jsx';
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { FaRegQuestionCircle } from 'react-icons/fa';
+import ArchivedOffer from "./ArchivedOffer.jsx";
+import { fetchAllArchivedOffers } from '../../FetchFunctions.jsx';
 
-export default function NannyApplicationsHistory() { // Corrected function declaration
+
+export default function NannyOffersHistory() { // Corrected function declaration
     const { userData } = useAuth();
-    const { data: applications, isLoading } = useQuery({
-        queryFn: () => fetchAllDraftApplications(userData?.id),
+    const { data: offers, isLoading } = useQuery({
+        queryFn: () => fetchAllArchivedOffers(userData?.id),
         queryKey: ['draftApplications', userData?.id],
         enabled: !!userData
     });
+
+
 
     const [sortBy, setSortBy] = useState("date-desc");
     return(
@@ -43,6 +48,21 @@ export default function NannyApplicationsHistory() { // Corrected function decla
                     <FaRegQuestionCircle    className="text-xl"/>
                 </div>
                 <p className="w-1/3 ">Ενέργεια</p>
+
+            </div>
+
+            <div className='w-11/12 mx-auto h-full flex flex-col mb-5  gap-2 items-center justify-start  mt-2'>
+                {isLoading && <span className="loading loading-lg mt-32"></span>
+                }
+                
+                {!isLoading && Array.isArray(offers) && 
+                    offers?.map((app,idx)=>(
+                        <ArchivedOffer key={idx} code={app.id} finalDate={app.finalizedAt}/>
+                    ))
+                }
+
+
+
 
             </div>
             
