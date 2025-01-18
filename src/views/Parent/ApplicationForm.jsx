@@ -27,6 +27,7 @@ function ApplicationForm({action="Δημιουργία Νέου Συμφωνητ
         months:"",
         hasAccepted:false,
         hasSigned:false,
+        correctAMKA:false
     });
 
     
@@ -63,6 +64,7 @@ function ApplicationForm({action="Δημιουργία Νέου Συμφωνητ
                 hasSigned: isView,
                 cantEdit: isView,
                 id: isEdit ? data?.id : null,
+                correctAMKA: isView ? true : (data?.correctAMKA ?? false)
             });
         }
     }, [data, isLoading, action]);

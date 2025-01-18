@@ -269,10 +269,10 @@ function FormPage2({ form, setForm, nextFn }) {
                 {!form.cantEdit &&
                     <button onClick={()=>addApplication()}
                             className={` border-2 font-medium w-48 border-gray-500 text-md px-2 mr-10 h-14 rounded-md my-3
-                                        ${!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" || form.name==="" || form.surname==="" || form.AMKA==="" || form.schedule.length===0 || form.AMKA.length!==11 ? 'bg-gray-300' : 'bg-white' }
+                                        ${!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" || form.name==="" || form.surname==="" || form.AMKA==="" || form.schedule.length===0 || form.AMKA.length!==11 || form.correctAMKA===false ? 'bg-gray-300' : 'bg-white' }
                             `}
-                            disabled={!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" || form.name==="" || form.surname==="" || form.AMKA==="" || form.AMKA.length!==11 || form.schedule.length===0}
-                            title={`${!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" || form.name==="" || form.surname==="" || form.AMKA==="" || form.schedule.length===0 || form.AMKA.length!==11 ? 'Παρακαλώ συμπληρώστε σωστά όλα τα πεδία.' : "" }`}
+                            disabled={!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" || form.name==="" || form.surname==="" || form.AMKA==="" || form.AMKA.length!==11 || form.schedule.length===0 || form.correctAMKA===false}
+                            title={`${!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" || form.name==="" || form.surname==="" || form.AMKA==="" || form.schedule.length===0 || form.AMKA.length!==11 || form.correctAMKA===false ? 'Παρακαλώ συμπληρώστε σωστά όλα τα πεδία.' : "" }`}
                     >
                         {isPending ? 'Οριστικοποίηση...' :'Οριστικοποίηση Συμφωνητικού'}
                     </button>

@@ -434,7 +434,8 @@ export async function addDraftApplication(data){
             finalizedAt: formattedDate,
             exactDate : exactDate,
             archived:false,
-            type: 'draft'
+            type: 'draft',
+            correctAMKA: data.correctAMKA
         };
 
         //first, check if there are any applications with that id that have type "draft" to update them
@@ -1237,4 +1238,30 @@ export async function fetchContacts(nannyId) {
         console.log('Result:', result);
         return result;
     }
+}
+
+
+export async function fetchAllUsers(){
+    // console.log("called..")
+    const result=[]
+    try {
+        const q = query(collection(db, 'users'),
+        );
+        const querySnapshot = await getDocs(q); // Get documents matching the query
+        if (!querySnapshot.empty) {
+            querySnapshot.forEach((doc) => {
+                result.push({ id: doc.id, ...doc.data() });
+            });
+            
+        } else {
+            console.error('No nannies found..');
+        }
+    }catch(error){
+        console.error('Error fetching nannies');
+    }
+
+    console.log("before exit...")
+    return result;
+
+
 }
