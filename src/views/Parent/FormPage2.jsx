@@ -150,7 +150,7 @@ function FormPage2({ form, setForm, nextFn }) {
                 <table className="table-auto w-full border-collapse border-2 bg-white border-gray-300 text-xs">
                     <thead>
                         <tr>
-                            <th className="border border-gray-300 "></th> {/* Reduce padding */}
+                            <th className="border border-gray-300 "></th>{/* Reduce padding */}
                             {days.map(day => (
                                 <th key={day} className="border border-gray-300 p-1 cursor-pointer" onClick={() => handleColumnClick(day)}>
                                     {day}
