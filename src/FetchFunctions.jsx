@@ -535,6 +535,7 @@ export async function addFinalOffer( data ) {
         archived:false,
         childAge: data.childAge || "null",
         exactDate:exactDate,
+        timeType:data.timeType
     };
 
     try {
@@ -618,6 +619,7 @@ export async function addDraftOffer(data){
         type:'draft',
         archived:false,
         exactDate : exactDate,
+        timeType:data.timeType,
 
         childAge: data.childAge || "null",
     };

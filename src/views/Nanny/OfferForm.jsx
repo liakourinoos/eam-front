@@ -26,6 +26,7 @@ function OfferForm({action="Δημιουργία Νέας Αγγελίας"}){
         startingDate:"",
         months:"",
         childAge:"",
+        timeType:""
 
     });
 
@@ -59,6 +60,7 @@ function OfferForm({action="Δημιουργία Νέας Αγγελίας"}){
                 startingDate: isEdit || isView ? data?.startingDate ?? "" : "",
                 months: isEdit || isView ? data?.months ?? "" : "",
                 childAge: isEdit || isView ? data?.childAge ?? "" : "",
+                timeType: isEdit || isView ? data?.timeType ?? "" : "",
                 hasAccepted: isView,
                 hasSigned: isView,
                 cantEdit: isView,

@@ -49,7 +49,8 @@ function FormPage2({ form, setForm, nextFn }) {
                     }
                     return value !== ""; // Check that the value is not an empty string
                 })
-            )
+            ) &&
+            form.timeType!=="" && form.childAge!==""
 
         );
     }
@@ -86,10 +87,28 @@ function FormPage2({ form, setForm, nextFn }) {
             >
                 <MdArrowBackIosNew className="text-3xl"/>
             </button>
-            <p className="text-3xl font-medium mt-5 mb-10 text-center">Περιοχή και Πρόγραμμα</p>
+            <p className="text-3xl font-medium mt-5 mb-10 text-center">Πρόγραμμα Απασχόλησης</p>
 
            
-
+            <div className="w-1/6 mx-auto pl-2">
+                <p className="text-xl  mb-1 font-medium">Τύπος Απασχόλησης</p>
+                <div className="flex gap-2 items-center mt-2 "> 
+                    <input  type="radio" name="type-radio" className="radio radio-secondary ml-3 "
+                            checked={form.timeType==="full-time"} onChange={()=>handleChange({target:{name:"timeType",value:"full-time"}})}
+                            disabled={form.cantEdit}
+                
+                    />
+                    <p className={`${(form.timeType === "part-time" ) && form.cantEdit? 'text-gray-400' : ''}`}>Πλήρης</p>
+                </div>
+                <div className="flex gap-2 items-center mt-2 "> 
+                    <input  type="radio" name="type-radio" className="radio radio-secondary ml-3 "
+                            checked={form.timeType==="part-time"} onChange={()=>handleChange({target:{name:"timeType",value:"part-time"}})}
+                            disabled={form.cantEdit}
+                
+                    />
+                    <p className={`${(form.timeType === "full-time" ) && form.cantEdit? 'text-gray-400' : ''}`}>Μερική</p>
+                </div>
+            </div> 
 
             {/* Calendar */}
             <div className="w-1/6 my-5 mx-auto">

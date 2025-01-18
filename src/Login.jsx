@@ -34,11 +34,12 @@ function Login() {
         setMessage("Unexpected error: Login failed without errors.");
       }
     } catch (error) {
-      console.error("Error in handleLogin:", error.message); // Log error details
+      // console.error("Error in handleLogin:", error.message); // Log error details
 
       if(error.message){
-        if(error.message==="Firebase: Error (auth/invalid-email).") setMessage("Λάθος email ή κωδικός πρόσβασης."); // Update message state
-        else setMessage(error.message);
+        // if(error.message==="Firebase: Error (auth/invalid-email).") setMessage("Λάθος email ή κωδικός πρόσβασης."); // Update message state
+        // else setMessage(error.message);
+        setMessage("Λάθος email ή κωδικός πρόσβασης.")
       }
     } finally {
       console.log("handleLogin finished"); // Debugging exit point
@@ -48,6 +49,10 @@ function Login() {
 
   };
   
+
+
+
+
   const [emailError, setEmailError] = useState("");
 
     useEffect(() => {

@@ -20,6 +20,7 @@ function ParentProfileEdit(){
         if(userData){
             // console.log(userData);
             setBio(userData?.bio );
+            setImgUrl(userData?.img);
         }
     }, [userData]);
 
@@ -47,6 +48,15 @@ function ParentProfileEdit(){
         setBio(e.target.value);
     };
 
+    const handleChange = () => {
+        if(userData?.bio !== bio){
+            changeBio();
+        }
+        if(userData?.img !== imgUrl){
+            changePic();
+        }
+    }
+
     if(loading) 
         return (
             <div className="w-full h-screen flex items-center justify-center">
@@ -73,19 +83,19 @@ function ParentProfileEdit(){
                 </div>
                 {picChange && 
                     <div className="w-1/3 font-medium h-20 mx-auto flex flex-col gap-1 mb-3 items-center  justify-center">
-                        <p>URL νέας εικόνας προφίλ:</p>
+                        <p>URL εικόνας προφίλ:</p>
                         <input  className="bg-white h-10 w-1/2 rounded-md border-2 pl-2   border-gray-400 px-1"
                                 placeholder="https://jdm-restoration.com/cdn/shop/collections/jzx100_1350x902.jpg?v=1679301822"
                                 value={imgUrl}
                                 onChange={(e)=>setImgUrl(e.target.value)}
                         />
-                        <button className={`${userData?.img!== imgUrl && imgUrl.length===0 ? "bg-gray-200" : "bg-pallete-300" }  w-32 font-medium h-10 px-2 text-center rounded-md`}
+                        {/* <button className={`${userData?.img!== imgUrl && imgUrl.length===0 ? "bg-gray-200" : "bg-pallete-300" }  w-32 font-medium h-10 px-2 text-center rounded-md`}
                                 onClick={()=>changePic()}
                                 disabled={!userData?.uid || isPending || userData?.img == imgUrl || imgUrl.length===0}
                         >
 
                             {isPending ? <span className="loading loading-md"></span> : "Αποθήκευση"}
-                        </button>
+                        </button> */}
 
 
                     </div>
@@ -149,9 +159,9 @@ function ParentProfileEdit(){
                     />
                 </label>
 
-                <button className={`${userData?.bio == bio ? "bg-gray-200" : "bg-pallete-300" }  w-32 font-medium h-10 px-2 text-center rounded-md`}
-                        onClick={()=>changeBio()}
-                        disabled={!userData?.uid || isPending || userData?.bio == bio}
+                <button className={`${userData?.bio === bio  && userData?.img === imgUrl ? "bg-gray-200" : "bg-pallete-300" }  w-32 font-medium h-10 px-2 text-center rounded-md`}
+                        onClick={()=>handleChange()}
+                        disabled={!userData?.uid || isPending || (userData?.bio === bio && userData?.img === imgUrl)}
                 >
                     
                     {isPending ? <span className="loading loading-md"></span> : "Αποθήκευση"}

@@ -31,6 +31,8 @@ export default function AvailabilityAndSkills(){
         });
     };
 
+    const [showModal,setShowModal] = useState(false)
+
     const {mutateAsync:changeSchedule,isPending}=useMutation({
         mutationFn:()=>updateSchedule(userData?.id,schedule),
     })
@@ -106,7 +108,7 @@ export default function AvailabilityAndSkills(){
                 <div className="w-2/3 flex flex-col ">
                     <p className="underline text-2xl font-medium">Αλλαγή Διαθεσιμότητας</p>
                     <div className="ml-5 w-full b mt-8 flex flex-col gap-5 font-medium text-lg">
-                        <table className="table-auto w-full border-collapse border-2 bg-white border-gray-300">
+                        {/* <table className="table-auto w-full border-collapse border-2 bg-white border-gray-300">
                             <thead>
                                 <tr>
                                     <th className="border border-gray-300 p-2"></th>
@@ -136,13 +138,46 @@ export default function AvailabilityAndSkills(){
                                     </tr>
                                 ))}
                             </tbody>
-                        </table>
+                        </table> */}
+
+                        <table className="table-auto w-full border-collapse border-2 bg-white border-gray-300 text-xs">
+                            <thead>
+                                <tr>
+                                    <th className="border border-gray-300 "></th>{/* Reduce padding */}
+                                    {days.map(day => (
+                                        <th key={day} className="border border-gray-300 p-1 cursor-pointer" onClick={() => handleColumnClick(day)}>
+                                            {day}
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {hours.map(time => (
+                                    <tr key={time}>
+                                        <td className="border border-gray-300 p-1 text-center cursor-pointer" onClick={() => handleRowClick(time)}>
+                                            {time}
+                                        </td>
+                                        {days.map(day => (
+                                            <td key={`${day}-${time}`} className="border border-gray-300 px-1 text-center"> {/* Reduce padding */}
+                                                <input
+                                                    type="checkbox"
+                                                    checked={schedule.some(slot => slot.day === day && slot.time === time)}
+                                                    onChange={() => handleTimeClick(day, time)}
+                                                    className="checkbox checkbox-sm checkbox-secondary -my-1"
+                                                />
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>     
 
                         <div className="w-full font-medium  mt-10 flex justify-end items-center gap-4 h-16">
                             <button className={` border-2 border-gray-500 rounded-md p-2  "bg-gray-400" 'bg-white' `}
-                                    onClick={()=>setSchedule([])}
+                                    onClick={()=>setShowModal(true)}
+                                    disabled={schedule.length===0}
                             >
-                                Καθαρισμός
+                                Καθαρισμός Ωρών
                             </button>
                             <button className={`${isPending? "bg-gray-400"  : 'bg-pallete-400'} border-2  border-gray-500 rounded-md p-2    `}
                                     onClick={()=>changeSchedule()}
@@ -191,7 +226,29 @@ export default function AvailabilityAndSkills(){
                     </div>
 
                 </div>
+                {showModal && (
+                    <>
+                        {/* Background Overlay */}
+                        <div className="fixed inset-0 bg-black bg-opacity-40 z-40" />
 
+                        {/* Modal */}
+                        <div className="fixed top-24 left-1/2 transform -translate-x-1/2 w-1/3 rounded-md z-50 bg-white shadow-xl p-6">
+                            <h3 className="font-bold text-lg">Προσοχή!</h3>
+                            <p className="py-4">Πρόκειται να σβήσετε όλες τις ώρες που έχετε επιλέξει. Συνέχεια;</p>
+                            <div className="modal-action">
+                                <form method="dialog" className='flex gap-3'>
+                                    {/* Close button */}
+                                    <button className="bg-red-500 py-2 px-3 rounded-md font-semibold text-white" onClick={() => setShowModal(false)}>Ακύρωση</button>
+                                    <button className="text-black border-2 border-black py-2 px-3 rounded-md font-semibold text" onClick={() => {setSchedule([]);setShowModal(false) } }>
+                                        Επιβεβαίωση
+                                    </button>
+                                    
+
+                                </form>
+                            </div>
+                        </div>
+                    </>
+                )}
 
             </div>
 

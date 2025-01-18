@@ -60,6 +60,10 @@ function Search() {
         // enabled: !!userData
     })
 
+
+    const [timeType,setTimeType] = useState("");
+
+
     if(loading || isLoading) 
         return(
             <div className="w-full h-screen bg-white flex items-center justify-center">
@@ -67,7 +71,7 @@ function Search() {
             </div>
         )
 
-        
+    
 
     if(!loading && !isLoading)
     return (
@@ -107,6 +111,7 @@ function Search() {
                         </div>
 
                         
+                        
 
                         {/* Other Filters */}
                         {/* <div className="flex flex-col items-center">
@@ -139,28 +144,45 @@ function Search() {
                                 <option>3-5</option>
                             </select>
                         </div> */}
+
+                        <div className='flex w-60 flex-col gap-2'>
+                            <p className='text-l'>Τύπος Απασχόλησης</p>
+                            <div className="flex gap-3">
+                                <input type="radio" name="radio-type" checked={timeType===""} className="radio radio-secondary" onChange={()=>setTimeType("")} />
+                                <p>Όλα</p>
+                            </div>
+                            <div className="flex gap-3">
+                                <input type="radio" name="radio-type" checked={timeType==="full-time"} className="radio radio-secondary" onChange={()=>setTimeType("full-time")} />
+                                <p>Πλήρης</p>
+                            </div>
+                            <div className="flex gap-3">
+                                <input type="radio" name="radio-type" checked={timeType==="part-time"} className="radio radio-secondary" onChange={()=>setTimeType("part-time")} />
+                                <p>Μερική</p>
+                            </div>
+                        </div>
+
+
                         <div className='w-60 flex flex-col gap-2 '>
                             <p className='text-l'>Ηλικία Παιδιού</p>
-                           
                             <div className="flex  gap-3 ">
-                                <input type="radio" name="radio-2" className="radio radio-secondary" onChange={()=>setChildAge("0-1")} />
+                                <input type="radio" name="radio-2" checked={childAge==="0-1"} className="radio radio-secondary" onChange={()=>setChildAge("0-1")} />
                                 <p>0-1</p>
                             </div>
                             <div className="flex gap-3">
-                                <input type="radio" name="radio-2" className="radio radio-secondary" onChange={()=>setChildAge("1-3")} />
+                                <input type="radio" name="radio-2" checked={childAge==="1-3"} className="radio radio-secondary" onChange={()=>setChildAge("1-3")} />
                                 <p>1-3</p>
                             </div>
                             <div className="flex gap-3">
-                                <input type="radio" name="radio-2" className="radio radio-secondary" onChange={()=>setChildAge("3-5")}/>
+                                <input type="radio" name="radio-2" checked={childAge==="3-5"} className="radio radio-secondary" onChange={()=>setChildAge("3-5")}/>
                                 <p>3-5</p>
                             </div>
                         </div>
 
                         {/* Experience Slider */}
-                        <div className="w-60 flex flex-col gap-1">
+                        <div className="w-60 flex flex-col gap-1 ">
                             <p className="text-l">Χρόνια Εμπειρίας</p>
-                            <input onChange={handleExperienceChange} type="range" min={0} max={4} value={experienceSlider} className="range range-secondary" step="1" />
-                            <div className="flex w-full justify-between text-xs">
+                            <input onChange={handleExperienceChange} type="range" min={0} max={4} value={experienceSlider} className="range range-secondary bg-white w-56 mx-auto" step="1" />
+                            <div className="flex w-52 mx-auto justify-between text-xs">
                                 <span>0</span>
                                 <span>1</span>
                                 <span>2</span>
@@ -178,15 +200,15 @@ function Search() {
                                 <option>Other</option>
                             </select> */}
                             <div className="flex  gap-3 ">
-                                <input type="radio" name="radio-3" className="radio radio-secondary" onChange={()=>setGender("")} />
-                                <p>Άλλο</p>
+                                <input type="radio" name="radio-3" checked={gender===""} className="radio radio-secondary" onChange={()=>setGender("")} />
+                                <p>Όλα</p>
                             </div>
                             <div className="flex gap-3">
-                                <input type="radio" name="radio-3" className="radio radio-secondary" onChange={()=>setGender(true)} />
+                                <input type="radio" name="radio-3" checked={gender===true} className="radio radio-secondary" onChange={()=>setGender(true)} />
                                 <p>Αρσενικό</p>
                             </div>
                             <div className="flex gap-3">
-                                <input type="radio" name="radio-3" className="radio radio-secondary" onChange={()=>setGender(false)}/>
+                                <input type="radio" name="radio-3" checked={gender===false} className="radio radio-secondary" onChange={()=>setGender(false)}/>
                                 <p>Θηλυκό</p>
                             </div>
                         </div>
@@ -194,8 +216,8 @@ function Search() {
                         {/* Employment Period Slider */}
                         <div className="w-60 flex flex-col gap-1">
                             <p className="text-l">Διάστημα Απασχόλησης (μήνες)</p>
-                            <input onChange={handleYearsSlider} type="range" min={1} max={9} value={yearsSlider} className="range range-secondary" step="1" />
-                            <div className="flex w-full mx-auto justify-between text-xs">
+                            <input onChange={handleYearsSlider} type="range" min={1} max={9} value={yearsSlider} className="range range-secondary w-60 mx-auto bg-white" step="1" />
+                            <div className="flex w-56 mx-auto justify-between text-xs">
                                 {/* <span>0</span> */}
                                 <span>1</span>
                                 <span>2</span>
