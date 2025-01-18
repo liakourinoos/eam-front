@@ -274,12 +274,12 @@ function FormPage2({ form, setForm, nextFn }) {
                             disabled={!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" || form.name==="" || form.surname==="" || form.AMKA==="" || form.AMKA.length!==11 || form.schedule.length===0}
                             title={`${!form.hasAccepted || !form.hasSigned || form.startingDate==="" || form.months==="" || form.address==="" || form.name==="" || form.surname==="" || form.AMKA==="" || form.schedule.length===0 || form.AMKA.length!==11 ? 'Παρακαλώ συμπληρώστε σωστά όλα τα πεδία.' : "" }`}
                     >
-                        {isPending ? 'Οριστικοποίηση...' :'Οριστικοποίηση Αίτησης'}
+                        {isPending ? 'Οριστικοποίηση...' :'Οριστικοποίηση Συμφωνητικού'}
                     </button>
                 }
                 {form.cantEdit && 
                     <Link to='/parentapplications' className={` border-2 flex items-center justify-center bg-white font-medium w-48 border-gray-500 text-md px-2 mr-10 h-14 rounded-md my-3`}>
-                        Οι Αιτήσεις Μου
+                        Τα Συμφωνητικά Μου
                     </Link>
 
                 }

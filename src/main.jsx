@@ -57,8 +57,8 @@ const router = createBrowserRouter([
 
   //Parent Applications
   { path: '/applicationform', element: <ApplicationForm/>},
-  { path: '/viewapplication/:id', element: <ApplicationForm action="Προβολή Αίτησης"/>},
-  { path: '/editapplication/:id', element: <ApplicationForm action="Επεξεργασία Αίτησης"/>},
+  { path: '/viewapplication/:id', element: <ApplicationForm action="Προβολή Συμφωνητικού"/>},
+  { path: '/editapplication/:id', element: <ApplicationForm action="Επεξεργασία Συμφωνητικού"/>},
 
   //Parent History
   // { path:'/parentapplicationshistory' , element: <></>}

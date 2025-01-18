@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom';
 import { fetchApplication,addDraftApplication } from '../../FetchFunctions.jsx';
 import { useQuery,useMutation } from '@tanstack/react-query';
 
-function ApplicationForm({action="Δημιουργία Νέας Αίτησης"}){
+function ApplicationForm({action="Δημιουργία Νέου Συμφωνητικού"}){
     const nav=useNavigate();
     const {id} = useParams();
 
@@ -35,7 +35,7 @@ function ApplicationForm({action="Δημιουργία Νέας Αίτησης"}
         queryFn:()=>fetchApplication(id),
         queryKey:['application',id],
         retry:false,
-        enabled:action==="Προβολή Αίτησης" || action==="Επεξεργασία Αίτησης" && !!id
+        enabled:action==="Προβολή Συμφωνητικού" || action==="Επεξεργασία Συμφωνητικού" && !!id
     })
 
     const {mutateAsync:addDraft,isPending} = useMutation({
@@ -47,8 +47,8 @@ function ApplicationForm({action="Δημιουργία Νέας Αίτησης"}
 
     useEffect(() => {
         if (!isLoading && data) {
-            const isView = action === "Προβολή Αίτησης";
-            const isEdit = action === "Επεξεργασία Αίτησης";
+            const isView = action === "Προβολή Συμφωνητικού";
+            const isEdit = action === "Επεξεργασία Συμφωνητικού";
     
             setFormState({
                 ...formState,
@@ -79,7 +79,7 @@ function ApplicationForm({action="Δημιουργία Νέας Αίτησης"}
             </div>
         )
 
-    if((action==="Προβολή Αίτησης" && !isLoading && data) || action==="Δημιουργία Νέας Αίτησης" || action==="Επεξεργασία Αίτησης") 
+    if((action==="Προβολή Συμφωνητικού" && !isLoading && data) || action==="Δημιουργία Νέου Συμφωνητικού" || action==="Επεξεργασία Συμφωνητικού") 
         return(
             <div className='w-full min-h-screen flex flex-col bg-pallete-50'>
                 {RenderHeaderNavbar(userData,2)}
@@ -90,13 +90,13 @@ function ApplicationForm({action="Δημιουργία Νέας Αίτησης"}
                     {/* breadcrumbs */}
                     <div className="breadcrumbs  pl-5 text-md">
                         <ul>
-                            <li><Link to='/parentapplications'>Αιτήσεις</Link></li>
+                            <li><Link to='/parentapplications'>Συμφωνητικά</Link></li>
                             <li><Link className='font-medium'>{action}</Link></li>
                         </ul>
                     </div>
                     
                     <p className='my-5 mx-auto text-3xl font-medium'>{action}</p>
-                    {action!=="Προβολή Αίτησης" && 
+                    {action!=="Προβολή Συμφωνητικού" && 
                         <div className='w-11/12  mx-auto'>
                             <button 
                                 className={`border-2 font-medium w-48 border-gray-500 text-md px-2 h-16 rounded-md my-3 

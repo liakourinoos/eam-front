@@ -10,7 +10,7 @@ function ParentPayment() {
 
 
     return (
-        <div className="w-full bg-pallete-50 h-screen flex flex-col">
+        <div className="w-full bg-pallete-50 min-h-screen flex flex-col">
             {RenderHeaderNavbar(userData, 4)}
             {/* main page */}
             <div className='w-full flex flex-grow flex-col bg-pallete-50  pt-10'>

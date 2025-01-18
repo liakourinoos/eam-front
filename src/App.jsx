@@ -55,7 +55,7 @@ function App() {
                       setLocation("");
                     }}
                     value={town}
-                    className="select text-xl select-bordered rounded-md h-16 border-2 border-black pl-2 bg-white w-80 max-w-xs"
+                    className="select text-lg select-bordered rounded-md h-14 border-2 border-black pl-2 bg-white w-80 max-w-xs"
                   >
                     <option disabled value={""}>Επιλέξτε</option>
                     {cities.map((city, idx) => (
@@ -70,7 +70,7 @@ function App() {
                   <select
                     onChange={(e) => { setLocation(e.target.value); }}
                     value={location}
-                    className="select text-xl mt-2 select-bordered rounded-md h-16 border-2 border-black pl-2 bg-white w-80 max-w-xs"
+                    className="select text-lg mt-2 select-bordered rounded-md h-14 border-2 border-black pl-2 bg-white w-80 max-w-xs"
                   >
                     <option disabled value={""}>Επιλέξτε</option>
                     {town !== "" &&

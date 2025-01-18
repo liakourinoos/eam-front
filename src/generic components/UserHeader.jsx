@@ -37,7 +37,7 @@ function UserHeader({main_page="/",role,id}){
 
     if(!loading && userData )
         return(
-            <div className="h-16 w-full flex justify-between border-b-2 border-black bg-pallete-50" >
+            <div className="h-16 w-full flex justify-between border-b-2 border-black bg-white" >
                 {/* box for logo and name */}
                 <div className="flex ">
                     <Link to={`${role ? '/' : '/nannyoffers'}`} className="flex pr-5  items-center text-pallete-600 h-full hover:text-pallete-800">
@@ -79,11 +79,11 @@ function UserHeader({main_page="/",role,id}){
                             onMouseLeave={() => toggleHover(false)}
                     >
                         <img    src={userData?.img} 
-                                className={`size-14  rounded-full ${hover &&'border-2 border-red-500'}`}/>
-                        <p className={`text-2xl w-56 font-medium text-start truncate  ${hover && 'text-red-500'}`} title={`${userData?.name} ${userData?.surname}`} > {userData?.name} {userData?.surname} </p>
+                                className={`size-14  rounded-full ${hover &&'border-2 border-pallete-600'}`}/>
+                        <p className={`text-2xl w-56 font-medium text-start truncate  ${hover && 'text-pallete-600'}`} title={`${userData?.name} ${userData?.surname}`} > {userData?.name} {userData?.surname} </p>
                     </Link>
                 {/* settings */}
-                    <div onClick={toggleSettings} className="relative cursor-pointer w-1/6 flex items-center justify-center h-full text-center hover:text-red-500">
+                    <div onClick={toggleSettings} className="relative cursor-pointer w-1/6 flex items-center justify-center h-full text-center hover:text-pallete-600">
                         {settings && 
                             <div className='absolute top-full -right-2 flex flex-col gap-2 w-52 bg-gray-500  border-2 border-gray-700 text-white      z-10'>
                                 <Link to={`${role? `/parentsettings` :`/nannysettings` }`} className='flex items-center justify-evenly h-12 p-2 border-b-2 w-full'> <FaGear className='text-2xl'/><span className='text-sm'>Ρυθμίσεις Λογαριασμού</span></Link>

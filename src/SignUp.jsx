@@ -88,6 +88,8 @@ function SignUp({role}){
         }
     });
 
+    
+
     const [repeatPassword,setRepeatPassword] = useState("")
 
     const [passwordVisibility1,setPasswordVisibility1] = useState(false);
@@ -310,12 +312,11 @@ function SignUp({role}){
 
                     
                         <button     className={`h-10 w-36  flex items-center justify-center text-xl font-medium text-white rounded-md px-3 py-1 mt-10 ${!isFormValid() ? 'bg-gray-400 ' : 'bg-pink-600'}`}
-                                    disabled={!isFormValid()}
-                                    // onClick={()=>console.log("test")}
-                                    onClick={()=>createUser()}
+                                    disabled={isFormValid()===false}
+                                    onClick={()=>{ createUser();}}
                                     title={!isFormValid() ? "Παρακαλούμε συμπληρώστε όλα τα πεδία." : ""}
                         >
-                            {isPending ? 'Ενημέρωση...' :'Εγγραφή'}
+                            {isPending ? <span className="loading loading-spinner loading-md "/> :'Εγγραφή'}
                         </button>
                     </div>
                 </div>

@@ -76,12 +76,12 @@ function Login() {
       <Header />
 
       <div className="w-full h-full overflow-y-auto flex flex-col items-center py-20 ">
-        <div className="w-2/3 rounded-md flex flex-col p-20 items-center bg-fuchsia-200 shadow-lg my-auto shadow-gray-400">
+        <form className="w-2/3 rounded-md flex flex-col p-20 items-center bg-fuchsia-200 shadow-lg my-auto shadow-gray-400">
       
           <p className="text-5xl font-bold">Σύνδεση</p>
           {/* Show message after success or error */}
           {message && <p className=" text-xl mt-14 font-medium -mb-14 text-red-600">{message}</p>}
-
+          
           <div className="w-1/4 mt-20 ">
             <p className="text-xl ml-1 font-medium ">Email</p>
             {emailError.length>0 && <p className="text-red-700 my-2 font-medium text-sm ">{emailError}</p>}
@@ -138,9 +138,8 @@ function Login() {
               {!isLoading && "Σύνδεση"}
             </button>
           </div>
-
           
-        </div>
+        </form>
       </div>
       <Footer />
     </div>

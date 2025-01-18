@@ -79,11 +79,11 @@ function Search() {
         
             {RenderHeaderNavbar(userData)}
 
-            <div className="w-full flex h-screen justify-between bg-pallete-50">
+            <div className="w-full flex h-screen justify-between bg-white">
 
                 {/* left div - filters */}
                 <div className="w-1/3 h-full flex flex-col items-center overflow-y-auto py-10 ">
-                    <div className="w-3/4 bg-gray-200 shadow-lg rounded-md shadow-gray-700 flex flex-col gap-3 py-5 items-center justify-center">
+                    <div className="w-3/4 bg-gray-100 shadow-lg rounded-md shadow-gray-700 flex flex-col gap-3 py-5 items-center justify-center">
                         <p className="text-3xl font-bold">Φίλτρα Αναζήτησης</p>
 
                         {/* Town Filter */}

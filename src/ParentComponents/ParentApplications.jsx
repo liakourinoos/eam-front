@@ -35,13 +35,13 @@ function ParentApplications() {
                         <button     className={` ${selectedPage===1 ? 'bg-pallete-400 border-gray-700' : "bg-gray-300 border-gray-400" } h-full rounded-md  w-1/6  border-2`}
                                     onClick={()=>setSelectedPage(1)}
                         >
-                            Οριστικοποιημένες
+                            Οριστικοποιημένα
                         </button>
 
                         <button     className={` ${selectedPage===2 ? 'bg-pallete-400 border-gray-700' : "bg-gray-300 border-gray-400" } h-full rounded-md  w-1/6  border-2`}
                                     onClick={()=>setSelectedPage(2)}
                         >
-                            Μη Οριστικοποιημένες
+                            Μη Οριστικοποιημένα
                         </button>
                     </div>
 

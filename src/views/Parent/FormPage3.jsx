@@ -14,14 +14,14 @@ function FormPage3({ form, setForm, nextFn }) {
                 <li className="step step-secondary text-secondary">Οριστικοποίηση</li>
             </ul>
 
-            <p className="text-3xl font-medium mt-10 text-center">Η αίτησή σας οριστικοποιήθηκε επιτυχώς.</p>
+            <p className="text-3xl font-medium mt-10 text-center">Το Συμφωνητικό Οριστικοποιήθηκε Επιτυχώς.</p>
 
             <FaCheckCircle className='text-9xl text-green-500 my-5 mx-auto'/>            
             <div className='w-11/12  mx-auto flex justify-center '>                    
                             <Link to='/parentapplications'
-                                    className='bg-white border-2  flex items-center justify-center text-lg font-medium w-48 border-gray-500 text-md h-14 rounded-md my-3'
+                                    className='bg-white border-2  flex items-center justify-center text-lg font-medium w-52 border-gray-500 text-md h-14 rounded-md my-3'
                             >
-                                Οι αιτήσεις μου
+                                Τα Συμφωνητικά Μου
                             </Link>
             </div>
         </div>
