@@ -68,7 +68,7 @@ function FormPage2({ form, setForm, nextFn }) {
 
     const endingDate = calculateEndingDate(form.startingDate, form.months);
 
-
+    const[showModal,setShowModal] = useState(false);
     
 
     const handleTimeClick = (day, time) => {
@@ -147,14 +147,13 @@ function FormPage2({ form, setForm, nextFn }) {
 
             {/* schedule */}
             <div className="w-1/2 mx-auto my-5 ">
-                <p className="text-xl text-center font-medium mb-4">Πρόγραμμα</p>
-                
-                <table className="table-auto w-full border-collapse border-2 bg-white border-gray-300">
+               <p className="text-xl text-center font-medium mb-4">Πρόγραμμα</p>
+                <table className="table-auto w-full border-collapse border-2 bg-white border-gray-300 text-xs">
                     <thead>
                         <tr>
-                            <th className="border border-gray-300 p-2"></th>
+                            <th className="border border-gray-300 "></th> {/* Reduce padding */}
                             {days.map(day => (
-                                <th key={day} className="border border-gray-300 p-2 cursor-pointer" onClick={() => handleColumnClick(day)}>
+                                <th key={day} className="border border-gray-300 p-1 cursor-pointer" onClick={() => handleColumnClick(day)}>
                                     {day}
                                 </th>
                             ))}
@@ -163,16 +162,16 @@ function FormPage2({ form, setForm, nextFn }) {
                     <tbody>
                         {hours.map(time => (
                             <tr key={time}>
-                                <td className="border border-gray-300 p-2 text-center cursor-pointer" onClick={() => handleRowClick(time)}>
+                                <td className="border border-gray-300 p-1 text-center cursor-pointer" onClick={() => handleRowClick(time)}>
                                     {time}
                                 </td>
                                 {days.map(day => (
-                                    <td key={`${day}-${time}`} className="border border-gray-300 p-2 text-center">
+                                    <td key={`${day}-${time}`} className="border border-gray-300 px-1 text-center"> {/* Reduce padding */}
                                         <input
                                             type="checkbox"
                                             checked={form.schedule.some(slot => slot.day === day && slot.time === time)}
                                             onChange={() => handleTimeClick(day, time)}
-                                            className={`checkbox  checkbox-secondary`}
+                                            className="checkbox checkbox-sm checkbox-secondary -my-1"
                                             disabled={form.cantEdit}
                                         />
                                     </td>
@@ -183,8 +182,9 @@ function FormPage2({ form, setForm, nextFn }) {
                 </table>
 
                 <div className="w-full flex justify-end my-5"> 
-                    <button className="rounded-md bg-white border-2 border-gray-500   font-medium p-2 "
-                            onClick={() => setForm(prevState => ({ ...prevState, schedule: [] }))}
+                    <button className="rounded-md bg-white border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white  font-medium p-2 "
+                            // onClick={() => {setForm(prevState => ({ ...prevState, schedule: [] })) } }
+                            onClick={()=>setShowModal(true)}
                             disabled={form.cantEdit}
                     >
                         Καθαρισμός Ωρών
@@ -285,6 +285,29 @@ function FormPage2({ form, setForm, nextFn }) {
 
                 }
             </div>
+            {showModal && (
+                    <>
+                        {/* Background Overlay */}
+                        <div className="fixed inset-0 bg-black bg-opacity-40 z-40" />
+
+                        {/* Modal */}
+                        <div className="fixed top-24 left-1/2 transform -translate-x-1/2 w-1/3 rounded-md z-50 bg-white shadow-xl p-6">
+                            <h3 className="font-bold text-lg">Προσοχή!</h3>
+                            <p className="py-4">Πρόκειται να σβήσετε όλες τις ώρες που έχετε επιλέξει. Συνέχεια;</p>
+                            <div className="modal-action">
+                                <form method="dialog" className='flex gap-3'>
+                                    {/* Close button */}
+                                    <button className="bg-red-500 py-2 px-3 rounded-md font-semibold text-white" onClick={() => setShowModal(false)}>Ακύρωση</button>
+                                    <button className="text-black border-2 border-black py-2 px-3 rounded-md font-semibold text" onClick={() => {setForm(prevState => ({ ...prevState, schedule: [] }));setShowModal(false) } }>
+                                        Επιβεβαίωση
+                                    </button>
+                                    
+
+                                </form>
+                            </div>
+                        </div>
+                    </>
+                )}
         </div>
     );
 }

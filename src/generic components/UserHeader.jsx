@@ -80,7 +80,7 @@ function UserHeader({main_page="/",role,id}){
                     >
                         <img    src={userData?.img} 
                                 className={`size-14  rounded-full ${hover &&'border-2 border-red-500'}`}/>
-                        <p className={`text-2xl w-56 font-medium text-start truncate  ${hover && 'text-red-500'}`}> {userData?.name} {userData?.surname} </p>
+                        <p className={`text-2xl w-56 font-medium text-start truncate  ${hover && 'text-red-500'}`} title={`${userData?.name} ${userData?.surname}`} > {userData?.name} {userData?.surname} </p>
                     </Link>
                 {/* settings */}
                     <div onClick={toggleSettings} className="relative cursor-pointer w-1/6 flex items-center justify-center h-full text-center hover:text-red-500">

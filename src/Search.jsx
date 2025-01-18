@@ -120,12 +120,12 @@ function Search() {
                         <div className='w-60 flex flex-col gap-2 '>
                             <p className='text-l'>Απασχόληση επαγγελματία στην οικία μου</p>
                             
-                            <div className="flex  gap-3 ">
-                                <input type="radio" name="radio-1" checked={atMyHouse===true} title={(location==="" || town==="" )  && "Επιλέξτε πρώτα πόλη και περιοχή."}  className="radio radio-secondary" onClick={()=>setAtMyHouse(true)} disabled={location===""} />
+                            <div className={`flex  gap-3 ${location==="" ? 'text-gray-400' :""}`}>
+                                <input type="radio" name="radio-1" checked={atMyHouse===true} title={(location==="" || town==="" )  ? "Επιλέξτε πρώτα πόλη και περιοχή." : ""}  className="radio radio-secondary" onChange={()=>setAtMyHouse(true)} disabled={location===""} />
                                 <p>Ναι</p>
                             </div>
-                            <div className="flex gap-3">
-                                <input type="radio" name="radio-1" checked={atMyHouse===false} title={ (location==="" || town==="") && "Επιλέξτε πρώτα πόλη και περιοχή."} className="radio radio-secondary" onClick={()=>setAtMyHouse(false)}  disabled={location===""} />
+                            <div className={`flex  gap-3 ${location==="" ? 'text-gray-400' :""}`}>
+                                <input type="radio" name="radio-1" checked={atMyHouse===false} title={ (location==="" || town==="") ? "Επιλέξτε πρώτα πόλη και περιοχή." : ""} className="radio radio-secondary" onChange={()=>setAtMyHouse(false)}  disabled={location===""} />
                                 <p>Όχι</p>
                             </div>
                         </div>
@@ -143,15 +143,15 @@ function Search() {
                             <p className='text-l'>Ηλικία Παιδιού</p>
                            
                             <div className="flex  gap-3 ">
-                                <input type="radio" name="radio-2" className="radio radio-secondary" onClick={()=>setChildAge("0-1")} />
+                                <input type="radio" name="radio-2" className="radio radio-secondary" onChange={()=>setChildAge("0-1")} />
                                 <p>0-1</p>
                             </div>
                             <div className="flex gap-3">
-                                <input type="radio" name="radio-2" className="radio radio-secondary" onClick={()=>setChildAge("1-3")} />
+                                <input type="radio" name="radio-2" className="radio radio-secondary" onChange={()=>setChildAge("1-3")} />
                                 <p>1-3</p>
                             </div>
                             <div className="flex gap-3">
-                                <input type="radio" name="radio-2" className="radio radio-secondary" onClick={()=>setChildAge("3-5")}/>
+                                <input type="radio" name="radio-2" className="radio radio-secondary" onChange={()=>setChildAge("3-5")}/>
                                 <p>3-5</p>
                             </div>
                         </div>
@@ -178,15 +178,15 @@ function Search() {
                                 <option>Other</option>
                             </select> */}
                             <div className="flex  gap-3 ">
-                                <input type="radio" name="radio-3" className="radio radio-secondary" onClick={()=>setGender("")} />
+                                <input type="radio" name="radio-3" className="radio radio-secondary" onChange={()=>setGender("")} />
                                 <p>Άλλο</p>
                             </div>
                             <div className="flex gap-3">
-                                <input type="radio" name="radio-3" className="radio radio-secondary" onClick={()=>setGender(true)} />
+                                <input type="radio" name="radio-3" className="radio radio-secondary" onChange={()=>setGender(true)} />
                                 <p>Αρσενικό</p>
                             </div>
                             <div className="flex gap-3">
-                                <input type="radio" name="radio-3" className="radio radio-secondary" onClick={()=>setGender(false)}/>
+                                <input type="radio" name="radio-3" className="radio radio-secondary" onChange={()=>setGender(false)}/>
                                 <p>Θηλυκό</p>
                             </div>
                         </div>

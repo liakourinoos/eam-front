@@ -42,7 +42,7 @@ function App() {
             }}
           >
             <div className='w-1/2 my-auto h-full flex flex-col gap-10'>
-              <p className='ml-32 mt-20 text-5xl font-extrabold'>Οι <spam className="underline">ΤΕΛΕΥΤΑIΟΙ</spam> όταν έχει να κάνει με την φροντίδα του παιδιού σας!</p>
+              <p className='ml-32 mt-20 text-5xl font-extrabold'>Οι <span className="underline">ΤΕΛΕΥΤΑIΟΙ</span> όταν έχει να κάνει με την φροντίδα του παιδιού σας!</p>
 
               {/* Input Div */}
               <div className='pl-20 gap-7 h-full flex flex-col justify-center items-center pr-36 text-2xl'>

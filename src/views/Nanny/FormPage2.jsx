@@ -129,9 +129,9 @@ function FormPage2({ form, setForm, nextFn }) {
                 </select>
             </div>
 
-            <div className="w-1/6 mx-auto mt-8">
-                <p className='text-l font-medium ml-2'>Ηλικία Παιδιού (προαιρετικό)</p>
-                <select value={form.childAge} 
+            <div className="w-1/6 mx-auto flex flex-col mt-8">
+                <p className='text-l font-medium ml-2'>Ηλικία Παιδιού</p>
+                {/* <select value={form.childAge} 
                         onChange={handleChange} 
                         className={`select select-bordered rounded-md bg-white h-12 border-2 border-gray-300 pl-2 w-full max-w-xs`}
                         name="childAge" 
@@ -142,7 +142,29 @@ function FormPage2({ form, setForm, nextFn }) {
                     <option value={"1-3"}>1-3 ετών</option>
                     <option value={"3-5"}>3-5 ετών</option>
 
-                </select>
+                </select> */}
+                <div className={`flex ml-3 mt-2  gap-3 `}>
+                    <input type="radio" name={`radio-child`} checked={form.childAge === "0-1"}
+                        className="radio radio-secondary" disabled={form.cantEdit}
+                        onChange={() => { handleChange({ target: { name: "childAge", value: "0-1" } }) }}
+                    />
+                    <p className={`${(form.childAge === "1-3" || form.childAge === "3-5") && form.cantEdit ? 'text-gray-400' : ''}`}>0-1</p>
+                </div>
+                <div className={`flex ml-3 mt-2  gap-3 `}>
+                    <input type="radio" name={`radio-child`} checked={form.childAge === "1-3"}
+                        className="radio radio-secondary" disabled={form.cantEdit}
+                        onChange={() => { handleChange({ target: { name: "childAge", value: "1-3" } }) }}
+                    />
+                    <p className={`${(form.childAge === "3-5" || form.childAge === "0-1") && form.cantEdit ? 'text-gray-400' : ''}`}>1-3</p>
+                </div>
+                <div className={`flex ml-3 mt-2  gap-3 `}>
+                    <input type="radio" name={`radio-child`} checked={form.childAge === "3-5"}
+                        className="radio radio-secondary" disabled={form.cantEdit}
+                        onChange={() => { handleChange({ target: { name: "childAge", value: "3-5" } }) }}
+                    />
+                    <p className={`${(form.childAge === "1-3" || form.childAge === "0-1") && form.cantEdit? 'text-gray-400' : ''}`}>3-5</p>
+                </div>
+
             </div>
 
 

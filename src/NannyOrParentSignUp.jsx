@@ -14,7 +14,7 @@ function ParentOrNannySignUp() {
 
             {/* parent div, left */}
             <div className='h-1/2  w-1/5 flex items-center justify-center '>
-                <Link className='flex  justify-center flex-col items-center gap-4  hover:text-gray-600 hover:underline' to='/signupparent'>
+                <Link className='flex  justify-center flex-col items-center gap-4  hover:text-pallete-800 hover:underline' to='/signupparent'>
                     <RiParentFill className='text-9xl  '/>
                     <p className='text-3xl font-medium ' >Γονέας</p>
                 </Link>
@@ -26,7 +26,7 @@ function ParentOrNannySignUp() {
 
             {/* nanny div, left */}
             <div className='h-1/2  w-1/5 flex items-center justify-center '>
-                <Link className='flex  justify-center flex-col items-center gap-4  hover:text-gray-600 hover:underline' to='/signupnanny'>
+                <Link className='flex  justify-center flex-col items-center gap-4  hover:text-pallete-800 hover:underline' to='/signupnanny'>
                     <FaUser className='text-9xl  '/>
                     <p className='text-3xl font-medium ' >Επαγγελματίας</p>
                 </Link>

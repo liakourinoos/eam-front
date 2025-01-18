@@ -48,8 +48,23 @@ function Login() {
 
   };
   
-  
+  const [emailError, setEmailError] = useState("");
 
+    useEffect(() => {
+        const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        if (!isValidEmail && email.length > 0) {
+            setEmailError("Το email δεν έχει έγκυρη μορφή.");
+        } else {
+            setEmailError("");
+        }
+    }, [email]);
+
+    const validInput = () => {
+      const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      const isPasswordProvided = password.length > 0;
+
+      return isValidEmail && isPasswordProvided;
+    };
 
   return (
     <div className="w-full min-h-screen flex flex-col overflow-hidden justify-between bg-pink-100 ">
@@ -64,9 +79,10 @@ function Login() {
 
           <div className="w-1/4 mt-20 ">
             <p className="text-xl ml-1 font-medium ">Email</p>
+            {emailError.length>0 && <p className="text-red-700 my-2 font-medium text-sm ">{emailError}</p>}
             <input
               type="email"
-              className="w-full h-10 border-2 border-gray-300 rounded-md pl-2 mt-1 bg-white"
+              className={`w-full h-10 border-2 border-gray-300 rounded-md pl-2 mt-1 bg-white ${emailError.length ===0? 'border-gray-300': 'border-red-700'  }`}
               placeholder="johndoe@gmail.com"
               value={email}
               onChange={(e) =>{ setMessage("");  setEmail(e.target.value)}}
@@ -109,8 +125,9 @@ function Login() {
             <button
               onClick={handleLogin}
               type="submit"
-              className="bg-pink-600 h-10 w-32 text-lg justify-center ml-60 flex items-center font-medium text-white rounded-md px-3 py-1 mt-5"
-              disabled={isLoading} // Disable button when loading
+              className={`${validInput() ? "bg-pink-600" : "bg-gray-500" } h-10 w-32 text-lg justify-center ml-60 flex items-center font-medium text-white rounded-md px-3 py-1 mt-5`}
+              disabled={isLoading || !validInput()} // Disable button when loading
+              title={validInput() ? "Σύνδεση" : "Συμπληρώστε πρώτα τα στοιχεία σύνδεσής σας"}
             >
               {isLoading && <span className="loading loading-spinner loading-md "/>}
               {!isLoading && "Σύνδεση"}

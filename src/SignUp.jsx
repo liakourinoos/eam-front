@@ -131,6 +131,60 @@ function SignUp({role}){
     
 
 
+    const [numberError,setNumberError]= useState("")
+    // input check for number
+    useEffect(()=>{
+        const isValidNumber = /^\d{10}$/.test(SignUpData.number);
+        if (!isValidNumber && SignUpData.number.length > 0) {
+            setNumberError("Ο αριθμός τηλεφώνου πρέπει να αποτελείται από 10 ψηφία.");
+        } else {
+            setNumberError("");
+        }
+    },[SignUpData.number])
+
+
+    const [emailError, setEmailError] = useState("");
+
+    useEffect(() => {
+        const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(SignUpData.email);
+        if (!isValidEmail && SignUpData.email.length > 0) {
+            setEmailError("Το email δεν έχει έγκυρη μορφή.");
+        } else {
+            setEmailError("");
+        }
+    }, [SignUpData.email]);
+
+    const [passwordError, setPasswordError] = useState("");
+
+    useEffect(() => {
+        const isValidPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d_]{6,}$/.test(SignUpData.password);
+        const containsOnlyDigitsAndUnderscore = /^[\d_]+$/.test(SignUpData.password);
+        
+        if (containsOnlyDigitsAndUnderscore && SignUpData.password.length > 0) {
+            setPasswordError("Ο κωδικός πρέπει να περιέχει τουλάχιστον έναν λατινικό χαρακτήρα.");
+        } else if (!isValidPassword && SignUpData.password.length > 0) {
+            setPasswordError("Ο κωδικός πρέπει να αποτελείται από τουλάχιστον 6 χαρακτήρες και να περιέχει μόνο λατινικούς χαρακτήρες, ψηφία και το σύμβολο '_'.");
+        } else {
+            setPasswordError("");
+        }
+    }, [SignUpData.password]);
+
+
+    const isFormValid = () => {
+        return (
+            repeatPassword.length > 0 &&
+            SignUpData.email.length > 0 &&
+            emailError === "" &&
+            SignUpData.number.length > 0 &&
+            numberError === "" &&
+            SignUpData.password.length > 0 &&
+            matchingPasswords &&
+            SignUpData.gender !== "" &&
+            SignUpData.password.length > 6 &&
+            passwordError===""
+        );
+    };
+
     return(
         <div className="w-full h-full flex flex-col  justify-between bg-pink-100 ">
            {successMessage && <div role="alert" className="alert alert-success fixed top-32 left-1/2 transform -translate-x-1/2 w-1/2 flex items-center justify-center  p-4 rounded shadow">
@@ -157,8 +211,9 @@ function SignUp({role}){
 
                     <div className="w-1/4  mt-20 ">
                         <p className="text-xl ml-1 font-medium ">Email</p>
+                        {emailError.length>0 && <p className="text-red-700 my-2 font-medium text-sm ">{emailError}</p>}
                         <input  type="text" 
-                                className="w-full h-10 border-2 bg-white rounded-md pl-2 mt-1"
+                                className={`w-full h-10 border-2 bg-white rounded-md pl-2 mt-1 ${emailError.length ===0? 'border-gray-300': 'border-red-700'  }`}
                                 placeholder="johndoe@gmail.com"
                                 value={SignUpData.email}
                                 onChange={(e)=>setSignUpData({...SignUpData,email:e.target.value})}
@@ -167,6 +222,7 @@ function SignUp({role}){
                     
                     <div className="w-1/4  mt-5 ">
                         <p className="text-xl ml-1 font-medium ">Κωδικός Πρόσβασης</p>
+                        {passwordError.length>0 && <p className="text-red-700 my-2 font-medium text-sm ">{passwordError}</p>}
                         <div className="w-full flex  items-center justify-center">
                             <input  type={passwordVisibility1 ? "text" : "password"}
                                     className="w-full h-10 border-l-2 border-y-2 rounded-l-md pl-2 mt-1 border-gray-300 bg-white"
@@ -203,8 +259,9 @@ function SignUp({role}){
 
                     <div className="w-1/4  mt-5 ">
                         <p className="text-xl ml-1 font-medium ">Τηλέφωνο</p>
+                        {numberError.length>0 && <p className="text-red-700 my-2 font-medium text-sm ">{numberError}</p>}
                         <input  type="tel" 
-                                className="w-full h-10 border-2 bg-white rounded-md pl-2 mt-1"
+                                className={`w-full h-10 border-2 bg-white rounded-md pl-2 mt-1 ${numberError.length>0 ? 'border-red-700' : 'border-gray-300'}`}
                                 value={SignUpData.number}
                                 onChange={(e)=>setSignUpData({...SignUpData,number:e.target.value})}
                                 />
@@ -212,9 +269,9 @@ function SignUp({role}){
                     
                     </div>
 
-                    <div className="w-1/4  mt-5 ">
+                    <div className="w-1/4  mt-5 flex flex-col gap-2 text-lg  ">
                         <p className="text-xl ml-1 font-medium ">Φύλο</p>
-                        <select className="w-full h-10 border-2 bg-white rounded-md pl-2 mt-1"
+                        {/* <select className="w-full h-10 border-2 bg-white rounded-md pl-2 mt-1"
                                 value={SignUpData.gender}
                                 onChange={(e)=>setSignUpData({...SignUpData, gender: e.target.value === "true" ? true : e.target.value === "false" ? false : "" })}
                         >
@@ -225,8 +282,16 @@ function SignUp({role}){
 
 
 
-                        </select>
-                        
+                        </select> */}
+                        <div className="flex gap-2 items-center">
+                            <input type="radio" checked={SignUpData.gender===true} className="radio radio-secondary" onChange={()=>setSignUpData({...SignUpData,gender:true})}/>    
+                            <p>Αρσενικό</p>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                            <input type="radio" checked={SignUpData.gender===false} className="radio radio-secondary" onChange={()=>{ console.log("Changed gender!"); setSignUpData({...SignUpData,gender:false})}}/>                        
+                            <p>Θηλυκό</p>
+                        </div>
+                    
                     
                     </div>
 
@@ -244,12 +309,13 @@ function SignUp({role}){
                     <div className="w-full flex justify-end px-32 mt-3">
 
                     
-                        <button     className={`h-10 w-32  flex items-center justify-center text-xl font-medium text-white rounded-md px-3 py-1 mt-10 ${!(repeatPassword.length > 0 && SignUpData.email.length>0 && SignUpData.number.length>0 && SignUpData.password.length > 0 && matchingPasswords) ? 'bg-gray-400 ' : 'bg-pink-600'}`}
-                                    disabled={!(repeatPassword.length > 0 && SignUpData.email.length>0 && SignUpData.number.length>0 && SignUpData.password.length > 0 && matchingPasswords)}
+                        <button     className={`h-10 w-36  flex items-center justify-center text-xl font-medium text-white rounded-md px-3 py-1 mt-10 ${!isFormValid() ? 'bg-gray-400 ' : 'bg-pink-600'}`}
+                                    disabled={!isFormValid()}
+                                    // onClick={()=>console.log("test")}
                                     onClick={()=>createUser()}
-                                    title={`${!(repeatPassword.length > 0 && SignUpData.email.length>0 && SignUpData.number.length>0 && SignUpData.password.length > 0 && matchingPasswords) ? "Παρακαλούμε συμπληρώστε όλα τα πεδία." : ""} `}
+                                    title={!isFormValid() ? "Παρακαλούμε συμπληρώστε όλα τα πεδία." : ""}
                         >
-                            {isPending ? 'Pending...' :'Εγγραφή'}
+                            {isPending ? 'Ενημέρωση...' :'Εγγραφή'}
                         </button>
                     </div>
                 </div>

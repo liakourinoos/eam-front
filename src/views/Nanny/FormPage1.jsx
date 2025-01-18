@@ -108,9 +108,9 @@ function FormPage1({ form, setForm, nextFn }) {
                         
 
                         {/* μπορει να φιλοξενησει */}
-                        <div className="w-full mt-3  mx-auto">
+                        <div className="w-full mt-3  mx-auto ">
                             <p className="text-l font-medium pl-2">Μπορώ να φιλοξενήσω παιδί στην οικία μου</p>
-                            <select value={row.canHost} 
+                            {/* <select value={row.canHost} 
                                     onChange={(e) => {
                                         const updatedRows = form.rows.map((r, idx) =>
                                             idx === index ? { ...r, canHost: e.target.value === "true" } : r
@@ -123,7 +123,31 @@ function FormPage1({ form, setForm, nextFn }) {
                                 <option disabled value={""}>Επιλέξτε</option>
                                 <option value={true}>Ναι</option>
                                 <option value={false}>Όχι</option>
-                            </select>
+                            </select> */}
+                            <div className={`flex ml-3 mt-2  gap-3 ${form.rows[index]?.area==="" ? 'text-gray-400' :""} `}>
+                                <input  type="radio" name={`radio-${index}`} checked={form.rows[index]?.canHost===true} title={ (form.rows[index]?.area==="") ? "Επιλέξτε πρώτα πόλη και περιοχή." : ""} 
+                                        className="radio radio-secondary"  disabled={form.rows[index]?.area==="" || form.cantEdit} 
+                                        onChange={() => {
+                                            const updatedRows = form.rows.map((r, idx) =>
+                                                idx === index ? { ...r, canHost: true } : r
+                                            );
+                                            setForm({ ...form, rows: updatedRows });
+                                        }}          
+                                />
+                                <p className={`${form.rows[index]?.canHost===false ? 'text-gray-400': ''}`}>Ναι</p>
+                            </div>
+                            <div className={`flex ml-3 mt-2  gap-3 ${form.rows[index]?.area===""? 'text-gray-400' :""} `}>
+                                <input  type="radio" name={`radio-${index}`} checked={form.rows[index]?.canHost===false} title={ (form.rows[index]?.area==="") ? "Επιλέξτε πρώτα πόλη και περιοχή." : ""} 
+                                        className="radio radio-secondary"  disabled={form.rows[index]?.area==="" || form.cantEdit} 
+                                        onChange={() => {
+                                            const updatedRows = form.rows.map((r, idx) =>
+                                                idx === index ? { ...r, canHost: false } : r
+                                            );
+                                            setForm({ ...form, rows: updatedRows });
+                                        }}          
+                                />
+                                <p className={`${form.rows[index]?.canHost===true ? 'text-gray-400': ''}`}>Όχι</p>
+                            </div>
                         </div>
                         
                         
