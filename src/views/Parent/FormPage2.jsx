@@ -14,7 +14,6 @@ function FormPage2({ form, setForm, nextFn }) {
 
     const {userData} = useAuth();
 
-
     const [selectedDate, setSelectedDate] = useState(() => {
         if (form.startingDate) {
             const [day, month, year] = form.startingDate.split('/');
@@ -179,7 +178,7 @@ function FormPage2({ form, setForm, nextFn }) {
                             </tr>
                         ))}
                     </tbody>
-                </table>
+                </table>                    
 
                 <div className="w-full flex justify-end my-5"> 
                     <button className="rounded-md bg-white border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white  font-medium p-2 "
