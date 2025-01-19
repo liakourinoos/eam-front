@@ -805,7 +805,9 @@ export async function fetchJobNotification(id) {
             startingDate,
             months,
             address,
-            status:data.status
+            status:data.status,
+            applicationId:data.applicationId,
+            
         };
 
     } catch (error) {
@@ -1268,6 +1270,284 @@ export async function fetchContacts(nannyId) {
 }
 
 
+export async function rejectApplication(notificationId){
+    const today = new Date();
+    const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+    console.log(formattedDate)
+    const exactDate = Timestamp.now();
+    try{
+        // console.log("aaa"+notificationId)
+
+        //fetch the notification 
+        const docRef1 = doc(db, 'notifications', notificationId);
+        console.log("Fetching document from applications with ID:", notificationId);
+        const docSnap = await getDoc(docRef1);
+        // Get the fields of the notification
+        if (!docSnap.exists()) {
+            console.error(`Notification document with ID ${notificationId} does not exist.`);
+            return;
+        }
+        const notifData = docSnap.data();
+        
+        console.log("notifData:")
+        console.log(notifData)
+
+        // update the status of the notification
+        await updateDoc(docRef1, {
+            status:"rejected"
+        });
+
+
+
+        if (!notifData.applicationId) {
+            console.error("applicationId is missing in the notification data:", notifData);
+            return;
+        }
+        // first, get the application id to change its status and make it archived
+        const docRef2 = doc(db, 'applications',notifData.applicationId);
+        console.log("Fetching document from contactRequests with ID:", notifData.applicationId);
+        const docSnap2 = await getDoc(docRef2);
+        const jobData=docSnap2.data();
+        
+        console.log("JobData:")
+        console.log(jobData)
+        
+        // update the fields of the application
+        await updateDoc(docRef2, {
+            archived: true,
+            status:"Απερρίφθη"
+        });
+        
+        //send a new notification to the parent about the status of their application status
+
+
+        // make the proper notification nanny to parent
+        const notificationData = {
+            senderId: notifData.receiverId,
+            receiverId:  notifData.senderId,
+            type: 'jobOffer',
+            createdAt: formattedDate,
+            applicationId:notifData.applicationId,
+            exactDate:exactDate,
+            read:false,
+            status:"rejected"
+        };
+        const notificationsCollection = collection(db, 'notifications');
+        await addDoc(notificationsCollection, notificationData);  // Adds the document
+    
+    }
+    catch(error){
+        console.log(error.message)
+        
+        
+    }
+}
+
+export async function acceptApplication(notificationId){
+    const exactDate = Timestamp.now();
+    const today = new Date();
+    const formattedTodayDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+    // fetch all data for notification by that id
+    //fetch the notification 
+    const docRef1 = doc(db, 'notifications', notificationId);
+    console.log("Fetching document from applications with ID:", notificationId);
+    const docSnap = await getDoc(docRef1);
+    // Get the fields of the notification
+    if (!docSnap.exists()) {
+        console.error(`Notification document with ID ${notificationId} does not exist.`);
+        return;
+    }
+    const notifData = docSnap.data();
+    
+    console.log("notifData:")
+    console.log(notifData)
+
+    // update the status of the notification
+    await updateDoc(docRef1, {
+        status:"accepted"
+    });
+
+    if(!notifData) console.log("ERASED!:")
+    else console.log(notifData)
+    console.log("Before check:", notifData.applicationId);
+    if (!notifData.applicationId) {
+        console.error("applicationId is missing in the notification data:", notifData);
+        return;
+    }
+    // first, get the application id to change its status
+    const docRef2 = doc(db, 'applications',notifData.applicationId);
+    console.log("Fetching document from applications with ID:", notifData.applicationId);
+    const docSnap2 = await getDoc(docRef2);
+    const jobData=docSnap2.data();
+    
+    console.log("JobData:")
+    console.log(jobData)
+    
+    // update the fields of the application
+    await updateDoc(docRef2, {
+        // archived: true,
+        status:"Εγκρίθηκε"
+    });
+
+     //send a new notification to the parent about the status of their application status
+
+
+        // make the proper notification from nanny to parent
+        let notificationData = {
+            senderId: notifData.receiverId,
+            receiverId:  notifData.senderId,
+            type: 'jobOffer',
+            createdAt: formattedTodayDate ,
+            applicationId:notifData.applicationId,
+            exactDate:exactDate,
+            read:false,
+            status:"accepted"
+        };
+        const notificationsCollection = collection(db, 'notifications');
+        await addDoc(notificationsCollection, notificationData);  // Adds the document
+
+        // create a new document for the payments collection
+        const [day, month, year] = jobData?.startingDate.split('/').map(Number); // Parse startingDate string into day, month, year
+        const pDate = new Date(year, month - 1, day); // Create a Date object (month is zero-based)
+        const months = parseInt(jobData?.months, 10); // Parse months string into an integer (base 10)
+        //end Date in utc
+        pDate.setMonth(pDate.getMonth() + months); // Add the number of months to the startingDate
+        // Format pDate as DD/MM/YYYY
+        const formattedPayDate = `${String(pDate.getDate()).padStart(2, '0')}/${String(pDate.getMonth() + 1).padStart(2, '0')}/${pDate.getFullYear()}`;
+        
+        // Fetch the current value of globalCouponCounter from the metadata collection
+        const metadataRef = doc(db, 'metadata', 'globalCouponCounter'); // Replace 'GlobalCouponCounter' with the actual document ID
+        const metadataSnap = await getDoc(metadataRef);
+
+        if (!metadataSnap.exists()) {
+            console.error("Global counter not found in metadata.");
+            return;
+        }
+
+        // Get the current value of the global counter
+        let globalCouponCounter = metadataSnap.data().value;
+
+        // Use this counter value as the voucherCode
+        let voucherCode = globalCouponCounter;
+
+        // get the nanny id using AMKA
+        let q = query(collection(db, 'users'),
+                where('AMKA', '==', jobData.nannyAMKA));
+        const querySnapshot1 = await getDocs(q); // Get documents matching the query
+        let nannyId;
+        if (!querySnapshot1.empty) {
+            querySnapshot1.forEach((doc) => {
+            nannyId = doc.id;
+            });
+        } else {
+            console.error('No document found for AMKA:', jobData.AMKA);
+        }
+
+        // Create paymentData with the voucherCode
+        const paymentData = {
+            nannyId: nannyId,
+            parentId: jobData.userId,
+            status: "unavailable",
+            exactDate: Date.now(),
+            payDate: formattedPayDate,
+            voucherCode: voucherCode,  // Assign the current voucherCode
+        };
+
+        // Update the global counter in the metadata collection
+        await updateDoc(metadataRef, {
+            value: globalCouponCounter + 1  // Increment the counter by 1
+        });
+
+        // //create a new document for the payments collection
+        // const paymentData = {
+        //     nannyId: jobData.nannyId,
+        //     parentId: jobData.userId,
+        //     status: "unavailable",
+        //     // createdAt: 
+        //     exactDate: Date.now(), //just to have them by order, UTC time
+        //     payDate: formattedPayDate,
+        //     voucherCode:
+        // };
+
+        //add document
+        const paymentsCollection = collection(db, 'payments');
+        await addDoc(paymentsCollection, paymentData);  // Adds the document
+
+        const [startDay, startMonth, startYear] = jobData?.startingDate.split('/').map(Number); // Parse startingDate string into day, month, year
+
+        const applicationStartingDate = new Date(startYear, startMonth - 1, startDay); // Create a Date object (month is zero-based)
+
+        const applicationEndDate = new Date(startYear, startMonth - 1, startDay); // Create a Date object (month is zero-based)
+        applicationEndDate.setMonth(applicationEndDate.getMonth() + months); // Add the number of months to the startingDate
+
+        //archive all nanny's final offers that overlap with the agreed range
+        
+        //first, get all offers unarchived final offers by this nanny
+         q = query(collection(db, 'offers'),
+            where('userId', '==', jobData.userId),
+            where('type', '==' , 'final'),
+            where('archived', '==', false)
+        );
+        const querySnapshot = await getDocs(q); // Get documents matching the query
+        if (!querySnapshot.empty) {                
+            querySnapshot.forEach(async (doc) => {
+                const offerData=doc.data();
+                const [day, month, year] = offerData?.startingDate.split('/').map(Number); // Parse startingDate string into day, month, year
+                const offerEndDate = new Date(year, month - 1, day); // Create a Date object (month is zero-based)
+                const months = parseInt(offerData?.months, 10); // Parse months string into an integer (base 10)
+                // create the offerEndDate in UTC
+                offerEndDate.setMonth(offerEndDate.getMonth() + months); // Add the number of months to the startingDate
+                const offerStartDate = new Date(year, month - 1, day); // Create a Date object (month is zero-based)
+                //check if the offer overlaps with the accepted job
+                if( (applicationStartingDate<=offerStartDate && offerStartDate<=applicationEndDate) || (applicationStartingDate<=offerEndDate && offerEndDate<=applicationEndDate) ){
+                    //archive the offer
+                    const docRef = doc(db, 'offers', doc.id);
+                    await updateDoc(docRef, { archived: true });
+                }
+            });                
+        } else {
+            console.error('No document found for userId:', jobData.userId);
+        }
+
+        //create two notifications for when the job is done to send to parent and nanny
+
+        // from nanny to parent
+        notificationData = {
+            senderId: notifData.receiverId,
+            receiverId:  notifData.senderId,
+            type: 'endOfJob',
+            createdAt: formattedPayDate , //date should be the same as the day the payment becomes available
+            applicationId:notifData.applicationId,
+            exactDate:applicationEndDate,
+            read:false,
+            status:"pending"
+        };
+        // const notificationsCollection = collection(db, 'notifications');
+        await addDoc(notificationsCollection, notificationData);  // Adds the document
+
+         // from parent to nanny
+        notificationData = {
+            senderId: notifData.senderId,
+            receiverId:  notifData.receiverId,
+            type: 'endOfJob',
+            createdAt: formattedPayDate , //date should be the same as the day the payment becomes available
+            applicationId:notifData.applicationId,
+            exactDate:applicationEndDate,
+            read:false,
+            // status:"pending" //not needed for nanny, nothing to confirm
+        };
+        // const notificationsCollection = collection(db, 'notifications');
+        await addDoc(notificationsCollection, notificationData);  // Adds the document
+
+        
+
+
+
+
+}
+
+
+
 export async function fetchAllNannies(){
     // console.log("called..")
     const result=[]
@@ -1292,4 +1572,63 @@ export async function fetchAllNannies(){
     return result;
 
 
+}
+
+export async function fetchArchivedApplications(userId) {
+    const result = [];
+    try {
+        const q = query(collection(db, 'applications'),
+            where('userId', '==', userId),
+            where('archived','==', true)
+        );
+        const querySnapshot = await getDocs(q); // Get documents matching the query
+        if (!querySnapshot.empty) {
+            querySnapshot.forEach((doc) => {
+                result.push({ id: doc.id, ...doc.data() });
+            });
+
+        } else {
+            console.error('No nannies found..');
+        }
+    } catch (error) {
+        console.error('Error fetching nannies');
+    }
+
+    console.log("before exit...")
+    return result;
+}
+
+export async function fetchParentPayments(userId){
+    const result = [];
+    try {
+        const q = query(collection(db, 'payments'),
+            where('parentId', '==', userId),
+            // where('status','!=', "accepted")
+        );
+        const querySnapshot = await getDocs(q); // Get documents matching the query
+        if (!querySnapshot.empty) {
+            for (const ndoc of querySnapshot.docs) {
+                const paymentData = ndoc.data();
+                const nannyDocRef = doc(db, 'users', paymentData.nannyId);
+                const nannyDocSnap = await getDoc(nannyDocRef);
+                let nannyName = "", nannySurname = "";
+                if (nannyDocSnap.exists()) {
+                    const nannyData = nannyDocSnap.data();
+                    nannyName = nannyData.name || "";
+                    nannySurname = nannyData.surname || "";
+                } else {
+                    console.error(`Nanny with id ${paymentData.nannyId} not found.`);
+                }
+                result.push({ id: ndoc.id, ...paymentData, nannyName, nannySurname });
+            }
+        } else {
+            console.error('No payments found for parentId:', userId);
+        }
+    } catch (error) {
+        console.error('Error fetching payments:', error);
+    }
+
+    console.log("payments:")
+    console.log(result)
+    return result;
 }

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
-import { fetchJobNotification,fetchContactRequestNotification, rejectContact,acceptContact } from '../../FetchFunctions';
+import { fetchJobNotification,fetchContactRequestNotification, rejectContact,acceptContact,rejectApplication, acceptApplication } from '../../FetchFunctions';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MdClose } from "react-icons/md";
@@ -38,27 +38,31 @@ function Notification({ id, type ,role}){
     const [showModal,setShowModal] = useState(false);
 
 
-    if(isJobLoading || isRequestLoading)
+    if (isJobLoading || isRequestLoading)
         // skeleton for loading
         return (
-            <div className="rounded-md bg-gray-200 mx-auto my-5 w-2/3 flex items-center h-32">
-            {/* Left side, profile and info */}
-            <div className="w-3/4 h-full rounded-l-md flex items-center space-x-3 px-4">
-                {/* Skeleton for image */}
-                <div className="h-28 w-32 bg-gray-500 rounded-full animate-pulse" />
-                
-                {/* Skeleton for name and date */}
-                <div className="h-full w-full flex flex-col justify-center space-y-2">
-                    <div className="h-4 bg-gray-500 rounded-md animate-pulse w-3/4" />
-                    <div className="h-4 bg-gray-500 rounded-md animate-pulse w-5/6" />
-                </div>
-            </div>
-            
-            {/* Right side (action buttons area) */}
-            <div className="w-1/4 h-full rounded-r-md font-medium pr-5 flex items-center justify-center">
-                <div className="h-8 w-full bg-gray-500 rounded-md animate-pulse" />
-            </div>
-        </div>
+            <>
+                {[1, 2, 3, 4, 5].slice(0, 4).map((el) => (
+                    <div key={el} className="rounded-md bg-gray-200 mx-auto my-5 w-2/3 flex items-center h-32">
+                        {/* Left side, profile and info */}
+                        <div className="w-3/4 h-full rounded-l-md flex items-center space-x-3 px-4">
+                            {/* Skeleton for image */}
+                            <div className="h-28 w-32 bg-gray-500 rounded-full animate-pulse" />
+
+                            {/* Skeleton for name and date */}
+                            <div className="h-full w-full flex flex-col justify-center space-y-2">
+                                <div className="h-4 bg-gray-500 rounded-md animate-pulse w-3/4" />
+                                <div className="h-4 bg-gray-500 rounded-md animate-pulse w-5/6" />
+                            </div>
+                        </div>
+
+                        {/* Right side (action buttons area) */}
+                        <div className="w-1/4 h-full rounded-r-md font-medium pr-5 flex items-center justify-center">
+                            <div className="h-8 w-full bg-gray-500 rounded-md animate-pulse" />
+                        </div>
+                    </div>
+                ))}
+            </>
         );
     
 
@@ -134,20 +138,38 @@ function Notification({ id, type ,role}){
                             </>
                         }
                         {/* periptwsi 2 */}
-                        {type==="jobOffers" &&
+                        {type==="jobOffer" &&
                             <>
-                                <button className='h-1/2 w-full text-xl  bg-red-400 rounded-md'
-                                        onClick={()=>{rejectApplication(id)}}
+                            {status!=="accepted" && 
+                                <button className={`
+                                        h-1/2 w-1/2 text-xl rounded-md
+                                        ${status==="pending"  && "bg-red-600"}   
+                                        ${status==="rejected" && "bg-red-500"}
+                                        ${status==="accepted" && "bg-red-200"}
+                                    `}
+                                    onClick={()=>{setStatus("rejected"); rejectApplication(id); }}
+                                    disabled={status!=="pending"}
                                 >
-                                    Απόρριψη
+                                    {status==="pending" && 'Απόρριψη'}
+                                    {status==="rejected" && 'Απορρίφθηκε'}
                                 </button>
-                                <button className='h-1/2 w-full text-xl bg-green-400 rounded-md'
-
+                            }
+                            {status!=="rejected" &&
+                                <button className={`
+                                            h-1/2 w-1/2 text-xl bg-green-600 rounded-md
+                                            ${status==="pending"  && "bg-green-600"}   
+                                            ${status==="rejected" && "bg-green-200"}
+                                            ${status==="accepted" && "bg-green-400"}
+                                        `}
+                                        onClick={()=>{setStatus("accepted"); acceptApplication(id); }}
+                                        disabled={status!=="pending"}
                                 
                                 >
-                                    Αποδοχή    
+                                    {status==="pending" && 'Αποδοχή'}
+                                    {status==="accepted" && 'Εγκρίθηκε'}   
                                 </button>
-                            </>
+                            }
+                        </>
                         }
 
                 </div>
@@ -164,7 +186,7 @@ function Notification({ id, type ,role}){
                                 <p className='w-4/6 h-full font-medium text-3xl flex items-center justify-center bg-white'> Επιθεώρηση Συμφωνητικού Απασχόλησης</p>
                                 <div className='w-1/6 h-full flex items-center justify-end '>
                                     <button className='h-12 w-12 text-red-500 border-2 border-gray-400 rounded-md flex items-center text-5xl font-medium justify-center bg-white'
-                                            onClick={()=>setShowModal(sm=>!sm)}
+                                            onClick={()=>setShowModal(false)}
                                     >
                                         <MdClose/>
                                     </button>
@@ -247,7 +269,7 @@ function Notification({ id, type ,role}){
                         {/* periptwsi 1 */}
                         {type==="jobOffer" && 
                             <p className='h-2/3 flex items-start pt-2  text-xl font-medium'>
-                                {job?.gender ? "Ο" : "Η"} <Link to={`/nannyprofile/${job?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{job?.senderName} {job?.senderSurname}</Link> {status==="accepted" ? 'ΑΠΟΔΈΧΤΗΚΕ' :'ΑΠΈΡΡΙΨΕ'} την <button onClick={()=>setShowModal(sm=>!sm)} className="underline mx-1">αίτηση απασχόλησης </button> σας.
+                                {job?.gender ? "Ο" : "Η"} <Link to={`/nannyprofile/${job?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{job?.senderName} {job?.senderSurname}</Link> {status==="accepted" ? 'ΑΠΟΔΈΧΤΗΚΕ' :'ΑΠΈΡΡΙΨΕ'} το <Link to={`/viewapplication/${job?.applicationId}`} className="underline hover:text-pallete-700 mx-1">συμφωνητικό απασχόλησης </Link> σας.
                             </p>
                         }
                         {/* periptwsi 2 */}

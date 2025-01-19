@@ -1,26 +1,26 @@
 import { Link } from "react-router-dom";
 import { VscNewFile } from "react-icons/vsc";
 import { useState } from "react";
-import {  FaRegQuestionCircle } from 'react-icons/fa';
+import { FaRegQuestionCircle } from 'react-icons/fa';
 import DraftApplication from "./DraftApplication";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../customHooks";
 import { fetchAllDraftApplications } from "../../FetchFunctions";
 
 
-function ParentDraftApplications(){
-    const {userData} = useAuth();
+function ParentDraftApplications() {
+    const { userData } = useAuth();
 
-    const {data:applications,isLoading} = useQuery({
-        queryFn:()=>fetchAllDraftApplications(userData?.id),
-        queryKey:['draftApplications',userData?.id],
-        enabled:!!userData
+    const { data: applications, isLoading } = useQuery({
+        queryFn: () => fetchAllDraftApplications(userData?.id),
+        queryKey: ['draftApplications', userData?.id],
+        enabled: !!userData
     })
 
-   
-    const [sortBy,setSortBy] = useState("date-desc")
-    return(
-        <div className="w-full py-2 ">
+
+    const [sortBy, setSortBy] = useState("date-desc")
+    return (
+        <div className="w-full flex-grow flex flex-col py-2 ">
 
             <div className="h-16 w-11/12 mx-auto flex  items-center justify-between ">
                 <Link to='/applicationform' className="h-full w-2/12 text-xl bg-pallete-200 font-medium flex items-center gap-4 justify-center rounded-md">
@@ -49,16 +49,20 @@ function ParentDraftApplications(){
             </div>
 
             {/* data */}
-            <div className='w-11/12 mx-auto h-full flex flex-col mb-5  gap-2 items-center justify-start overflow-y-auto mt-2'>
-                {isLoading && <span className="loading loading-lg mt-32"></span>
-                    }
-                    {!isLoading && Array.isArray(applications) && 
-                        applications.map((app,idx)=>(
-                            <DraftApplication key={idx} code={app.id} firstName={app.nannyName} lastName={app.nannySurname}/>
-                        ))
-                    }
+            <div className='w-11/12 mx-auto flex-grow flex flex-col mb-2  gap-2 items-center justify-start overflow-y-auto mt-2'>
+                {isLoading &&
+                    <div className="flex flex=grow items-center justify-center ">
+                        <span className="loading loading-lg mt-32"></span>
+                    </div>
+                }
+                {!isLoading && Array.isArray(applications) &&
+                    applications.map((app, idx) => (
+                        <DraftApplication key={idx} code={app.id} firstName={app.nannyName} lastName={app.nannySurname} />
+                    ))
+                }
 
-                
+
+
             </div>
 
 
