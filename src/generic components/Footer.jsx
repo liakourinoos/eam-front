@@ -6,7 +6,7 @@ import { PiBabyDuotone } from "react-icons/pi";
 function Footer() {
 
     return(
-        <div className="w-full h-16 flex justify-between  border-t-2 border-black bg-pallete-50"> 
+        <div className="w-full h-16 flex justify-between  border-t-2 border-black bg-white"> 
             {/* div1, social media links */}
             <div className="w-1/3 h-full flex gap-10 pl-10 items-center  ">
 
@@ -30,7 +30,7 @@ function Footer() {
 
             {/* div2, logo */}
             <div className="w-1/3 h-full flex justify-center ">
-                <PiBabyDuotone className="w-1/6  h-full text-pallete-600"/>
+                <PiBabyDuotone className="w-1/6  h-full text-pallete-800"/>
             
             </div>
 

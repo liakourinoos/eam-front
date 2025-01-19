@@ -24,7 +24,7 @@ function ParentApplications() {
 
     if(!loading && userData)
         return (
-            <div className="w-full flex flex-col bg-pallete-50 min-h-screen ">
+            <div className="w-full flex flex-col bg-white min-h-screen ">
                 {RenderHeaderNavbar(userData,2)}
 
                 {/* main page */}
@@ -46,7 +46,7 @@ function ParentApplications() {
                     </div>
 
                     {/* page displayed */}
-                    <div className="flex flex-col flex-grow bg-pallete-50 ">                    
+                    <div className="flex flex-col flex-grow bg-white ">                    
                         {selectedPage===1 && <ParentFinalApplications/>}
                         {selectedPage===2 && <ParentDraftApplications/>}
                     </div>

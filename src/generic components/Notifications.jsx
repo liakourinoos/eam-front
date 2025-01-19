@@ -13,7 +13,7 @@ function Notifications(){
     const { data: notifs, isLoading: isNotifsLoading } = useQuery({
         queryFn: () => fetchNotifications(userData?.id),
         enabled: !!userData,
-        queryKey: ['notifications'],
+        queryKey: [`notifications`, userData?.id],
         refetchInterval: 5000,
         refetchOnMount:true 
     });

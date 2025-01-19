@@ -1268,11 +1268,12 @@ export async function fetchContacts(nannyId) {
 }
 
 
-export async function fetchAllUsers(){
+export async function fetchAllNannies(){
     // console.log("called..")
     const result=[]
     try {
         const q = query(collection(db, 'users'),
+                where('role', '==', false)
         );
         const querySnapshot = await getDocs(q); // Get documents matching the query
         if (!querySnapshot.empty) {

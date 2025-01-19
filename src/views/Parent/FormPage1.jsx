@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
-import { fetchAllUsers } from "../../FetchFunctions";
+import { fetchAllNannies } from "../../FetchFunctions";
 
 function FormPage1({ form, setForm, nextFn }) {
     const [errors, setErrors] = useState({
@@ -42,7 +42,7 @@ function FormPage1({ form, setForm, nextFn }) {
     // fetch nannies that have accepted contact request
     const {data:nannies, isLoading: isNanniesLoading} = useQuery({
         queryKey: ['nannies'],
-        queryFn: fetchAllUsers,
+        queryFn: ()=>fetchAllNannies(),
         enabled: form.cantEdit
         
     })
@@ -57,7 +57,8 @@ function FormPage1({ form, setForm, nextFn }) {
             nannies.map(nanny => ({
                 img: nanny.img,
                 name: nanny.name,
-                surname: nanny.surname
+                surname: nanny.surname,
+                AMKA: nanny.AMKA
             })))
     }, [nannies])
 
@@ -71,9 +72,10 @@ function FormPage1({ form, setForm, nextFn }) {
         else{
             setSearchResult(nannies);
         }    
+        console.log(searchResult);
     }, [searchInput])
 
-
+    const [selectedNannyAMKA,setSelectedNannyAMKA] = useState("");
 
     return (
         <div className="w-full">
@@ -100,8 +102,8 @@ function FormPage1({ form, setForm, nextFn }) {
                             {form.cantEdit && <div className="w-full h-full bg-gray-300"/>}
                             {isNanniesLoading && <div className="h-full w-full flex items-center justify-center"><span className="loading loading-lg"></span></div>}
                             {!form.cantEdit && searchResult?.length >0 && searchResult?.map((nanny, index) => (
-                                <div    key={index} onClick={()=>{setForm(prevState => ({...prevState,name: nanny.name,surname: nanny.surname}));}} 
-                                        className="flex h-20 pl-5 items-center border-b-2 border-gray-300 hover:bg-white bg-slate-50 hover:text-pallete-700 cursor-pointer"
+                                <div    key={index} onClick={()=>{ setForm(prevState => ({...prevState,name: nanny.name,surname: nanny.surname})); setSelectedNannyAMKA( nanny.AMKA); }} 
+                                        className={` ${ selectedNannyAMKA===nanny.AMKA ? 'text-pallete-900 underline': 'text-black' } flex h-20 pl-5 items-center border-b-2 border-gray-300 hover:bg-white bg-slate-50 hover:text-pallete-500 cursor-pointer`}
                                 >    
                                     <img src={nanny.img} className="h-16 w-16 rounded-full object-cover"/>
                                     <p className="text-lg font-medium ml-4">{nanny.name} {nanny.surname}</p>

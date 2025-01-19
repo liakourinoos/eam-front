@@ -166,15 +166,15 @@ function Search() {
                             <p className='text-l'>Ηλικία Παιδιού</p>
                             <div className="flex  gap-3 ">
                                 <input type="radio" name="radio-2" checked={childAge==="0-1"} className="radio radio-secondary" onChange={()=>setChildAge("0-1")} />
-                                <p>0-1</p>
+                                <p>0-1 έτους</p>
                             </div>
                             <div className="flex gap-3">
                                 <input type="radio" name="radio-2" checked={childAge==="1-3"} className="radio radio-secondary" onChange={()=>setChildAge("1-3")} />
-                                <p>1-3</p>
+                                <p>1-3 ετών</p>
                             </div>
                             <div className="flex gap-3">
                                 <input type="radio" name="radio-2" checked={childAge==="3-5"} className="radio radio-secondary" onChange={()=>setChildAge("3-5")}/>
-                                <p>3-5</p>
+                                <p>3-5 ετών</p>
                             </div>
                         </div>
 

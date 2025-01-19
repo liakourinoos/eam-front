@@ -19,7 +19,7 @@ export default function ParentPaymentsHistory() { // Corrected function declarat
     const [sortBy, setSortBy] = useState("date-desc");
 
 return(
-        <div className="w-auto flex-grow py-2  bg-gray-200 ">
+        <div className="w-auto flex-grow py-2   ">
             
             <div className=" w-11/12 mx-auto flex  ">
                 <div className='w-1/3'></div>

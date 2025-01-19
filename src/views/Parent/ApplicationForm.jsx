@@ -83,11 +83,11 @@ function ApplicationForm({action="Δημιουργία Νέου Συμφωνητ
 
     if((action==="Προβολή Συμφωνητικού" && !isLoading && data) || action==="Δημιουργία Νέου Συμφωνητικού" || action==="Επεξεργασία Συμφωνητικού") 
         return(
-            <div className='w-full min-h-screen flex flex-col bg-pallete-50'>
+            <div className='w-full min-h-screen flex flex-col bg-white'>
                 {RenderHeaderNavbar(userData,2)}
                 
                 {/* main page */}
-                <div className='flex flex-col bg-pallete-50 flex-grow'>
+                <div className='flex flex-col bg-white flex-grow'>
 
                     {/* breadcrumbs */}
                     <div className="breadcrumbs  pl-5 text-md">

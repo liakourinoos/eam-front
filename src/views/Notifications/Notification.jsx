@@ -82,7 +82,7 @@ function Notification({ id, type ,role}){
                         {/* periptwsi 1 */}
                         {type==="jobOffer" && 
                             <p className='h-2/3 flex items-start pt-2  text-xl font-medium'>
-                                {job?.gender ? "Ο" : "Η"} <Link to={`/parentprofile/${job?.senderId}`} className='underline mx-1'>{job?.senderName} {job?.senderSurname}</Link> σας έστειλε <button onClick={()=>setShowModal(sm=>!sm)} className="underline ml-1">αίτηση απασχόλησης</button>.
+                                {job?.gender ? "Ο" : "Η"} <Link to={`/parentprofile/${job?.senderId}`} className='underline mx-1'>{job?.senderName} {job?.senderSurname}</Link> σας έστειλε <button onClick={()=>setShowModal(sm=>!sm)} className="underline ml-1">συμφωνητικό απασχόλησης</button>.
                             </p>
                         }
                         {/* periptwsi 2 */}
@@ -247,7 +247,7 @@ function Notification({ id, type ,role}){
                         {/* periptwsi 1 */}
                         {type==="jobOffer" && 
                             <p className='h-2/3 flex items-start pt-2  text-xl font-medium'>
-                                {job?.gender ? "Ο" : "Η"} <Link to={`/nannyprofile/${job?.senderId}`} className='underline mx-1'>{job?.senderName} {job?.senderSurname}</Link> {status==="accepted" ? 'ΑΠΟΔΈΧΤΗΚΕ' :'ΑΠΈΡΡΙΨΕ'} την <button onClick={()=>setShowModal(sm=>!sm)} className="underline ml-1">αίτηση απασχόλησης </button> σας.
+                                {job?.gender ? "Ο" : "Η"} <Link to={`/nannyprofile/${job?.senderId}`} className='underline mx-1'>{job?.senderName} {job?.senderSurname}</Link> {status==="accepted" ? 'ΑΠΟΔΈΧΤΗΚΕ' :'ΑΠΈΡΡΙΨΕ'} την <button onClick={()=>setShowModal(sm=>!sm)} className="underline mx-1">αίτηση απασχόλησης </button> σας.
                             </p>
                         }
                         {/* periptwsi 2 */}

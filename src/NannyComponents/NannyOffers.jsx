@@ -24,7 +24,7 @@ function NannyOffers() {
 
     if(!loading && userData)
         return (
-            <div className="w-full flex flex-col bg-pallete-50 min-h-screen ">
+            <div className="w-full flex flex-col bg-white min-h-screen ">
                 {RenderHeaderNavbar(userData,1)}
 
                 {/* main page */}

@@ -1,6 +1,6 @@
 import Header from "./generic components/Header";
 import Footer from "./generic components/Footer";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate,useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa6";
 import { FaEyeSlash } from "react-icons/fa";
@@ -13,6 +13,9 @@ function Login() {
   const [password, setPassword] = useState("");
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [message, setMessage] = useState("");
+
+  const location = useLocation();
+  const from = location.state || "/";
 
 
   const toggleVisibility = () => setPasswordVisibility((pV) => !pV);
@@ -27,7 +30,13 @@ function Login() {
         setMessage(`Welcome back, ${user.email}`);
         
         // not sure where im supposed to redirect...
-        nav("/"); // Uncomment when ready to redirect
+        if(user?.role===false)
+          nav("/nannyOffers"); 
+        else{ //im a user that just logged in after pressing contact, must go to the next page
+          if(from==="/") nav("/search");
+          else
+            nav(from); // Redirect to previous page
+        }
 
 
       } else {
@@ -49,7 +58,6 @@ function Login() {
 
   };
   
-
 
 
 

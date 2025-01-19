@@ -167,21 +167,21 @@ function FormPage2({ form, setForm, nextFn }) {
                         className="radio radio-secondary" disabled={form.cantEdit}
                         onChange={() => { handleChange({ target: { name: "childAge", value: "0-1" } }) }}
                     />
-                    <p className={`${(form.childAge === "1-3" || form.childAge === "3-5") && form.cantEdit ? 'text-gray-400' : ''}`}>0-1</p>
+                    <p className={`${(form.childAge === "1-3" || form.childAge === "3-5") && form.cantEdit ? 'text-gray-400' : ''}`}>0-1 έτους</p>
                 </div>
                 <div className={`flex ml-3 mt-2  gap-3 `}>
                     <input type="radio" name={`radio-child`} checked={form.childAge === "1-3"}
                         className="radio radio-secondary" disabled={form.cantEdit}
                         onChange={() => { handleChange({ target: { name: "childAge", value: "1-3" } }) }}
                     />
-                    <p className={`${(form.childAge === "3-5" || form.childAge === "0-1") && form.cantEdit ? 'text-gray-400' : ''}`}>1-3</p>
+                    <p className={`${(form.childAge === "3-5" || form.childAge === "0-1") && form.cantEdit ? 'text-gray-400' : ''}`}>1-3 ετών</p>
                 </div>
                 <div className={`flex ml-3 mt-2  gap-3 `}>
                     <input type="radio" name={`radio-child`} checked={form.childAge === "3-5"}
                         className="radio radio-secondary" disabled={form.cantEdit}
                         onChange={() => { handleChange({ target: { name: "childAge", value: "3-5" } }) }}
                     />
-                    <p className={`${(form.childAge === "1-3" || form.childAge === "0-1") && form.cantEdit? 'text-gray-400' : ''}`}>3-5</p>
+                    <p className={`${(form.childAge === "1-3" || form.childAge === "0-1") && form.cantEdit? 'text-gray-400' : ''}`}>3-5 ετών</p>
                 </div>
 
             </div>

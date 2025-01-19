@@ -35,14 +35,14 @@ function App() {
 
           {/* Main Div */}
           <div
-            className="w-full h-full flex flex-col justify-center absolute top-0 left-0 z-10 bg-pink-200"
+            className="w-full h-full flex flex-col justify-center absolute  top-0 left-0 z-10 bg-white"
             style={{
               boxShadow: "10px 10px 20px rgba(0, 0, 139, 0.7)", // Apply shadow here
               clipPath: "polygon(0 100%, 0 0, 50% 0, 75% 0, 45% 100%, 50% 100%)",
             }}
           >
             <div className='w-1/2 my-auto h-full flex flex-col gap-10'>
-              <p className='ml-32 mt-20 text-5xl font-extrabold'>Οι <span className="underline">ΤΕΛΕΥΤΑIΟΙ</span> όταν έχει να κάνει με την φροντίδα του παιδιού σας!</p>
+              <p className='ml-32 mt-20 text-5xl text-pallete-800 font-extrabold'>Οι <span className="underline">ΤΕΛΕΥΤΑIΟΙ</span> όταν έχει να κάνει με την φροντίδα του παιδιού σας!</p>
 
               {/* Input Div */}
               <div className='pl-20 gap-7 h-full flex flex-col justify-center items-center pr-36 text-2xl'>
@@ -87,7 +87,7 @@ function App() {
                       pathname: '/search',
                     }}
                     state={{ selectedTown: town, selectedLocation: location }}
-                    className='rounded-md flex items-center justify-center font-semibold text-center text-xl bg-pink-600 w-40 h-12 text-white py-1'
+                    className='rounded-md flex items-center justify-center font-semibold text-center text-xl bg-pallete-800 hover:bg-pallete-700 w-40 h-12 text-white py-1'
                   >
                     <span>Συνέχεια</span>
                   </Link>

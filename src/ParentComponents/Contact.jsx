@@ -87,7 +87,7 @@ function Contact(){
                 <span>Το αίτημά σας στάλθηκε!</span>
             </div>}
             {RenderHeaderNavbar(userData)}
-            <div className='flex-grow pb-5 flex flex-col bg-pallete-50'>
+            <div className='flex-grow pb-5 flex flex-col bg-white'>
 
                 {/* Breadcrumbs */}
                 <div className="breadcrumbs pl-5 text-md">
@@ -100,7 +100,7 @@ function Contact(){
 
                 {/* div for back button */}
                     <button     className='size-12 mt-5 flex items-center justify-center bg-gray-400 rounded-md  ml-10  shadow-sm shadow-gray-600'
-                                onClick={()=>nav(-1)}
+                                onClick={()=>nav(`/nannyProfile/${id}`)}
                     >
                         <IoChevronBack className='text-4xl'/>
                     </button>
