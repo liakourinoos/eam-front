@@ -192,7 +192,7 @@ function SignUp({role}){
            {successMessage && <div role="alert" className="alert alert-success fixed top-32 left-1/2 transform -translate-x-1/2 w-1/2 flex items-center justify-center  p-4 rounded shadow">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 shrink-0 stroke-current"
+                    className="h-6 w-6 shrink-0 stroke-current text-white text-2xl "
                     fill="none"
                     viewBox="0 0 24 24">
                     <path
@@ -201,7 +201,7 @@ function SignUp({role}){
                     strokeWidth="2"
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span>Η εγγραφή σας ολοκληρώθηκε!</span>
+                <span className='text-white font-bold text-2xl'>Η εγγραφή σας ολοκληρώθηκε!</span>
             </div>}
 
 

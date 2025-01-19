@@ -60,13 +60,15 @@ function NannyNavbar({page=1}){
                 <span >Αγγελίες</span>
             </Link> 
 
-             
-            <div    className={` indicator flex items-center hover:text-pallete-700 gap-1 cursor-pointer ${selectedPage==2?"text-pallete-800 underline font-semibold" : 'text-black'}`} 
-                    onClick={()=>{setNotificationsRead(true); setNotifications(0); readNotifs(); setSelectedPage(2); nav("/notifications"); }}>
-                {((!isLoading && notifications > 0) && selectedPage!==2) &&<span className="indicator-item badge badge-secondary flex items-center justify-center">{notifications}</span>}
-                {/* <Link to='/notifications'  className={`cursor-pointer ${selectedPage==2?"text-pallete-800 underline font-semibold" : 'text-black'}`}>Ειδοποιήσεις</Link> */}
-                    <span className=" text-2xl "><FaBell/> </span>
-                    <span >Ειδοποιήσεις</span>
+    
+            <div className={`relative flex items-center hover:text-pallete-700 gap-1 cursor-pointer ${selectedPage==2?"text-pallete-800 underline font-semibold" : 'text-black'}`} 
+                 onClick={()=>{setNotificationsRead(true); setNotifications(0); readNotifs(); setSelectedPage(2); nav("/notifications"); }}>
+                <span className="text-2xl"><FaBell/></span>
+                <span>Ειδοποιήσεις</span>
+                {((!isLoading && notifications > 0) && selectedPage!==2) && 
+                    <span className="absolute top-[-5px] right-[-18px] bg-pallete-800 text-white text-sm rounded-full w-5 h-5 flex items-center justify-center">
+                        {notifications >=10 ? '9+' : notifications}
+                    </span>}
             </div>
 
             <Link to='/reviews' onClick={()=>setSelectedPage(3)} className={`cursor-pointer hover:text-pallete-700 flex items-center gap-1 ${selectedPage==3?"text-pallete-800 underline font-semibold" : 'text-black'}`}>

@@ -65,7 +65,7 @@ function Notification({ id, type ,role}){
     //notification for nannies
     if (((!isJobLoading && type==="jobOffer") || (!isRequestLoading && type==="contactRequest")) && !role ) {
         return(
-            <div className='rounded-md bg-gray-200 mx-auto my-5 w-2/3 flex items-center h-32'>
+            <div className='rounded-md bg-white shadow-md border-black border-2 shadow-gray-400 mx-auto my-5 w-2/3 flex items-center h-32'>
                 
                 {/* left side, profile and info */}
                 <div className='w-3/4 h-full rounded-l-md flex items-center'>
@@ -82,13 +82,13 @@ function Notification({ id, type ,role}){
                         {/* periptwsi 1 */}
                         {type==="jobOffer" && 
                             <p className='h-2/3 flex items-start pt-2  text-xl font-medium'>
-                                {job?.gender ? "Ο" : "Η"} <Link to={`/parentprofile/${job?.senderId}`} className='underline mx-1'>{job?.senderName} {job?.senderSurname}</Link> σας έστειλε <button onClick={()=>setShowModal(sm=>!sm)} className="underline ml-1">συμφωνητικό απασχόλησης</button>.
+                                {job?.gender ? "Ο" : "Η"} <Link to={`/parentprofile/${job?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{job?.senderName} {job?.senderSurname}</Link> σας έστειλε <button onClick={()=>setShowModal(sm=>!sm)} className="underline hover:text-pallete-800 ml-1">συμφωνητικό απασχόλησης</button>.
                             </p>
                         }
                         {/* periptwsi 2 */}
                         {type==="contactRequest" &&
                             <p className='h-2/3 flex items-start pt-2  text-xl font-medium'>
-                                {request?.gender ? "Ο" : "Η"} <Link to={`/parentprofile/${request?.senderId}`} className='underline mx-1'>{request?.senderName} {request?.senderSurname}</Link> σας έστειλε αίτημα επικοινωνίας.
+                                {request?.gender ? "Ο" : "Η"} <Link to={`/parentprofile/${request?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{request?.senderName} {request?.senderSurname}</Link> σας έστειλε αίτημα επικοινωνίας.
                             </p>
                         
                         }
@@ -230,7 +230,7 @@ function Notification({ id, type ,role}){
     // notification for parents
     if (((!isJobLoading && type==="jobOffer") || (!isRequestLoading && type==="contactRequest")) && role ) {
         return(
-            <div className='rounded-md bg-gray-200 mx-auto my-5 w-2/3 flex items-center h-32'>
+            <div className='rounded-md bg-white shadow-md border-black border-2 shadow-gray-400 mx-auto my-5 w-2/3 flex items-center h-32'>
                 
                 {/* left side, profile and info */}
                 <div className='w-3/4 h-full rounded-l-md flex items-center'>
@@ -247,13 +247,13 @@ function Notification({ id, type ,role}){
                         {/* periptwsi 1 */}
                         {type==="jobOffer" && 
                             <p className='h-2/3 flex items-start pt-2  text-xl font-medium'>
-                                {job?.gender ? "Ο" : "Η"} <Link to={`/nannyprofile/${job?.senderId}`} className='underline mx-1'>{job?.senderName} {job?.senderSurname}</Link> {status==="accepted" ? 'ΑΠΟΔΈΧΤΗΚΕ' :'ΑΠΈΡΡΙΨΕ'} την <button onClick={()=>setShowModal(sm=>!sm)} className="underline mx-1">αίτηση απασχόλησης </button> σας.
+                                {job?.gender ? "Ο" : "Η"} <Link to={`/nannyprofile/${job?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{job?.senderName} {job?.senderSurname}</Link> {status==="accepted" ? 'ΑΠΟΔΈΧΤΗΚΕ' :'ΑΠΈΡΡΙΨΕ'} την <button onClick={()=>setShowModal(sm=>!sm)} className="underline mx-1">αίτηση απασχόλησης </button> σας.
                             </p>
                         }
                         {/* periptwsi 2 */}
                         {type==="contactRequest" &&
                             <p className='h-2/3 flex items-start pt-2  text-xl font-medium'>
-                                {request?.gender ? "Ο" : "Η"} <Link to={`/nannyprofile/${request?.senderId}`} className='underline mx-1'>{request?.senderName} {request?.senderSurname}</Link> {status==="accepted" ? 'ΑΠΟΔΈΧΤΗΚΕ' :'ΑΠΈΡΡΙΨΕ'} το αίτημα επικοινωνίας σας.
+                                {request?.gender ? "Ο" : "Η"} <Link to={`/nannyprofile/${request?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{request?.senderName} {request?.senderSurname}</Link> {status==="accepted" ? 'ΑΠΟΔΈΧΤΗΚΕ' :'ΑΠΈΡΡΙΨΕ'} το αίτημα επικοινωνίας σας.
                             </p>
                         
                         }

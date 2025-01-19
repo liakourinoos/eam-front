@@ -133,7 +133,7 @@ function NannyProfile() {
                     </div> */}
 
                         {/* Div for nanny name, pfp and contact button */}
-                        <div className="my-4 px-2 w-full h-40  flex items-center justify-between">
+                        <div className="my-4 px-2 w-full h-40  flex items-center justify-between pr-14 pl-5">
                             {/* Left section: pfp, name, and info */}
                             <div className="flex h-full">
                                 <img
@@ -167,7 +167,7 @@ function NannyProfile() {
                             </div>
 
                             {/* Right section: contact button, ONLY visible when Im not in my own profile */}
-                            {id !== myData?.id && <Link state={`/contact/${userData?.id}`} to={`${myData ? `/contact/${userData?.id}` : '/login'}`} className="w-1/5  bg-pallete-400 text-gray-50  text-3xl flex items-center justify-center rounded-md font-medium h-1/2 ml-auto mr-4">
+                            {id !== myData?.id && <Link state={`/contact/${userData?.id}`} to={`${myData ? `/contact/${userData?.id}` : '/login'}`} className="w-1/5 hover:bg-pallete-700 hover:text-white hover:underline border-2 border-pallete-800 bg-white text-pallete-800  text-3xl flex items-center justify-center rounded-md font-medium h-1/2 ml-auto mr-4">
                                 Επικοινωνία
                             </Link>}
                         </div>

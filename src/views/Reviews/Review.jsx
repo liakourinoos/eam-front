@@ -39,7 +39,7 @@ export default function Review({seenFrom,nannyName,nannySurname,nannyImg,review}
     },[])
 
     return(
-        <div className="w-11/12 md:w-3/5 mx-auto bg-gray-200 flex h-40  items-center justify-center font-medium border border-gray-200 rounded-lg px-2 py-1 my-5">
+        <div className="w-11/12 md:w-3/5 mx-auto bg- flex h-40  items-center justify-center font-medium  border-2 pb-2 shadow-lg shadow-gray-300 border-black rounded-lg px-2 py-1 my-5">
             
             {/* left div: img */}
             <div className='w-32 h-full flex items-center justify-center'>
@@ -53,8 +53,8 @@ export default function Review({seenFrom,nannyName,nannySurname,nannyImg,review}
 
                     {/* name and rating on the same row */}
                     <div className='flex items-center text-xl mb-2'>
-                        {seenFrom === "parent" && <span className=''>{review.personName} {review.personSurname} {`>`} <Link className=' underline ' to={`/nannyprofile/${review.nannyId}`}>{nannyName} {nannySurname}</Link></span>}
-                        {seenFrom !== "parent" && <Link className=' underline ' to={`/parentprofile/${review.parentId}`}>{review.personName} {review.personSurname}</Link>}
+                        {seenFrom === "parent" && <span className='hover:text-pallete-700'>{review.personName} {review.personSurname} {`>`} <Link className=' underline ' to={`/nannyprofile/${review.nannyId}`}>{nannyName} {nannySurname}</Link></span>}
+                        {seenFrom !== "parent" && <Link className=' underline hover:text-pallete-700 ' to={`/parentprofile/${review.parentId}`}>{review.personName} {review.personSurname}</Link>}
 
                     </div>
 

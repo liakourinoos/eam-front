@@ -1,13 +1,20 @@
 import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
+import { useState } from "react";
 
 
 function OfferProfile({id,name,surname,rating,ratingCount,bio,img}) {
+
+    const [selected,setSelected] = useState(false);
+
     return (
-        <Link to={`/nannyprofile/${id}`} className="w-4/5 h-36 mx-auto my-5  flex justify-between bg-stone-100 rounded-md p-1 shadow-md shadow-gray-700">
+        <Link to={`/nannyprofile/${id}`} className={`w-4/5 h-36 mx-auto my-5 hover:border-2 ${selected ? "border-2 border-pallete-700" : ''} flex justify-between bg-stone-100 rounded-md p-1 shadow-md shadow-gray-700`}
+                onMouseEnter={()=>setSelected(true)}
+                onMouseLeave={()=>setSelected(false)}
+        >
             {/* photo */}
             <div className="h-full w-1/5  flex items-center justify-center">
-                <img src={img} className="object-cover size-28 rounded-full "></img>
+                <img src={img} className={`object-cover size-28 rounded-full ${selected? "border-2 border-pallete-700" :""} `}></img>
             </div>
 
             {/* name, rating and bio */}
@@ -15,7 +22,7 @@ function OfferProfile({id,name,surname,rating,ratingCount,bio,img}) {
 
                 {/* box 1: name and ratings */}
                 <div className="w-full  flex justify-between pr-1 text-xl font-medium">                
-                    <span >{name} {surname}</span>
+                    <span className={selected ? "text-pallete-700" :""}>{name} {surname}</span>
                     <div>
                         <span title={`βαθμολογία: ${rating}/5`} className="text-xl font-medium">{rating}  </span>
                         <span title={`${ratingCount} ${ratingCount!==1?'χρήστες έχουν ' : 'χρήστης έχει'} αξιολογήσει την νταντά.`}>({ratingCount})</span>
