@@ -1027,7 +1027,7 @@ export async function fetchNotifications(userId){
         if (!querySnapshot.empty) {
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
-                // if ( data.exactDate <= now) 
+                if ( data.exactDate <= now) 
                     result.push({ id: doc.id, ...data });
                 
             });
@@ -1066,7 +1066,7 @@ export async function fetchNotificationCount(userId){
         if (!querySnapshot.empty) {
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
-                // if ( data.exactDate <= now)
+                if ( data.exactDate <= now)
                     count++;
             });
         } 

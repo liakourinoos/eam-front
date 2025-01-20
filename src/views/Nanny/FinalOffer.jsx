@@ -5,9 +5,9 @@ import { MdDelete } from "react-icons/md";
 import { useMutation } from '@tanstack/react-query';
 import { archiveOffer} from '../../FetchFunctions'
 import { queryClient } from '../../main'; // Adjust the import path as needed.
-
+import { useNavigate } from 'react-router-dom';
 function FinalOffer({code,finalDate, returnTo="offers"}) {
-    
+    const nav=useNavigate();
 
     const {mutateAsync:deleteOffer,isPending} = useMutation({
         mutationFn:()=>archiveOffer(code),
