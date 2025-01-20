@@ -40,7 +40,8 @@ function ParentPayment() {
                     }
                     {!isLoading && payments && payments?.length > 0 &&
                         payments?.map((payment, index) => (
-                            <PaymentInfo key={index} firstName={payment.nannyName} lastName={payment?.nannySurname} paymentDate={payment?.payDate} role={true} voucher={payment?.voucherCode} senderId={payment?.nannyId} status={payment?.status} />
+                            <PaymentInfo    key={index} firstName={payment.nannyName} lastName={payment?.nannySurname} paymentDate={payment?.payDate} 
+                                            role={true} voucher={payment?.voucherCode} senderId={payment?.nannyId} status={payment?.status} paymentId={payment?.id} />
                         ))
                     }
 

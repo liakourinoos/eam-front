@@ -700,15 +700,19 @@ export async function updateUserInfo(id,field,data){
 
 export async function fetchNotifications(userId){
     // console.log("called..")
+    const now=Timestamp.now
     const result=[]
     try {
         const q = query(collection(db, 'notifications'),
-            where('receiverId', '==', userId)
+            where('receiverId', '==', userId),
         );
         const querySnapshot = await getDocs(q); // Get documents matching the query
         if (!querySnapshot.empty) {
             querySnapshot.forEach((doc) => {
-                result.push({ id: doc.id, ...doc.data() });
+                const data = doc.data();
+                // if ( data.exactDate <= now) 
+                    result.push({ id: doc.id, ...data });
+                
             });
             
         } else {
@@ -856,6 +860,7 @@ export async function fetchContactRequestNotification(id) {
             console.error(`User with id ${senderId} not found in users collection.`);
         }
         // Return structured data
+        
         return {
             senderId,
             senderName,
@@ -869,6 +874,47 @@ export async function fetchContactRequestNotification(id) {
     } catch (error) {
         console.error("Fetching failed:", error);
         throw error;
+    }
+}
+
+export async function fetchPaymentNotification(id){
+    
+    try {
+        // fetch the whole document and gets its data
+        const docRef = doc(db, 'notifications', id);
+        const docSnap = await getDoc(docRef);
+        if (!docSnap.exists()) {
+            console.error(`Notification with id ${id} not found.`);
+            throw new Error(`Notification with id ${id} not found.`);
+        }
+        const notifData = docSnap.data();
+        // fetch name, surname, id and image from users collection based on the senderId of the notifData object
+        const senderDocRef = doc(db, 'users', notifData.senderId);
+        const senderDocSnap = await getDoc(senderDocRef);
+        let senderName = "", senderSurname = "", img = "",gender=""
+        if (!senderDocSnap.exists()) {
+            throw new Error(`User with id ${notifData.senderId} not found.`);
+        }
+        const senderData = senderDocSnap.data();
+        senderName = senderData.name || "";
+        senderSurname = senderData.surname || "";
+        img = senderData.img || "";
+        gender= senderData.gender || "";
+        return {
+            senderId:notifData.senderId,
+            senderName,
+            senderSurname,
+            img,
+            createdAt: notifData.createdAt,
+            status:notifData.status,
+            type:notifData.type,
+            gender
+        };
+
+    }
+    catch(error){
+        console.log(error.message)
+        return;
     }
 }
 
@@ -1023,6 +1069,7 @@ export async function fetchParentReviews(parentId){
 
 export async function fetchNotificationCount(userId){
     let count=0;
+    const now=Timestamp.now
     try{
         const q = query(collection(db, 'notifications'),
             where('receiverId', '==', userId),
@@ -1032,7 +1079,9 @@ export async function fetchNotificationCount(userId){
         const querySnapshot = await getDocs(q); // Get documents matching the query
         if (!querySnapshot.empty) {
             querySnapshot.forEach((doc) => {
-                count++;
+                const data = doc.data();
+                if ( data.exactDate <= now)
+                    count++;
             });
         } 
         else {
@@ -1182,7 +1231,7 @@ export async function acceptContact(notificationId){
             console.error("applicationId is missing in the notification data:", notifData);
             return;
         }
-        // first, get the application id to change its status and make it archived
+        // first, get the contactRequest id to change its status and make it archived
         const docRef2 = doc(db, 'contactRequests',notifData.contactRequestId);
         console.log("Fetching document from contactRequests with ID:", notifData.contactRequestId);
         const docSnap2 = await getDoc(docRef2);
@@ -1221,6 +1270,7 @@ export async function acceptContact(notificationId){
         
     }
 }
+
 
 
 export async function fetchContacts(nannyId) {
@@ -1548,27 +1598,38 @@ export async function acceptApplication(notificationId){
 
 
 
-export async function fetchAllNannies(){
+export async function fetchContactedNannies(parentId) {
     // console.log("called..")
-    const result=[]
+    const result = []
     try {
         const q = query(collection(db, 'users'),
-                where('role', '==', false)
+            where('role', '==', false)
         );
         const querySnapshot = await getDocs(q); // Get documents matching the query
         if (!querySnapshot.empty) {
-            querySnapshot.forEach((doc) => {
-                result.push({ id: doc.id, ...doc.data() });
-            });
-            
+            for (const nannyDoc of querySnapshot.docs) {
+                const nannyData = { id: nannyDoc.id, ...nannyDoc.data() };
+
+                // Check if a contactRequest document exists with receiverId as nanny's id and senderId as parentId
+                const contactQuery = query(collection(db, 'contactRequests'),
+                    where('receiverId', '==', nannyData.id),
+                    where('senderId', '==', parentId),
+                    where('status', '==', 'Εγκρίθηκε')
+                );
+                const contactSnapshot = await getDocs(contactQuery);
+
+                if (!contactSnapshot.empty) {
+                    result.push(nannyData);
+                }
+            }
         } else {
             console.error('No nannies found..');
         }
-    }catch(error){
+    } catch (error) {
         console.error('Error fetching nannies');
     }
 
-    console.log("before exit...")
+    // console.log("before exit...")
     return result;
 
 
@@ -1603,7 +1664,7 @@ export async function fetchParentPayments(userId){
     try {
         const q = query(collection(db, 'payments'),
             where('parentId', '==', userId),
-            // where('status','!=', "accepted")
+            where('status', 'in', ["unavailable","available","pending"])
         );
         const querySnapshot = await getDocs(q); // Get documents matching the query
         if (!querySnapshot.empty) {
@@ -1631,4 +1692,224 @@ export async function fetchParentPayments(userId){
     console.log("payments:")
     console.log(result)
     return result;
+}
+
+
+export async function fetchArchivedParentPayments(userId){
+    const result = [];
+    try {
+        const q = query(collection(db, 'payments'),
+            where('parentId', '==', userId),
+            where('status', '==', "accepted")
+        );
+        const querySnapshot = await getDocs(q); // Get documents matching the query
+        if (!querySnapshot.empty) {
+            for (const ndoc of querySnapshot.docs) {
+                const paymentData = ndoc.data();
+                const nannyDocRef = doc(db, 'users', paymentData.nannyId);
+                const nannyDocSnap = await getDoc(nannyDocRef);
+                let nannyName = "", nannySurname = "";
+                if (nannyDocSnap.exists()) {
+                    const nannyData = nannyDocSnap.data();
+                    nannyName = nannyData.name || "";
+                    nannySurname = nannyData.surname || "";
+                } else {
+                    console.error(`Nanny with id ${paymentData.nannyId} not found.`);
+                }
+                result.push({ id: ndoc.id, ...paymentData, nannyName, nannySurname });
+            }
+        } else {
+            console.error('No payments found for parentId:', userId);
+        }
+    } catch (error) {
+        console.error('Error fetching payments:', error);
+    }
+
+    console.log("payments:")
+    console.log(result)
+    return result;
+}
+
+
+export async function updatePayment(paymentId){
+    try {
+        //fetch the payment
+        const paymentRef = doc(db, 'payments', paymentId);
+        const paymentSnap = await getDoc(paymentRef);
+        if (!paymentSnap.exists()) {
+            console.error(`No payment found with ID ${paymentId}`);
+            return ; 
+        } 
+        const paymentData = paymentSnap.data();
+        console.log(`Payment data for ID ${paymentId}:`, paymentData);
+
+
+        // update the status field to "pending"
+        await updateDoc(paymentRef, {
+            status: "pending"
+        });
+
+    
+        //create a new notification from parent to nanny for the payment
+        const today = new Date();
+        const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+        const exactDate = Timestamp.now();
+        const notificationData = {
+            senderId: paymentData.parentId,
+            receiverId: paymentData.nannyId,
+            type: 'payment',
+            createdAt: formattedDate,
+            paymentId: paymentId,
+            exactDate:exactDate,
+            read:false,
+            status:"pending"
+        };
+
+        const notificationsCollection = collection(db, 'notifications');
+        await addDoc(notificationsCollection, notificationData);  // Adds the document
+
+        console.log("added the notif!")
+
+
+    } catch (error) {
+        console.error("Error updating payment status:", error);
+    }
+}
+
+
+export async function acceptPayment(id) {
+    try {
+        // fetch the notification by id
+        const docRef = doc(db, 'notifications', id);
+        const docSnap = await getDoc(docRef);
+        if (!docSnap.exists()) {
+            console.error(`Notification with id ${id} not found.`);
+            return;
+        }
+        const data = docSnap.data();
+        // update status field to "accepted"
+        await updateDoc(docRef, {
+            status: "accepted"
+        });
+
+        //fetch the payment
+        const paymentRef = doc(db, 'payments', data.paymentId);
+        const paymentSnap = await getDoc(paymentRef);
+        if (!paymentSnap.exists()) {
+            console.error(`No payment found with ID ${data.paymentId}`);
+            return;
+        }
+        const paymentData = paymentSnap.data();
+        console.log(`Payment data for ID ${data.paymentId}:`, paymentData);
+
+
+        // Update the status field to "accepted"
+        await updateDoc(paymentRef, {
+            status: "accepted"
+        });
+
+
+        //create a new notification from nanny to parent that the payment got accepted
+        const today = new Date();
+        const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+        const exactDate = Timestamp.now();
+        const notificationData = {
+            receiverId: paymentData.parentId,
+            senderId: paymentData.nannyId,
+            type: 'payment',
+            createdAt: formattedDate,
+            paymentId: data.paymentId,
+            exactDate:exactDate,
+            read:false,
+            status:"accepted"
+        };
+
+        const notificationsCollection = collection(db, 'notifications');
+        await addDoc(notificationsCollection, notificationData);  // Adds the document
+
+        console.log("added the notif!")
+
+    }
+    catch (error) {
+        console.log(error.message)
+    }
+}
+
+
+export async function archiveApplication(applicationId,status){
+    console.log(status)
+    // update archived field to true
+    try {
+        // const docRef = doc(db, 'applications', applicationId);
+        // await updateDoc(docRef, {
+        //     archived: true,
+        //     status:status
+        // });
+    } catch (error) {
+        console.error("Error archiving application:", error);
+    }
+}
+
+
+export async function fetchEndJobNotification(notifId){
+    try {
+        // Fetch notification by id
+        const docRef = doc(db, 'notifications', notifId);
+        console.log("Fetching document from notifications with ID:", notifId);
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+            console.error(`Document with id ${notifId} not found in notifications.`);
+            throw new Error(`Document with id ${notifId} not found in notifications.`);
+        }
+
+        const data = docSnap.data();
+        // console.log("Document data fetched from notifications:", data);
+
+        // Verify senderId and applicationId
+        if (!data.senderId || !data.applicationId) {
+            console.error("Notification data is missing senderId or applicationId:", data);
+            throw new Error("Missing senderId or applicationId in the notification data.");
+        }
+
+        const senderId = data.senderId;
+        // console.log("Sender ID:", senderId);
+
+        // Fetch sender's name and surname using document ID
+        const senderDocRef = doc(db, 'users', senderId);
+        const senderDocSnap = await getDoc(senderDocRef);
+        let senderName = "", senderSurname = "", img = ""
+        if (!senderDocSnap.exists()) {
+            throw new Error("user NOT found!");
+        }
+        const senderData = senderDocSnap.data();
+        senderName = senderData.name || "";
+        senderSurname = senderData.surname || "";
+        img = senderData.img
+
+
+        //fetch application data using applicationId to get its status
+        const appDocRef = doc(db, 'applications', data.applicationId);
+        const appDocSnap = await getDoc(appDocRef);
+        if (!appDocSnap.exists()) {
+            throw new Error("application NOT found!");
+        }
+        const appData = appDocSnap.data();
+
+
+        return {
+            senderId,
+            senderName,
+            senderSurname,
+            img,
+            createdAt: data.createdAt,
+            status:appData.status,
+            type:data.type,
+            gender:senderData.gender,
+            applicationId:data.applicationId
+        }
+    }
+    catch(error){
+        console.log(error.message)
+    }
 }

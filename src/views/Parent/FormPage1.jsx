@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
-import { fetchAllNannies } from "../../FetchFunctions";
+import { fetchContactedNannies } from "../../FetchFunctions";
 
-function FormPage1({ form, setForm, nextFn }) {
+function FormPage1({myId, form, setForm, nextFn }) {
     const [errors, setErrors] = useState({
         name: "",
         surname: "",
@@ -42,8 +42,8 @@ function FormPage1({ form, setForm, nextFn }) {
     // fetch nannies that have accepted contact request
     const {data:nannies, isLoading: isNanniesLoading} = useQuery({
         queryKey: ['nannies'],
-        queryFn: ()=>fetchAllNannies(),
-        enabled: form.cantEdit
+        queryFn: ()=>fetchContactedNannies(myId),
+        enabled: form.cantEdit && !!myId
         
     })
 
@@ -90,7 +90,7 @@ function FormPage1({ form, setForm, nextFn }) {
             <div className=" h-96 flex">
                 {/* left div for contacts */}
                 <div className="w-1/3  py-5 flex items-center">
-                    <div className="h-full w-3/4  mx-auto flex flex-col items-center pb-3 px-5">
+                    {!form.cantEdit && <div className="h-full w-3/4  mx-auto flex flex-col items-center pb-3 px-5">
                         <p className="font-semibold mt-2 text-lg">Επαγγελματίες από τις επαφές σας:</p>
                         {/* scrollable div with nannies */}
                         <input  value={searchInput} onChange={(e)=>setSearchInput(e.target.value)}
@@ -111,7 +111,7 @@ function FormPage1({ form, setForm, nextFn }) {
                             ))}
                             {!form.cantEdit && searchResult?.length===0 && <div className="h-full w-full flex items-center justify-center"><p>Δεν βρέθηκαν αποτελέσματα.</p></div>}
                         </div>
-                    </div>
+                    </div>}
 
                 </div>
                 {/* middle div for info */}
@@ -177,6 +177,7 @@ function FormPage1({ form, setForm, nextFn }) {
 }
 
 FormPage1.propTypes = {
+    myId: PropTypes.string.isRequired,
     form: PropTypes.object.isRequired,
     setForm: PropTypes.func.isRequired,
     nextFn: PropTypes.func.isRequired,

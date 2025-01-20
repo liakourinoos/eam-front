@@ -29,8 +29,9 @@ function Footer() {
             </div>
 
             {/* div2, logo */}
-            <div className="w-1/3 h-full flex justify-center ">
+            <div className="w-1/3 h-full flex justify-center items-center ">
                 <PiBabyDuotone className="w-1/6  h-full text-pallete-800"/>
+                
             
             </div>
 

@@ -1,44 +1,66 @@
 import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
-import { fetchJobNotification,fetchContactRequestNotification, rejectContact,acceptContact,rejectApplication, acceptApplication } from '../../FetchFunctions';
+import { fetchJobNotification, fetchContactRequestNotification, rejectContact, acceptContact, rejectApplication, acceptApplication, fetchPaymentNotification, acceptPayment,archiveApplication,fetchEndJobNotification } from '../../FetchFunctions';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MdClose } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
-import {hours, days} from '../../../global_assets/global_values';
-
+import { hours, days } from '../../../global_assets/global_values';
+import { FaStar, FaRegStar } from 'react-icons/fa';
+import { RiCloseLargeFill } from "react-icons/ri";
 //prepei na pairnei tis leptomereies kathe notification
-function Notification({ id, type ,role}){
+function Notification({ id, type, role }) {
     const [status, setStatus] = useState(null); // Local state for status
 
-//     useEffect(()=>{
-//         console.log(id,type)    
-    
-// },[])
+    //     useEffect(()=>{
+    //         console.log(id,type)    
 
-    const { data: job, isLoading: isJobLoading} = useQuery({
+    // },[])
+
+    const { data: job, isLoading: isJobLoading } = useQuery({
         queryFn: () => fetchJobNotification(id),
-        enabled: type==="jobOffer",
-        queryKey: ['jobOfferNotif',id],
+        enabled: type === "jobOffer",
+        queryKey: ['jobOfferNotif', id],
     });
 
-    const { data:request, isLoading: isRequestLoading} = useQuery({
+    const { data: request, isLoading: isRequestLoading } = useQuery({
         queryFn: () => fetchContactRequestNotification(id),
-        enabled: type==="contactRequest",
-        queryKey: ['contactRequestNotif',id],
+        enabled: type === "contactRequest",
+        queryKey: ['contactRequestNotif', id],
     });
 
-    useEffect(()=>{
-        if(request)
+    const { data: payment, isLoading: isPaymentLoading } = useQuery({
+        queryFn: () => fetchPaymentNotification(id),
+        enabled: type === "payment",
+        queryKey: ['paymentNotif', id],
+    });
+
+    const { data: endJob, isLoading: isEndJobLoading } = useQuery({
+        queryFn: () => fetchEndJobNotification(id),
+        enabled: type === "endOfJob",
+        queryKey: ['endOfJob', id],
+    });
+
+
+
+
+    useEffect(() => {
+        if (request)
             setStatus(request?.status)
-        if(job)
+        if (job)
             setStatus(job?.status)
-    },[request,job])
+        if (payment)
+            setStatus(payment?.status)
+        if(endJob)
+            setStatus(endJob?.status)
+    }, [request, job, payment,endJob])
 
-    const [showModal,setShowModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [showReviewModal,setShowReviewModal] = useState(false)
+    const [ratedStars, setRatedStars] = useState(0);
 
 
-    if (isJobLoading || isRequestLoading)
+    if (isJobLoading || isRequestLoading || isPaymentLoading || isEndJobLoading)
         // skeleton for loading
         return (
             <>
@@ -64,113 +86,149 @@ function Notification({ id, type ,role}){
                 ))}
             </>
         );
-    
+
+
 
     //notification for nannies
-    if (((!isJobLoading && type==="jobOffer") || (!isRequestLoading && type==="contactRequest")) && !role ) {
-        return(
+    if (((!isJobLoading && type === "jobOffer") || (!isRequestLoading && type === "contactRequest") || (!isPaymentLoading && type === "payment") || (!isEndJobLoading && type==="endOfJob") ) && !role) {
+        return (
             <div className='rounded-md bg-white shadow-md border-black border-2 shadow-gray-400 mx-auto my-5 w-2/3 flex items-center h-32'>
-                
+
                 {/* left side, profile and info */}
                 <div className='w-3/4 h-full rounded-l-md flex items-center'>
                     {/* img div */}
-                    <div className='h-full w-1/6 flex items-center px-5  py-1'>
-                        <img    src={type==="jobOffer" ? job?.img : request?.img}
-                                className='size-24 mx-auto object-cover rounded-full'                            
+                    <div className='h-full w-1/6 flex items-center px-5 py-1'>
+                        <img
+                            src={type === "jobOffer" ? job?.img : type === "contactRequest" ? request?.img : type === "payment" ? payment?.img : endJob?.img}
+                            className='size-24 mx-auto object-cover rounded-full'
                         />
                     </div>
                     {/* name and date */}
-                    <div className='h-full w-5/6 flex flex-col justify-center'>  
-                        <p className='h-1/3  font-semibold pt-2 '>{type==="jobOffer" ? job?.finalizedAt : request.createdAt}</p>
+                    <div className='h-full w-5/6 flex flex-col justify-center'>
+                        <p className='h-1/3  font-semibold pt-2 '>{type === "jobOffer" ? job?.finalizedAt : type === "contactRequest" ? request?.createdAt : type === "payment" ? payment?.createdAt : endJob?.createdAt}</p>
 
-                        {/* periptwsi 1 */}
-                        {type==="jobOffer" && 
+                        {/* periptwsi 1, jobOffer */}
+                        {type === "jobOffer" &&
                             <p className='h-2/3 flex items-start pt-2  text-xl font-medium'>
-                                {job?.gender ? "Ο" : "Η"} <Link to={`/parentprofile/${job?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{job?.senderName} {job?.senderSurname}</Link> σας έστειλε <button onClick={()=>setShowModal(sm=>!sm)} className="underline hover:text-pallete-800 ml-1">συμφωνητικό απασχόλησης</button>.
+                                {job?.gender ? "Ο" : "Η"} <Link to={`/parentprofile/${job?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{job?.senderName} {job?.senderSurname}</Link> σας έστειλε <button onClick={() => setShowModal(sm => !sm)} className="underline hover:text-pallete-800 ml-1">συμφωνητικό απασχόλησης</button>.
                             </p>
                         }
-                        {/* periptwsi 2 */}
-                        {type==="contactRequest" &&
+                        {/* periptwsi 2, epikoinwnia */}
+                        {type === "contactRequest" &&
                             <p className='h-2/3 flex items-start pt-2  text-xl font-medium'>
                                 {request?.gender ? "Ο" : "Η"} <Link to={`/parentprofile/${request?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{request?.senderName} {request?.senderSurname}</Link> σας έστειλε αίτημα επικοινωνίας.
                             </p>
-                        
+
+                        }
+                        {/* periptwsi 3, plirwmi */}
+                        {type === "payment" &&
+                            <p className='h-2/3 flex items-start pt-2  text-xl font-medium'>
+                                {payment?.gender ? "Ο" : "Η"} <Link to={`/parentprofile/${payment?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{payment?.senderName} {payment?.senderSurname}</Link> σας έστειλε Voucher πληρωμής.
+                            </p>
                         }
 
+                        {/* periptwsi 4, anakoinwsi liksis */}
+                        {type === "endOfJob" &&
+                            <p className='h-2/3 flex items-start pt-2  text-xl font-medium'>
+                                Η συνεργασία σας με {endJob?.gender ? "τον" : "την"} <Link to={`/parentprofile/${endJob?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{endJob?.senderName} {endJob?.senderSurname}</Link> έληξε.
+                            </p>
+                        }
 
                     </div>
                 </div>
-            
+
                 {/* right side, action buttons */}
                 <div className='w-1/4 h-full rounded-r-md font-medium flex items-center justify-center gap-4 pr-4 '>
-                        {/* periptwsi 1 */}
-                        {type==="contactRequest" &&
-                            <>
-                                {status!=="accepted" && 
-                                    <button className={`
-                                            h-1/2 w-1/2 text-xl rounded-md
-                                            ${status==="pending"  && "bg-red-600"}   
-                                            ${status==="rejected" && "bg-red-500"}
-                                            ${status==="accepted" && "bg-red-200"}
-                                        `}
-                                        onClick={()=>{setStatus("rejected"); rejectContact(id); }}
-                                        disabled={status!=="pending"}
-                                    >
-                                        {status==="pending" && 'Απόρριψη'}
-                                        {status==="rejected" && 'Απορρίφθηκε'}
-                                    </button>
-                                }
-                                {status!=="rejected" &&
-                                    <button className={`
-                                                h-1/2 w-1/2 text-xl bg-green-600 rounded-md
-                                                ${status==="pending"  && "bg-green-600"}   
-                                                ${status==="rejected" && "bg-green-200"}
-                                                ${status==="accepted" && "bg-green-400"}
-                                            `}
-                                            onClick={()=>{setStatus("accepted"); acceptContact(id); }}
-                                            disabled={status!=="pending"}
-                                    
-                                    >
-                                        {status==="pending" && 'Αποδοχή'}
-                                        {status==="accepted" && 'Εγκρίθηκε'}   
-                                    </button>
-                                }
-                            </>
-                        }
-                        {/* periptwsi 2 */}
-                        {type==="jobOffer" &&
-                            <>
-                            {status!=="accepted" && 
+                    {/* periptwsi 1 */}
+                    {type === "contactRequest" &&
+                        <>
+                            {status !== "accepted" &&
                                 <button className={`
-                                        h-1/2 w-1/2 text-xl rounded-md
-                                        ${status==="pending"  && "bg-red-600"}   
-                                        ${status==="rejected" && "bg-red-500"}
-                                        ${status==="accepted" && "bg-red-200"}
-                                    `}
-                                    onClick={()=>{setStatus("rejected"); rejectApplication(id); }}
-                                    disabled={status!=="pending"}
+                                            h-1/2 w-1/2 text-xl rounded-md text-white
+                                            ${status === "pending" && "bg-red-600 hover:bg-red-500"}   
+                                            ${status === "rejected" && "bg-red-500"}
+                                            ${status === "accepted" && "bg-red-200"}
+                                        `}
+                                    onClick={() => { setStatus("rejected"); rejectContact(id); }}
+                                    disabled={status !== "pending"}
                                 >
-                                    {status==="pending" && 'Απόρριψη'}
-                                    {status==="rejected" && 'Απορρίφθηκε'}
+                                    {status === "pending" && 'Απόρριψη'}
+                                    {status === "rejected" && 'Απορρίφθηκε'}
                                 </button>
                             }
-                            {status!=="rejected" &&
+                            {status !== "rejected" &&
                                 <button className={`
-                                            h-1/2 w-1/2 text-xl bg-green-600 rounded-md
-                                            ${status==="pending"  && "bg-green-600"}   
-                                            ${status==="rejected" && "bg-green-200"}
-                                            ${status==="accepted" && "bg-green-400"}
-                                        `}
-                                        onClick={()=>{setStatus("accepted"); acceptApplication(id); }}
-                                        disabled={status!=="pending"}
-                                
+                                                h-1/2 w-1/2 text-xl bg-green-600 rounded-md text-white 
+                                                ${status === "pending" && "bg-green-600 hover:bg-green-500"}   
+                                                ${status === "rejected" && "bg-green-200"}
+                                                ${status === "accepted" && "bg-green-400"}
+                                            `}
+                                    onClick={() => { setStatus("accepted"); acceptContact(id); }}
+                                    disabled={status !== "pending"}
+
                                 >
-                                    {status==="pending" && 'Αποδοχή'}
-                                    {status==="accepted" && 'Εγκρίθηκε'}   
+                                    {status === "pending" && 'Αποδοχή'}
+                                    {status === "accepted" && 'Εγκρίθηκε'}
                                 </button>
                             }
                         </>
-                        }
+                    }
+                    {/* periptwsi 2 */}
+                    {type === "jobOffer" &&
+                        <>
+                            {status !== "accepted" &&
+                                <button className={`
+                                        h-1/2 w-1/2 text-xl rounded-md
+                                        ${status === "pending" && "bg-red-600 hover:bg-red-500"}   
+                                        ${status === "rejected" && "bg-red-500"}
+                                        ${status === "accepted" && "bg-red-200"}
+                                    `}
+                                    onClick={() => { setStatus("rejected"); rejectApplication(id); }}
+                                    disabled={status !== "pending"}
+                                >
+                                    {status === "pending" && 'Απόρριψη'}
+                                    {status === "rejected" && 'Απορρίφθηκε'}
+                                </button>
+                            }
+                            {status !== "rejected" &&
+                                <button className={`
+                                            h-1/2 w-1/2 text-xl bg-green-600 rounded-md text-white  
+                                            ${status === "pending" && "bg-green-600 hover:bg-green-500"}   
+                                            ${status === "rejected" && "bg-green-200"}
+                                            ${status === "accepted" && "bg-green-400"}
+                                        `}
+                                    onClick={() => { setStatus("accepted"); acceptApplication(id); }}
+                                    disabled={status !== "pending"}
+
+                                >
+                                    {status === "pending" && 'Αποδοχή'}
+                                    {status === "accepted" && 'Εγκρίθηκε'}
+                                </button>
+                            }
+                        </>
+                    }
+                    {/* periptwsi payment */}
+                    {type === "payment" &&
+                        <>
+                            {
+                                <button className={`
+                                                h-1/2 w-1/2 text-xl bg-green-600 rounded-md text-white 
+                                                ${status === "pending" && "bg-green-600 hover:bg-green-500"}   
+                                                ${status === "rejected" && "bg-green-200"}
+                                                ${status === "accepted" && "bg-green-400"}
+                                            `}
+                                    onClick={() => { setStatus("accepted"); acceptPayment(id); }}
+                                    disabled={status !== "pending"}
+
+                                >
+                                    {status === "pending" && 'Λήψη Voucher'}
+                                    {status === "accepted" && 'Λήφθηκε'}
+                                </button>
+                            }
+                        </>
+
+                    }
+
 
                 </div>
 
@@ -179,23 +237,23 @@ function Notification({ id, type ,role}){
                 {showModal && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ">
                         <div className="bg-white w-3/4 h-3/4 flex flex-col  rounded-lg shadow-lg px-3 pt-2 pb-1 overflow-y-auto relative">
-                            
+
                             {/* top part for modal title and close button */}
                             <div className='w-full h-1/6 flex items-center '>
                                 <p className='w-1/6 h-full'></p>
                                 <p className='w-4/6 h-full font-medium text-3xl flex items-center justify-center bg-white'> Επιθεώρηση Συμφωνητικού Απασχόλησης</p>
                                 <div className='w-1/6 h-full flex items-center justify-end '>
                                     <button className='h-12 w-12 text-red-500 border-2 border-gray-400 rounded-md flex items-center text-5xl font-medium justify-center bg-white'
-                                            onClick={()=>setShowModal(false)}
+                                        onClick={() => setShowModal(false)}
                                     >
-                                        <MdClose/>
+                                        <MdClose />
                                     </button>
                                 </div>
                             </div>
 
                             {/* main modal body */}
                             <div className='w-full flex-grow rounded-md  bg-gray-100 px-2 '>
-                                <p className='pt-2 text-xl'>Ο χρήστης <span className='font-medium'>{job?.senderName} {job?.senderSurname}</span> θέλει να σας απασχολήσει για χρονικό διάστημα <span className='mx-1 font-medium'>{job?.months} {job?.months >1  ? 'μηνών' : 'μήνα'}</span> ξεκινώντας από τις 
+                                <p className='pt-2 text-xl'>Ο χρήστης <span className='font-medium'>{job?.senderName} {job?.senderSurname}</span> θέλει να σας απασχολήσει για χρονικό διάστημα <span className='mx-1 font-medium'>{job?.months} {job?.months > 1 ? 'μηνών' : 'μήνα'}</span> ξεκινώντας από τις
                                     <span className='mx-2 font-bold'>{job?.startingDate}</span>για τις παρακάτω αναγραφόμενες ώρες:
 
                                 </p>
@@ -219,13 +277,13 @@ function Notification({ id, type ,role}){
                                             <tr key={hourIdx} className="text-center border-y-2 border-slate-400 hover:bg-gray-100">
                                                 {/* First column for the time slot */}
                                                 <td className="text-center cursor-default font-normal">{time}</td>
-                                                    {/* Iterate over days for each hour */}
-                                                    {days.map((day, dayIdx) => (
-                                                        <td key={dayIdx} className="border-2 border-slate-400 border-x">
-                                                            {/* Check if the current day and hour exists in the availabilityMatrix */}
-                                                            {job?.schedule.some((entry) => entry.day === day && entry.time === time) ? (<FaCheck className="text-green-800 font-medium mx-auto" />) : ("")}
-                                                        </td>
-                                                    ))}
+                                                {/* Iterate over days for each hour */}
+                                                {days.map((day, dayIdx) => (
+                                                    <td key={dayIdx} className="border-2 border-slate-400 border-x">
+                                                        {/* Check if the current day and hour exists in the availabilityMatrix */}
+                                                        {job?.schedule.some((entry) => entry.day === day && entry.time === time) ? (<FaCheck className="text-green-800 font-medium mx-auto" />) : ("")}
+                                                    </td>
+                                                ))}
                                             </tr>
                                         ))}
                                     </tbody>
@@ -235,67 +293,146 @@ function Notification({ id, type ,role}){
 
                                 <p className='pl-2 pt-2 text-xl'>στην οικία με διεύθυνση <span className='font-bold'>{job?.address}</span>.</p>
 
-                            </div> 
+                            </div>
 
-                            
+
                         </div>
 
 
                     </div>
                 )}
-                
+
             </div>
         );
     }
 
 
     // notification for parents
-    if (((!isJobLoading && type==="jobOffer") || (!isRequestLoading && type==="contactRequest")) && role ) {
-        return(
+    if (((!isJobLoading && type === "jobOffer") || (!isRequestLoading && type === "contactRequest") || (!isPaymentLoading && type === "payment") || (!isEndJobLoading &&  type === "endOfJob")) && role) {
+        return (
             <div className='rounded-md bg-white shadow-md border-black border-2 shadow-gray-400 mx-auto my-5 w-2/3 flex items-center h-32'>
-                
+
                 {/* left side, profile and info */}
                 <div className='w-3/4 h-full rounded-l-md flex items-center'>
-                    {/* img div */}
+                    {/* /* img div */}
                     <div className='h-full w-1/6 flex items-center px-5  py-1'>
-                        <img    src={type==="jobOffer" ? job?.img : request?.img}
-                                className='size-24 mx-auto object-cover rounded-full'                            
+                        <img src={type === "jobOffer" ? job?.img : type === "contactRequest" ? request?.img : type === "payment" ? payment?.img : endJob?.img}
+                            className='size-24 mx-auto object-cover rounded-full'
                         />
                     </div>
                     {/* name and date */}
-                    <div className='h-full w-5/6 flex flex-col justify-center'>  
-                        <p className='h-1/3  font-semibold pt-2 '>{type==="jobOffer" ? job?.finalizedAt : request.createdAt}</p>
+                    <div className='h-full w-5/6 flex flex-col justify-center'>
+                        <p className='h-1/3  font-semibold pt-2 '>{type === "jobOffer" ? job?.finalizedAt : type === "contactRequest" ? request?.createdAt : type === "payment" ? payment?.createdAt : endJob?.createdAt}</p>
 
-                        {/* periptwsi 1 */}
-                        {type==="jobOffer" && 
+                        {/* periptwsi 1, jobOffer */}
+                        {type === "jobOffer" &&
                             <p className='h-2/3 flex items-start pt-2  text-xl font-medium'>
-                                {job?.gender ? "Ο" : "Η"} <Link to={`/nannyprofile/${job?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{job?.senderName} {job?.senderSurname}</Link> {status==="accepted" ? 'ΑΠΟΔΈΧΤΗΚΕ' :'ΑΠΈΡΡΙΨΕ'} το <Link to={`/viewapplication/${job?.applicationId}`} className="underline hover:text-pallete-700 mx-1">συμφωνητικό απασχόλησης </Link> σας.
+                                {job?.gender ? "Ο" : "Η"} <Link to={`/nannyprofile/${job?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{job?.senderName} {job?.senderSurname}</Link> {status === "accepted" ? 'ΑΠΟΔΈΧΤΗΚΕ' : 'ΑΠΈΡΡΙΨΕ'} το <Link to={`/viewapplication/${job?.applicationId}`} className="underline hover:text-pallete-700 mx-1">συμφωνητικό απασχόλησης </Link> σας.
                             </p>
                         }
-                        {/* periptwsi 2 */}
-                        {type==="contactRequest" &&
+                        {/* periptwsi 2, contact */}
+                        {type === "contactRequest" &&
                             <p className='h-2/3 flex items-start pt-2  text-xl font-medium'>
-                                {request?.gender ? "Ο" : "Η"} <Link to={`/nannyprofile/${request?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{request?.senderName} {request?.senderSurname}</Link> {status==="accepted" ? 'ΑΠΟΔΈΧΤΗΚΕ' :'ΑΠΈΡΡΙΨΕ'} το αίτημα επικοινωνίας σας.
+                                {request?.gender ? "Ο" : "Η"} <Link to={`/nannyprofile/${request?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{request?.senderName} {request?.senderSurname}</Link> {status === "accepted" ? 'ΑΠΟΔΈΧΤΗΚΕ' : 'ΑΠΈΡΡΙΨΕ'} το αίτημα επικοινωνίας σας.
                             </p>
-                        
+
+                        }
+                        {/* periptwsi 3, payment */}
+                        {type === "payment" &&
+                            <p className='h-2/3 flex items-start pt-2  text-xl font-medium'>
+                                {payment?.gender ? "Ο" : "Η"} <Link to={`/nannyprofile/${payment?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{payment?.senderName} {payment?.senderSurname}</Link> {status === "accepted" ? 'ΑΠΟΔΈΧΤΗΚΕ' : ''} Voucher πληρωμής.
+                            </p>
+
+                        }
+                        {/* periptwsi 4, endJob Of Job */}
+                        {type === "endOfJob" &&
+                            <p className='h-2/3 flex items-start pt-2  text-xl font-medium'>
+                                Η συνεργασία σας με {endJob?.gender ? "τον" : "την"} <Link to={`/parentprofile/${endJob?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{endJob?.senderName} {endJob?.senderSurname}</Link> έληξε.
+                            </p>
                         }
 
 
                     </div>
                 </div>
-            
+
                 {/* right side, action buttons */}
                 <div className='w-1/4 h-full rounded-r-md font-medium flex items-center justify-center gap-4 pr-4 '>
-                        {/* periptwsi payment */}
-                        
+                    {/* periptwsi rehire */}
+                    {type === "endOfJob" &&
+                        <>
+                            {status !== "renewed" &&
+                                <button className={`
+                                        h-1/2 w-1/2 text-lg rounded-md text-pallete-800 border-2 border-pallete-800
+                                        ${status === "pending" && "bg-white hover:bg-pallete-700 hover:text-white"}   
+                                        
+                                    `}
+                                    onClick={() => { setStatus("ended"); archiveApplication(endJob?.applicationId,"ended"); setShowReviewModal(true); }}
+                                    disabled={status !== "pending"}
+                                >
+                                    {status === "pending" && 'Επιβεβαίωση Λήξης'}
+                                    {status === "ended" && 'Απορρίφθηκε'}
+                                </button>
+                            }
+                            {status !== "ended" &&
+                                <button className={`
+                                            h-1/2 w-1/2 text-lg rounded-md text-pallete-800 border-2 border-pallete-800
+                                            ${status === "pending" && "bg-white hover:bg-pallete-700 hover:text-white"}   
+                                            
+                                        `}
+                                        //must open a modal or redirect to applications page with some arguments for new application
+                                    onClick={() => { setStatus("renewed"); archiveApplication(endJob?.applicationId,"renewed"); setShowReviewModal(true);  }}
+                                    disabled={status !== "pending"}
 
-                        {/* periptwsi rehire */}
+                                >
+                                    {status === "pending" && 'Ανανέωση Συμφωνητικού'}
+                                    {status === "renewed" && 'Ανανεώθηκε'}
+                                </button>
+                            }
+                        </>
+
+                    }
 
                 </div>
 
+                {/* showMessage First */}
+                {showReviewModal &&
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ">
+                        <div className="w-8/12 flex-col flex items-center h-4/6 rounded-md z-50 my-auto bg-white shadow-xl p-6">
+                            <div className="flex items-center justify-end w-full">
+                                <button onClick={()=>setShowReviewModal(false)}>
+                                    <RiCloseLargeFill className="font-bold text-6xl text-red-500" />
+                                </button>
+                            </div>
+                            <p className="text-center h-auto text-4xl">
+                                Αξιολογήστε {endJob?.gender ? `τον` : `την `} {endJob?.senderName}
+                            </p>
+                            <div className="flex items-center justify-center bg-blue-400 mt-4">
+                                {[1, 2, 3, 4, 5].map((value) => (
+                                    <button
+                                        key={value} onClick={() => { setRatedStars(ratedStars === value ? 0 : value) }}>
+                                        {ratedStars >= value ? (<FaStar className="text-amber-500 text-6xl" />) : (<FaRegStar className="text-black text-6xl" />)}
+                                    </button>
+                                ))}
+                            </div>
+                            <textarea className="w-2/3 mt-16 h-48 max-h-48 rounded-md shadow-md border-2 border-gray-400 bg-yellow-400  shadow-gray-400 p-2" />
+                            <div className="modal-action flex justify-end w-full mt-6">
+                                <form method="dialog">
+                                    <button type="button"
+                                        className="text-black border-2 border-black py-2 px-3 rounded-md font-semibold mr-20"
+                                        onClick={() => { }}>
+                                        Υποβολή
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
 
-                
-                
+
+                    </div>
+
+                }
+
+
+
             </div>
         )
     }
@@ -305,7 +442,7 @@ function Notification({ id, type ,role}){
 export default Notification;
 
 Notification.propTypes = {
-    id:PropTypes.string.isRequired,
-    type:PropTypes.string.isRequired,
-    role:PropTypes.bool.isRequired,
+    id: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    role: PropTypes.bool.isRequired,
 };

@@ -60,6 +60,7 @@ function FormPage1({ form, setForm, nextFn }) {
                                     setForm({ ...form, rows: updatedRows });
                                     setSelectedAreas(updatedSelectedAreas);
                                 }}
+                                disabled={form.cantEdit}
                             >
                                 <MdOutlineRemoveCircleOutline className="text-2xl mr-1" />
                                 Αφαίρεση Επιπλέον Περιοχής

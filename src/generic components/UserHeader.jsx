@@ -9,6 +9,8 @@ import PropTypes from 'prop-types';
 import { PiBabyDuotone } from 'react-icons/pi';
 import { GrHelpBook } from "react-icons/gr";
 import { useLocation } from 'react-router-dom';
+
+
 function UserHeader({main_page="/",role,id}){
 
     const location=useLocation();
@@ -43,10 +45,7 @@ function UserHeader({main_page="/",role,id}){
                     <Link to={`${userData?.role ? '/' : '/nannyOffers'}`} className="flex pr-5  items-center text-pallete-800 h-full hover:text-pallete-700">
                         <PiBabyDuotone className=" ml-5 text-6xl " />
                         <p className='text-4xl ml-3 font-bold '>Nanika</p>
-                        {/* language toggle */}
-                        <div>
-
-                        </div>
+                        
                     </Link>
 
 

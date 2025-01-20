@@ -37,6 +37,8 @@ function Notifications(){
                         <Notification key={index} id={notif?.id} type={notif?.type} role={userData?.role}/>  
                         
                     ))}
+
+    
                 </div>
                 <Footer/>
             </div>

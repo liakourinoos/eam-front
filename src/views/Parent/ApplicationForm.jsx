@@ -15,7 +15,7 @@ function ApplicationForm({action="Δημιουργία Νέου Συμφωνητ
     const nav=useNavigate();
     const {id} = useParams();
 
-    const { userData } = useAuth();
+    const { userData,loading } = useAuth();
     // form should either start with this or be fetched from the server
     const [formState, setFormState] = useState({
         name:"",
@@ -74,14 +74,14 @@ function ApplicationForm({action="Δημιουργία Νέου Συμφωνητ
 
     // {!isLoading && console.log(data)}
 
-    if(isLoading)
+    if(isLoading || loading)
         return(
             <div className='w-full h-screen bg-white flex items-center justify-center text-3xl font-medium'>
                 <h1>Loading...</h1>
             </div>
         )
 
-    if((action==="Προβολή Συμφωνητικού" && !isLoading && data) || action==="Δημιουργία Νέου Συμφωνητικού" || action==="Επεξεργασία Συμφωνητικού") 
+    if(( (action==="Προβολή Συμφωνητικού" && !isLoading && data) || action==="Δημιουργία Νέου Συμφωνητικού" || action==="Επεξεργασία Συμφωνητικού") ) 
         return(
             <div className='w-full min-h-screen flex flex-col bg-white'>
                 {RenderHeaderNavbar(userData,2)}
@@ -122,7 +122,7 @@ function ApplicationForm({action="Δημιουργία Νέου Συμφωνητ
                         <div className='w-11/12 mx-auto flex flex-col flex-grow bg-pallete-100 rounded-md shadow-md shadow-gray-400 mb-3 '>
                             
                             {/* page1,2,3 here */}
-                            {selectedPage==1 && <FormPage1 form={formState} setForm={setFormState} nextFn={handleNextPage}/>}
+                            {selectedPage==1 && <FormPage1 myId={userData?.id} form={formState} setForm={setFormState} nextFn={handleNextPage}/>}
                             {selectedPage==2 && <FormPage2 form={formState} setForm={setFormState} nextFn={handleNextPage}/>}
                             {selectedPage==3 && <FormPage3/>}
 
