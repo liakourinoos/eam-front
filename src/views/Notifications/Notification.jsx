@@ -394,7 +394,7 @@ function Notification({ id, type, role }) {
                         <>
                             {status !== "renewed" &&
                                 <button className={`
-                                        h-1/2 w-1/2 text-lg rounded-md font-semibold text-pallete-800 border-2 border-pallete-800
+                                        h-1/2 w-1/2 text-lg rounded-md font-semibold text-pallete-800 border-2 ${status==="pending" ? "border-pallete-800" : "border-white" }
                                         ${status === "pending" && "bg-white hover:bg-pallete-700 hover:text-white"}   
                                         
                                     `}                                                                                                              
@@ -411,7 +411,7 @@ function Notification({ id, type, role }) {
                             }
                             {status !== "ended" &&
                                 <button className={`
-                                            h-1/2 w-1/2 text-lg rounded-md font-semibold text-pallete-800 border-2 border-pallete-800
+                                            h-1/2 w-1/2 text-lg rounded-md font-semibold text-pallete-800 border-2 ${status==="pending" ? "border-pallete-800" : "border-white" }
                                             ${status === "pending" && "bg-white hover:bg-pallete-700 hover:text-white"}   
                                             
                                         `}
