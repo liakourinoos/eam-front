@@ -699,58 +699,6 @@ export async function updateUserInfo(id,field,data){
     }
 }
 
-export async function fetchNotifications(userId){
-    // console.log("called..")
-    const now=Timestamp.now
-    const result=[]
-    try {
-        const q = query(collection(db, 'notifications'),
-            where('receiverId', '==', userId),
-        );
-        const querySnapshot = await getDocs(q); // Get documents matching the query
-        if (!querySnapshot.empty) {
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                // if ( data.exactDate <= now) 
-                    result.push({ id: doc.id, ...data });
-                
-            });
-            
-        } else {
-            console.error('No nannies found..');
-        }
-
-    //     // fetch contact requests too
-    //     const q1 = query(collection(db, 'contactRequests'),
-    //         where('receiverId', '==', userId)
-    //     );
-    //     const querySnapshot1 = await getDocs(q1); // Get documents matching the query
-    //     if (!querySnapshot1.empty) {
-    //         querySnapshot1.forEach((doc) => {
-    //             result.push({ id: doc.id, ...doc.data() });
-    //         });
-            
-    //     // console.log(result)
-    //     } else {
-    //         console.error('No nannies found..');
-    //     }
-    }catch(error){
-        console.error('Error fetching nannies');
-    }
-
-    // Sort the result array by 'exactDate' in descending order (latest first)
-    result.sort((a, b) => {
-        // Ensure 'exactDate' is a valid Timestamp and compare the time
-        const dateA = a.exactDate instanceof Date ? a.exactDate : a.exactDate.toDate();
-        const dateB = b.exactDate instanceof Date ? b.exactDate : b.exactDate.toDate();
-        return dateB - dateA; // Sorting in descending order (latest first)
-    });
-    
-    console.log(result)
-
-    return result;
-}
-
 
 export async function fetchJobNotification(id) {
     try {
@@ -1068,9 +1016,46 @@ export async function fetchParentReviews(parentId){
 }
 
 
+export async function fetchNotifications(userId){
+    const now=Timestamp.now();
+    const result=[]
+    try {
+        const q = query(collection(db, 'notifications'),
+            where('receiverId', '==', userId),
+        );
+        const querySnapshot = await getDocs(q); // Get documents matching the query
+        if (!querySnapshot.empty) {
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                // if ( data.exactDate <= now) 
+                    result.push({ id: doc.id, ...data });
+                
+            });
+            
+        } else {
+            console.error('No nannies found..');
+        }
+    }catch(error){
+        console.error('Error fetching nannies');
+    }
+
+    // Sort the result array by 'exactDate' in descending order (latest first)
+    result.sort((a, b) => {
+        // Ensure 'exactDate' is a valid Timestamp and compare the time
+        const dateA = a.exactDate instanceof Date ? a.exactDate : a.exactDate.toDate();
+        const dateB = b.exactDate instanceof Date ? b.exactDate : b.exactDate.toDate();
+        return dateB - dateA; // Sorting in descending order (latest first)
+    });
+    
+    console.log(result)
+
+    return result;
+}
+
+
 export async function fetchNotificationCount(userId){
     let count=0;
-    const now=Timestamp.now
+    const now=Timestamp.now();
     try{
         const q = query(collection(db, 'notifications'),
             where('receiverId', '==', userId),
@@ -1081,12 +1066,12 @@ export async function fetchNotificationCount(userId){
         if (!querySnapshot.empty) {
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
-                if ( data.exactDate <= now)
+                // if ( data.exactDate <= now)
                     count++;
             });
         } 
         else {
-            // console.error('No nannies found..');
+            // console.error('No new notifs found..');
         }
     }
     catch(error){
@@ -1564,10 +1549,10 @@ export async function acceptApplication(notificationId){
     const docRef2 = doc(db, 'applications',notifData.applicationId);
     console.log("Fetching document from applications with ID:", notifData.applicationId);
     const docSnap2 = await getDoc(docRef2);
-    const jobData=docSnap2.data();
+    const applicationData=docSnap2.data();
     
-    console.log("JobData:")
-    console.log(jobData)
+    console.log("applicationData:")
+    console.log(applicationData)
     
     // update the fields of the application
     await updateDoc(docRef2, {
@@ -1593,9 +1578,9 @@ export async function acceptApplication(notificationId){
         await addDoc(notificationsCollection, notificationData);  // Adds the document
 
         // create a new document for the payments collection
-        const [day, month, year] = jobData?.startingDate.split('/').map(Number); // Parse startingDate string into day, month, year
+        const [day, month, year] = applicationData?.startingDate.split('/').map(Number); // Parse startingDate string into day, month, year
         const pDate = new Date(year, month - 1, day); // Create a Date object (month is zero-based)
-        const months = parseInt(jobData?.months, 10); // Parse months string into an integer (base 10)
+        const months = parseInt(applicationData?.months, 10); // Parse months string into an integer (base 10)
         //end Date in utc
         pDate.setMonth(pDate.getMonth() + months); // Add the number of months to the startingDate
         // Format pDate as DD/MM/YYYY
@@ -1618,7 +1603,7 @@ export async function acceptApplication(notificationId){
 
         // get the nanny id using AMKA
         let q = query(collection(db, 'users'),
-                where('AMKA', '==', jobData.nannyAMKA));
+                where('AMKA', '==', applicationData.nannyAMKA));
         const querySnapshot1 = await getDocs(q); // Get documents matching the query
         let nannyId;
         if (!querySnapshot1.empty) {
@@ -1626,13 +1611,13 @@ export async function acceptApplication(notificationId){
             nannyId = doc.id;
             });
         } else {
-            console.error('No document found for AMKA:', jobData.AMKA);
+            console.error('No document found for AMKA:', applicationData.AMKA);
         }
 
         // Create paymentData with the voucherCode
         const paymentData = {
             nannyId: nannyId,
-            parentId: jobData.userId,
+            parentId: applicationData.userId,
             status: "unavailable",
             exactDate: Date.now(),
             payDate: formattedPayDate,
@@ -1644,22 +1629,12 @@ export async function acceptApplication(notificationId){
             value: globalCouponCounter + 1  // Increment the counter by 1
         });
 
-        // //create a new document for the payments collection
-        // const paymentData = {
-        //     nannyId: jobData.nannyId,
-        //     parentId: jobData.userId,
-        //     status: "unavailable",
-        //     // createdAt: 
-        //     exactDate: Date.now(), //just to have them by order, UTC time
-        //     payDate: formattedPayDate,
-        //     voucherCode:
-        // };
 
         //add document
         const paymentsCollection = collection(db, 'payments');
         await addDoc(paymentsCollection, paymentData);  // Adds the document
 
-        const [startDay, startMonth, startYear] = jobData?.startingDate.split('/').map(Number); // Parse startingDate string into day, month, year
+        const [startDay, startMonth, startYear] = applicationData?.startingDate.split('/').map(Number); // Parse startingDate string into day, month, year
 
         const applicationStartingDate = new Date(startYear, startMonth - 1, startDay); // Create a Date object (month is zero-based)
 
@@ -1668,16 +1643,16 @@ export async function acceptApplication(notificationId){
 
         //archive all nanny's final offers that overlap with the agreed range
         
-        //first, get all offers unarchived final offers by this nanny
-         q = query(collection(db, 'offers'),
-            where('userId', '==', jobData.userId),
+        //first, get all unarchived final offers by this nanny
+        q = query(collection(db, 'offers'),
+            where('userId', '==', nannyId),
             where('type', '==' , 'final'),
             where('archived', '==', false)
         );
         const querySnapshot = await getDocs(q); // Get documents matching the query
         if (!querySnapshot.empty) {                
-            querySnapshot.forEach(async (doc) => {
-                const offerData=doc.data();
+            querySnapshot.forEach(async (doc1) => {
+                const offerData=doc1.data();
                 const [day, month, year] = offerData?.startingDate.split('/').map(Number); // Parse startingDate string into day, month, year
                 const offerEndDate = new Date(year, month - 1, day); // Create a Date object (month is zero-based)
                 const months = parseInt(offerData?.months, 10); // Parse months string into an integer (base 10)
@@ -1687,12 +1662,12 @@ export async function acceptApplication(notificationId){
                 //check if the offer overlaps with the accepted job
                 if( (applicationStartingDate<=offerStartDate && offerStartDate<=applicationEndDate) || (applicationStartingDate<=offerEndDate && offerEndDate<=applicationEndDate) ){
                     //archive the offer
-                    const docRef = doc(db, 'offers', doc.id);
+                    const docRef = doc(db, 'offers', doc1.id);
                     await updateDoc(docRef, { archived: true });
                 }
             });                
         } else {
-            console.error('No document found for userId:', jobData.userId);
+            console.error('No active job found for userId:',nannyId);
         }
 
         //create two notifications for when the job is done to send to parent and nanny
@@ -1949,15 +1924,20 @@ export async function acceptPayment(id) {
 }
 
 
-export async function archiveApplication(applicationId,status){
+export async function archiveApplication(applicationId,status,notificationId){
     console.log(status)
     // update archived field to true
     try {
         // const docRef = doc(db, 'applications', applicationId);
         // await updateDoc(docRef, {
         //     archived: true,
+        // });
+        // // update notification status too
+        // const docRef2 = doc(db, 'notifications', notificationId);
+        // await updateDoc(docRef2, {
         //     status:status
         // });
+        console.log("UNCOMMENT FUNCTIONALITY!")
     } catch (error) {
         console.error("Error archiving application:", error);
     }
@@ -2009,7 +1989,9 @@ export async function fetchEndJobNotification(notifId){
         }
         const appData = appDocSnap.data();
 
-        const res={senderId,
+        const res={
+            id:docSnap.id,
+            senderId,
             senderName,
             senderSurname,
             img,

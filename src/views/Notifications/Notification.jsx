@@ -403,7 +403,7 @@ function Notification({ id, type, role }) {
                                         ${status === "pending" && "bg-white hover:bg-pallete-700 hover:text-white"}   
                                         
                                     `}                                                                                                              //setShowReviewModal(true);
-                                    onClick={() => { setStatus("ended"); archiveApplication(endJob?.applicationId,"ended");setConfirmOpenReviewModal(true);  }}
+                                    onClick={() => { setStatus("ended"); archiveApplication(endJob?.applicationId,"ended",endJob?.id);setConfirmOpenReviewModal(true);  }}
                                     disabled={status !== "pending"}
                                 >
                                     {status === "pending" && 'Επιβεβαίωση Λήξης'}
@@ -421,7 +421,7 @@ function Notification({ id, type, role }) {
                                             
                                         `}
                                         //must open a modal or redirect to applications page with some arguments for new application
-                                    onClick={() => { setStatus("renewed"); archiveApplication(endJob?.applicationId,"renewed"); setConfirmOpenReviewModal(true);  }}
+                                    onClick={() => { setStatus("renewed"); archiveApplication(endJob?.applicationId,"renewed",endJob?.id); setConfirmOpenReviewModal(true);  }}
                                     disabled={status !== "pending"}
 
                                 >
