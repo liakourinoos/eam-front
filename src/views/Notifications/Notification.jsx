@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
-import { fetchJobNotification, fetchContactRequestNotification, rejectContact, acceptContact, rejectApplication, acceptApplication, fetchPaymentNotification, acceptPayment,archiveApplication,fetchEndJobNotification } from '../../FetchFunctions';
+import { fetchJobNotification, fetchContactRequestNotification, rejectContact, acceptContact, rejectApplication, acceptApplication, fetchPaymentNotification, acceptPayment,archiveApplication,fetchEndJobNotification, addReview } from '../../FetchFunctions';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MdClose } from "react-icons/md";
@@ -8,6 +8,8 @@ import { FaCheck } from "react-icons/fa";
 import { hours, days } from '../../../global_assets/global_values';
 import { FaStar, FaRegStar } from 'react-icons/fa';
 import { RiCloseLargeFill } from "react-icons/ri";
+import { MdOutlineClose } from "react-icons/md";
+import { useMutation } from '@tanstack/react-query';
 //prepei na pairnei tis leptomereies kathe notification
 function Notification({ id, type, role }) {
     const [status, setStatus] = useState(null); // Local state for status
@@ -41,6 +43,19 @@ function Notification({ id, type, role }) {
         queryKey: ['endOfJob', id],
     });
 
+    const [showModal, setShowModal] = useState(false);
+    const [showReviewModal,setShowReviewModal] = useState(false)
+    const [ratedStars, setRatedStars] = useState(0);
+    const [review,setReview]= useState("");
+
+    const {mutateAsync:sendReview,isPending}=useMutation({
+        mutationFn:()=>addReview(endJob?.receiverId,endJob?.senderId,ratedStars,review),
+        onSuccess:()=>{
+            setReview("");
+            setRatedStars(0),
+            setShowReviewModal(false);
+        }
+    })
 
 
 
@@ -55,9 +70,7 @@ function Notification({ id, type, role }) {
             setStatus(endJob?.status)
     }, [request, job, payment,endJob])
 
-    const [showModal, setShowModal] = useState(false);
-    const [showReviewModal,setShowReviewModal] = useState(false)
-    const [ratedStars, setRatedStars] = useState(0);
+    
 
 
     if (isJobLoading || isRequestLoading || isPaymentLoading || isEndJobLoading)
@@ -347,7 +360,7 @@ function Notification({ id, type, role }) {
                         {/* periptwsi 4, endJob Of Job */}
                         {type === "endOfJob" &&
                             <p className='h-2/3 flex items-start pt-2  text-xl font-medium'>
-                                Η συνεργασία σας με {endJob?.gender ? "τον" : "την"} <Link to={`/parentprofile/${endJob?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{endJob?.senderName} {endJob?.senderSurname}</Link> έληξε.
+                                Η συνεργασία σας με {endJob?.gender ? "τον" : "την"} <Link to={`/nannyprofile/${endJob?.senderId}`} className='underline hover:text-pallete-800 mx-1'>{endJob?.senderName} {endJob?.senderSurname}</Link> έληξε.
                             </p>
                         }
 
@@ -396,17 +409,17 @@ function Notification({ id, type, role }) {
 
                 {/* showMessage First */}
                 {showReviewModal &&
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ">
-                        <div className="w-8/12 flex-col flex items-center h-4/6 rounded-md z-50 my-auto bg-white shadow-xl p-6">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 ">
+                        <div className="w-4/6 flex-col flex items-center h-4/6 rounded-md z-50 my-auto bg-white shadow-xl p-6">
                             <div className="flex items-center justify-end w-full">
-                                <button onClick={()=>setShowReviewModal(false)}>
-                                    <RiCloseLargeFill className="font-bold text-6xl text-red-500" />
+                                <button onClick={() => setShowReviewModal(false)}>
+                                    <MdOutlineClose className="font-bold text-7xl text-red-700 hover:text-red-500" />
                                 </button>
                             </div>
                             <p className="text-center h-auto text-4xl">
-                                Αξιολογήστε {endJob?.gender ? `τον` : `την `} {endJob?.senderName}
+                                Αξιολογήστε {endJob?.gender ? `τον` : `την `} <span className='font-medium'>{endJob?.senderName}</span>
                             </p>
-                            <div className="flex items-center justify-center bg-blue-400 mt-4">
+                            <div className="flex items-center justify-center  mt-4">
                                 {[1, 2, 3, 4, 5].map((value) => (
                                     <button
                                         key={value} onClick={() => { setRatedStars(ratedStars === value ? 0 : value) }}>
@@ -414,16 +427,29 @@ function Notification({ id, type, role }) {
                                     </button>
                                 ))}
                             </div>
-                            <textarea className="w-2/3 mt-16 h-48 max-h-48 rounded-md shadow-md border-2 border-gray-400 bg-yellow-400  shadow-gray-400 p-2" />
-                            <div className="modal-action flex justify-end w-full mt-6">
-                                <form method="dialog">
-                                    <button type="button"
-                                        className="text-black border-2 border-black py-2 px-3 rounded-md font-semibold mr-20"
-                                        onClick={() => { }}>
-                                        Υποβολή
-                                    </button>
-                                </form>
+                            <div className='h-64 w-2/4 mt-10 flex flex-col items-end  justify-between'>
+                                <textarea className="w-full  h-48 max-h-48 resize-none rounded-md shadow-md border-2 border-gray-400 bg-white shadow-gray-600 p-2"
+                                    value={review}
+                                    onChange={(e) => setReview(e.target.value)}
+                                />
+                                <button
+                                    className={`flex items-center mt-5 w-1/4 justify-center h-14    py-1 px-3 rounded-md font-semibold 
+                                                ${ratedStars === 0 ? "bg-gray-400 border-2 border-gray-400 text-white cursor-default" : "border-2 border-pallete-800 text-pallete-800 hover:bg-pallete-700 hover:text-white"}
+                                        
+                                    `}
+                                    title={ratedStars===0 ? "Παρακαλούμε διαλέξτε πλήθος αστεριών." : ""}
+                                    onClick={() => sendReview()}
+                                    disabled={ratedStars === 0}
+                                >
+                                    {isPending ? <span className='loading loading-md'></span> : "Υποβολή Αξιολόγησης"}
+                                    
+                                </button>
                             </div>
+
+
+
+
+
                         </div>
 
 

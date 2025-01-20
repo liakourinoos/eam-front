@@ -1906,10 +1906,39 @@ export async function fetchEndJobNotification(notifId){
             status:appData.status,
             type:data.type,
             gender:senderData.gender,
-            applicationId:data.applicationId
+            applicationId:data.applicationId,
+            receiverId: data.receiverId,
         }
     }
     catch(error){
         console.log(error.message)
     }
+}
+
+
+export async function addReview(parentId,nannyId,rating,bio){
+    const today = new Date();
+    const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+    const exactDate = Timestamp.now();
+    try{
+        const reviewData = {
+            parentId: parentId,
+            nannyId: nannyId,
+            rating: rating,
+            bio: bio,
+            createdAt: formattedDate,
+            exactDate:exactDate
+        };
+
+        const reviewsCollection = collection(db, 'parentReviews');
+        await addDoc(reviewsCollection, reviewData);  // Adds the document
+
+        return { success: true, message: 'Review added successfully' };
+
+    }
+    catch(error){
+        console.log(error.message)
+        return { success: false, message: 'Review not added' };
+    }
+
 }
