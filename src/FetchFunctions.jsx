@@ -1933,6 +1933,20 @@ export async function addReview(parentId,nannyId,rating,bio){
         const reviewsCollection = collection(db, 'parentReviews');
         await addDoc(reviewsCollection, reviewData);  // Adds the document
 
+        // fetch nanny data with nannyId
+        const docRef = doc(db, 'users', nannyId);
+        const docSnap = await getDoc(docRef);
+        const nannyData= docSnap.data();
+
+        //update ratingCount by 1 and calculate the new average rating
+        const newAverage= (nannyData.rating + rating) / (nannyData.ratingCount +1)
+        
+        //updateDoc
+        await updateDoc(docRef, {
+            rating: newAverage,
+            ratingCount: nannyData.ratingCount +1
+        });
+
         return { success: true, message: 'Review added successfully' };
 
     }
