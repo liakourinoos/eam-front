@@ -20,8 +20,10 @@ function PaymentInfo({paymentId,firstName,lastName,paymentDate,status,voucher,se
         date.setUTCHours(0, 0, 0, 0);
         return date;
     };
-    // const currentDate = getCurrentDate();
-    const currentDate = "2025-06-30";
+
+    const currentDate = getCurrentDate();
+    // δειτε την αλλαγη στο Component (format: YYYY-MM-DD) 
+    // const currentDate = "2025-06-30";
 
     const hasPaymentDatePassed = () => {
         return formatDate(paymentDate) <= new Date(currentDate);

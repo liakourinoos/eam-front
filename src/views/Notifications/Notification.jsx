@@ -416,7 +416,7 @@ function Notification({ id, type, role }) {
                                             
                                         `}
                                         //must open a modal or redirect to applications page with some arguments for new application
-                                    onClick={() => { setStatus("renewed"); archiveApplication(endJob?.applicationId,"renewed",endJob?.id); setConfirmOpenReviewModal(true);  }}
+                                    onClick={() => { setStatus("renewed"); archiveApplication(endJob?.applicationId,"renewed",endJob?.id); setConfirmOpenReviewModal(true);   }}
                                     disabled={status !== "pending"}
 
                                 >
@@ -441,13 +441,13 @@ function Notification({ id, type, role }) {
                             <p className='text-2xl w-full text-center  font-medium'>Θέλετε να αφήσετε μια κριτική για τον επαγγελματία;</p>
                             <div className='flex gap-5 justify-center  w-full  h-full mt-3'>
                                 <button className={`border-2 border-red-600 font-semibold hover:bg-red-600 hover:text-white w-32 text-red-600 px-2 py-3 rounded-md `}
-                                        onClick={()=>setConfirmOpenReviewModal(false)}
+                                        onClick={()=>{setConfirmOpenReviewModal(false) ; nav(`/renewapplication/${endJob?.applicationId}`)}}
                                 >
                                     
                                     Όχι
                                 </button>
                                 <button className={`border-2 border-green-600 font-semibold hover:bg-green-600 hover:text-white w-32 text-green-600 px-2 py-3 rounded-md `}
-                                        onClick={()=>{setConfirmOpenReviewModal(false); setShowReviewModal(true)}}
+                                        onClick={()=>{setConfirmOpenReviewModal(false); setShowReviewModal(true); }}
 
                                 >
                                     Ναι
@@ -466,7 +466,7 @@ function Notification({ id, type, role }) {
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 ">
                         <div className="w-4/6 flex-col flex items-center h-4/6 overflow-y-auto rounded-md z-50 my-auto bg-white shadow-xl p-6">
                             <div className="flex items-center justify-end w-full">
-                                <button onClick={() => setShowReviewModal(false)}>
+                                <button onClick={() => {setShowReviewModal(false);nav(`/renewapplication/${endJob?.applicationId}`)}}>
                                     <MdOutlineClose className="font-bold text-7xl text-red-700 hover:text-red-500" />
                                 </button>
                             </div>
@@ -492,8 +492,16 @@ function Notification({ id, type, role }) {
                                                 ${ratedStars === 0 ? "bg-gray-400 border-2 border-gray-400 text-white cursor-default" : "border-2 border-pallete-800 text-pallete-800 hover:bg-pallete-700 hover:text-white"}
                                     `}
                                     title={ratedStars === 0 ? "Παρακαλούμε διαλέξτε πλήθος αστεριών." : ""}
-                                    onClick={() => sendReview()}
-                                    disabled={ratedStars === 0}
+                                    onClick={async () => {
+                                        if (ratedStars > 0) {
+                                            try {
+                                                await sendReview(); // Wait for the review submission
+                                                nav(`/renewapplication/${endJob?.applicationId}`); // Redirect after review is submitted
+                                            } catch (error) {
+                                                console.error("Error submitting review:", error);
+                                            }
+                                        }
+                                    }}                                    disabled={ratedStars === 0}
                                 >
                                     {isPending ? <span className='loading loading-md'></span> : "Υποβολή Αξιολόγησης"}
                                 </button>

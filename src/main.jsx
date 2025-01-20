@@ -27,6 +27,7 @@ import ParentOrNannySignUp from './NannyOrParentSignUp.jsx';
 import Reviews from './generic components/Reviews.jsx';
 import ParentHistory from './ParentComponents/ParentHistory.jsx';
 import NannyHistory  from './NannyComponents/NannyHistory.jsx';
+import RenewApplicationForm from './views/Parent/RenewApplication/RenewApplicationForm.jsx';
 // import ParentApplicationsHistory from '../src/views/Parent/ParentApplicationsHistory.jsx';
 
 const router = createBrowserRouter([
@@ -59,6 +60,7 @@ const router = createBrowserRouter([
   { path: '/applicationform', element: <ApplicationForm/>},
   { path: '/viewapplication/:id', element: <ApplicationForm action="Προβολή Συμφωνητικού"/>},
   { path: '/editapplication/:id', element: <ApplicationForm action="Επεξεργασία Συμφωνητικού"/>},
+  { path: '/renewapplication/:id', element: <RenewApplicationForm />},
 
   //Parent History
   // { path:'/parentapplicationshistory' , element: <></>}
