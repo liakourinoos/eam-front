@@ -2,8 +2,10 @@ import PropTypes from 'prop-types'
 import { FaEye } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function DraftApplication({code,firstName,lastName}){
+    const nav=useNavigate();
     return(
     
 
@@ -17,16 +19,20 @@ function DraftApplication({code,firstName,lastName}){
 
             {/* view button */}
             <div className='w-1/2 flex gap-7 justify-center '>
-                <Link to={`/viewapplication/${code}`} className='w-1/3  h-14 rounded-md border-2 border-pallete-800 text-pallete-800 hover:bg-pallete-800 hover:text-white flex gap-2 items-center justify-center px-2'>
+                <button  className='w-1/3  h-14 rounded-md border-2 border-pallete-800 text-pallete-800 hover:bg-pallete-800 hover:text-white flex gap-2 items-center justify-center px-2'
+                            onClick={()=>nav(`/viewapplication/${code}`)}
+                >
                         <FaEye className='text-3xl'/>
                         Προβολή
 
-                </Link>
-                <Link to={`/editapplication/${code}`} className='w-1/3  h-14 rounded-md border-2  border-pallete-800 text-pallete-800 hover:bg-pallete-800 hover:text-white flex gap-2 items-center justify-center px-2'>
+                </button>
+                <button  className='w-1/3  h-14 rounded-md border-2  border-pallete-800 text-pallete-800 hover:bg-pallete-800 hover:text-white flex gap-2 items-center justify-center px-2'
+                        onClick={()=>nav(`/editapplication/${code}`)}
+                >
                         <MdEdit className='text-3xl'/>
                         Επεξεργασία
 
-                </Link>
+                </button>
             </div>
 
         </div>

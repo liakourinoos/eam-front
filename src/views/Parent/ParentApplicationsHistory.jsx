@@ -61,7 +61,7 @@ export default function ParentApplicationsHistory() { // Corrected function decl
                 }
                 {!isLoading && applications?.length > 0 && Array.isArray(applications) &&
                     applications.map((app, idx) => (
-                        <FinalApplication key={idx} code={app.id} firstName={app.nannyName} lastName={app.nannySurname} status={app.status} finalDate={app.finalizedAt} />
+                        <FinalApplication key={idx} code={app.id} firstName={app.nannyName} lastName={app.nannySurname} returnTo={"history"} status={app.status} finalDate={app.finalizedAt} />
                     ))
                 }
             </div>

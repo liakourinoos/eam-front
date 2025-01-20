@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import { FaEye } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-function FinalApplication({code,firstName,lastName,status,finalDate}) {
+function FinalApplication({code,firstName,lastName,status,finalDate, returnTo="applications"}) {
+    const nav = useNavigate();
+    console.log("Inside FinalApplication: " + returnTo)
     return(
     
 
@@ -27,11 +29,14 @@ function FinalApplication({code,firstName,lastName,status,finalDate}) {
 
             {/* view button */}
             <div className='w-1/5 flex justify-center '>
-                <Link to={`/viewapplication/${code}`} className={`w-2/3  h-14 rounded-md border-2 border-pallete-800 text-pallete-800 hover:bg-pallete-800 hover:text-white flex gap-2 items-center justify-center px-2`}>
+                <button 
+                        className={`w-2/3  h-14 rounded-md border-2 border-pallete-800 text-pallete-800 hover:bg-pallete-800 hover:text-white flex gap-2 items-center justify-center px-2`}
+                        onClick={()=>nav(`/viewapplication/${code}`,{ state:  returnTo  })}        
+                >
                     <FaEye className='text-3xl'/>
                     Προβολή
 
-                </Link>
+                </button>
             </div>
 
         </div>
@@ -48,5 +53,6 @@ FinalApplication.propTypes = {
     firstName: PropTypes.string.isRequired,
     lastName: PropTypes.string.isRequired,
     status: PropTypes.string.isRequired,
-    finalDate: PropTypes.string.isRequired
+    finalDate: PropTypes.string.isRequired,
+    returnTo:PropTypes.string
 };

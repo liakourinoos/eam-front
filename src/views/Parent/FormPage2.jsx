@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "../../customHooks.jsx";
 import { addFinalApplication } from "../../FetchFunctions.jsx";
 
-function FormPage2({ form, setForm, nextFn }) {
+function FormPage2({ form, setForm, nextFn, returnTo }) {
 
     const {userData} = useAuth();
 
@@ -277,12 +277,19 @@ function FormPage2({ form, setForm, nextFn }) {
                         {isPending ? 'Οριστικοποίηση...' :'Οριστικοποίηση Συμφωνητικού'}
                     </button>
                 }
-                {form.cantEdit && 
+                {form.cantEdit && returnTo==="applications" &&
                     <Link to='/parentapplications' className={` border-2 flex items-center justify-center bg-white font-medium w-48 border-gray-500 text-md px-2 mr-10 h-14 rounded-md my-3`}>
                         Τα Συμφωνητικά Μου
                     </Link>
 
                 }
+                {form.cantEdit && returnTo==="history" &&
+                    <Link to='/parentHistory' className={` border-2 flex items-center text-center justify-center bg-white font-medium w-48 border-gray-500 text-md px-2 mr-10 h-14 rounded-md my-3`}>
+                        Επιστροφή Στο Ιστορικό
+                    </Link>
+
+                }
+
             </div>
             {showModal && (
                     <>
@@ -315,6 +322,7 @@ FormPage2.propTypes = {
     form: PropTypes.object.isRequired,
     setForm: PropTypes.func.isRequired,
     nextFn: PropTypes.func.isRequired,
+    returnTo: PropTypes.string
 };
 
 export default FormPage2;

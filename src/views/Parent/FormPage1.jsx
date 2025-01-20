@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
 import { fetchContactedNannies } from "../../FetchFunctions";
 
-function FormPage1({myId, form, setForm, nextFn }) {
+function FormPage1({myId, form, setForm, nextFn, returnTo }) {
     const [errors, setErrors] = useState({
         name: "",
         surname: "",
@@ -181,6 +181,7 @@ FormPage1.propTypes = {
     form: PropTypes.object.isRequired,
     setForm: PropTypes.func.isRequired,
     nextFn: PropTypes.func.isRequired,
+    returnTo: PropTypes.string
 };
 
 export default FormPage1;

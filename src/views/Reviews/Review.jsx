@@ -53,7 +53,7 @@ export default function Review({seenFrom,nannyName,nannySurname,nannyImg,review}
 
                     {/* name and rating on the same row */}
                     <div className='flex items-center text-xl mb-2'>
-                        {seenFrom === "parent" && <span className='hover:text-pallete-700'>{review.personName} {review.personSurname} {`>`} <Link className=' underline ' to={`/nannyprofile/${review.nannyId}`}>{nannyName} {nannySurname}</Link></span>}
+                        {seenFrom === "parent" && <span className=''>{review.personName} {review.personSurname} {`>`} <Link className=' underline hover:text-pallete-700 ' to={`/nannyprofile/${review.nannyId}`}>{nannyName} {nannySurname}</Link></span>}
                         {seenFrom !== "parent" && <Link className=' underline hover:text-pallete-700 ' to={`/parentprofile/${review.parentId}`}>{review.personName} {review.personSurname}</Link>}
 
                     </div>

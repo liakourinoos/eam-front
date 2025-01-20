@@ -2152,37 +2152,90 @@ export async function fetchNannyDeals(nannyId){
 }
 
 
-export async function searchAvailableNannies({filters}){
+export async function searchAvailableNannies(filter){
     const results=[]
     try{
-        if(filters.town){
-            console.log("Updated search for town:" , filters.town)
+        // fetch all available nannies, meaning all the nannies that have offers that are final and not archived
+        const q = query(collection(db, 'offers'),
+            where('type', '==' , 'final'),
+            where('archived', '==', false)
+        );
+        const querySnapshot = await getDocs(q); // Get documents matching the query
+        if (!querySnapshot.empty) {
+            for (const dcmt of querySnapshot.docs) {
+                const offerData = dcmt.data();
+                // Fetch nanny data using userId field of offerData
+                const nannyDocRef = doc(db, 'users', offerData.userId);
+                const nannyDocSnap = await getDoc(nannyDocRef);
+                let nannyData = {};
+                if (!nannyDocSnap.exists()) {
+                    throw new Error("nanny doesnt exist!");    
+                } 
+                nannyData = nannyDocSnap.data();
+                let add=true;
+                if (Object.keys(filter).length === 0) {
+                    results.push({ ...offerData, ...nannyData });
+                    continue;
+                }
+                //check if the offerData matches the filter
+                if(filter.town && offerData.town!==filter.town){
+                    add=false;
+                }
+
+                if (filter.location && filter.atMyHouse!=="") {
+                    console.log("LOCATION & HOSTING")
+                    const matches = offerData.rows.some(row => {
+                        const locationMatch =  row.area === filter.location ;
+                        const atMyHouseMatch = row.canHost === filter.atMyHouse ;
+                        console.log("row.area: " + row.area + " ," + "filter.location: " + filter.location)
+                        console.log("row.canHost: ")
+                        console.log(row.canHost===true ?"YES":"NO") 
+                        console.log("filter.atMyHouse: " )
+                        console.log(filter.atMyHouse===true ?"YES":"NO")
+
+                        return locationMatch && atMyHouseMatch;
+                    });
+                    if (!matches) {
+                        add = false;
+                    }
+                }
+
+                if(filter.timeType && offerData.timeType!==filter.timeType){
+                    add=false;
+                }
+                if(filter.childAge && offerData.childAge!==filter.childAge){
+                    add=false;
+                }
+                if(filter.experienceSlider>0 && filter.experienceSlider > Number(nannyData.experience) ){
+                    add=false;
+                }
+                if(filter.gender && nannyData.gender!==filter.gender)
+                    add=false
+
+                if(filter.monthsSlider>0 &&  Number(filter.monthsSlider) > Number(offerData.months))
+                    add=false
+                
+                
+
+                // first, i must convert startingDate variables to UTC format.
+                if(filter.selectedDate!==null){
+                    const [startDay, startMonth, startYear] = offerData.startingDate.split('/').map(Number);
+                    const offerStartDate = new Date(Date.UTC(startYear, startMonth - 1, startDay));
+
+                    const filterStartDate = new Date(filter.selectedDate);
+
+                    if (filterStartDate < offerStartDate) {
+                        add = false;
+                    }
+                }
+
+                if (add) {
+                    // append to the results the nanny info and the offer info together
+                    results.push({ ...offerData, ...nannyData });
+                }
+            }
+            
         }
-        if(filters.area){
-            console.log("Updated search for area:" , filters.area)
-        }
-        if(filters.canHost){
-            console.log("Updated search for canHost:" , filters.canHost)
-        }
-        if(filters.timeType){
-            console.log("Updated search for timeType:" , filters.timeType)
-        }
-        if(filters.childAge){
-            console.log("Updated search for childAge:" , filters.childAge)
-        }
-        if(filters.experience){
-            console.log("Updated search for experience:" , filters.experience)
-        }
-        if(filters.gender){
-            console.log("Updated search for gender:" , filters.gender)
-        }
-        if(filters.months){
-            console.log("Updated search for months:" , filters.months)
-        }
-        if(filters.startingDate){
-            console.log("Updated search for startingDate:" , filters.startingDate)
-        }
-        
     }
     catch(error){
         console.log(error.message)

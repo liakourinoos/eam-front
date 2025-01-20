@@ -4,10 +4,9 @@ import { fetchJobNotification, fetchContactRequestNotification, rejectContact, a
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MdClose } from "react-icons/md";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaHistory } from "react-icons/fa";
 import { hours, days } from '../../../global_assets/global_values';
 import { FaStar, FaRegStar } from 'react-icons/fa';
-import { RiCloseLargeFill } from "react-icons/ri";
 import { MdOutlineClose } from "react-icons/md";
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -162,14 +161,19 @@ function Notification({ id, type, role }) {
                                 <button className={`
                                             h-1/2 w-1/2 text-xl rounded-md text-white
                                             ${status === "pending" && "bg-red-600 hover:bg-red-500"}   
-                                            ${status === "rejected" && "bg-red-500"}
+                                            ${status === "rejected" && "bg-white"}
                                             ${status === "accepted" && "bg-red-200"}
                                         `}
                                     onClick={() => { setStatus("rejected"); rejectContact(id); }}
                                     disabled={status !== "pending"}
                                 >
                                     {status === "pending" && 'Απόρριψη'}
-                                    {status === "rejected" && 'Απορρίφθηκε'}
+                                    {status === "rejected" && <span className='mx-auto flex items-center justify-center gap-1 text-red-600'>
+                                            <MdOutlineClose className='text-3xl '/>
+                                            Απερρίφθη
+
+                                        </span>
+                                    }
                                 </button>
                             }
                             {status !== "rejected" &&
@@ -177,14 +181,19 @@ function Notification({ id, type, role }) {
                                                 h-1/2 w-1/2 text-xl bg-green-600 rounded-md text-white 
                                                 ${status === "pending" && "bg-green-600 hover:bg-green-500"}   
                                                 ${status === "rejected" && "bg-green-200"}
-                                                ${status === "accepted" && "bg-green-400"}
+                                                ${status === "accepted" && "bg-white"}
                                             `}
                                     onClick={() => { setStatus("accepted"); acceptContact(id); }}
                                     disabled={status !== "pending"}
 
                                 >
                                     {status === "pending" && 'Αποδοχή'}
-                                    {status === "accepted" && 'Εγκρίθηκε'}
+                                    {status === "accepted" && 
+                                        <span className='mx-auto flex items-center justify-center gap-1 text-green-600'>
+                                            <FaCheck/>
+                                            Εγκρίθηκε
+
+                                        </span>}
                                 </button>
                             }
                         </>
@@ -196,14 +205,18 @@ function Notification({ id, type, role }) {
                                 <button className={`
                                         h-1/2 w-1/2 text-xl rounded-md text-white
                                         ${status === "pending" && "bg-red-600 hover:bg-red-500"}   
-                                        ${status === "rejected" && "bg-red-500"}
+                                        ${status === "rejected" && "bg-white"}
                                         ${status === "accepted" && "bg-red-200"}
                                     `}
                                     onClick={() => { setStatus("rejected"); rejectApplication(id); }}
                                     disabled={status !== "pending"}
                                 >
                                     {status === "pending" && 'Απόρριψη'}
-                                    {status === "rejected" && 'Απορρίφθηκε'}
+                                    {status === "rejected" && <span className='mx-auto flex items-center justify-center gap-1 text-red-600'>
+                                            <MdOutlineClose className='text-3xl '/>
+                                            Απερρίφθη
+
+                                        </span>}
                                 </button>
                             }
                             {status !== "rejected" &&
@@ -211,14 +224,18 @@ function Notification({ id, type, role }) {
                                             h-1/2 w-1/2 text-xl bg-green-600 rounded-md text-white  
                                             ${status === "pending" && "bg-green-600 hover:bg-green-500"}   
                                             ${status === "rejected" && "bg-green-200"}
-                                            ${status === "accepted" && "bg-green-400"}
+                                            ${status === "accepted" && "bg-white"}
                                         `}
                                     onClick={() => { setStatus("accepted"); acceptApplication(id); }}
                                     disabled={status !== "pending"}
 
                                 >
                                     {status === "pending" && 'Αποδοχή'}
-                                    {status === "accepted" && 'Εγκρίθηκε'}
+                                    {status === "accepted" && <span className='mx-auto flex items-center justify-center gap-1 text-green-600'>
+                                            <FaCheck/>
+                                            Εγκρίθηκε
+
+                                        </span>}
                                 </button>
                             }
                         </>
@@ -231,14 +248,18 @@ function Notification({ id, type, role }) {
                                                 h-1/2 w-1/2 text-xl bg-green-600 rounded-md text-white 
                                                 ${status === "pending" && "bg-green-600 hover:bg-green-500"}   
                                                 ${status === "rejected" && "bg-green-200"}
-                                                ${status === "accepted" && "bg-green-400"}
+                                                ${status === "accepted" && "bg-white"}
                                             `}
                                     onClick={() => { setStatus("accepted"); acceptPayment(id); }}
                                     disabled={status !== "pending"}
 
                                 >
                                     {status === "pending" && 'Λήψη Voucher'}
-                                    {status === "accepted" && 'Λήφθηκε'}
+                                    {status === "accepted" && <span className='mx-auto flex items-center justify-center gap-1 text-green-600'>
+                                            <FaCheck/>
+                                            Λήφθηκε
+
+                                        </span>}
                                 </button>
                             }
                         </>
@@ -386,7 +407,11 @@ function Notification({ id, type, role }) {
                                     disabled={status !== "pending"}
                                 >
                                     {status === "pending" && 'Επιβεβαίωση Λήξης'}
-                                    {status === "ended" && 'Επιβεβαίωσατε Λήξη'}
+                                    {status === "ended" && <span className='mx-auto flex items-center justify-center gap-1 text-pallete-800'>
+                                            <FaCheck className='text-xl '/>
+                                            Λήξαν
+
+                                        </span>}
                                 </button>
                             }
                             {status !== "ended" &&
@@ -401,7 +426,11 @@ function Notification({ id, type, role }) {
 
                                 >
                                     {status === "pending" && 'Ανανέωση Συμφωνητικού'}
-                                    {status === "renewed" && 'Ανανεώθηκε'}
+                                    {status === "renewed" && <span className='mx-auto flex items-center justify-center gap-1 text-pallete-800'>
+                                            <FaHistory className='text-xl '/>
+                                            Ανανεώθηκε
+
+                                        </span>}
                                 </button>
                             }
                         </>

@@ -10,10 +10,15 @@ import FormPage3 from './FormPage3.jsx';
 import { useParams } from 'react-router-dom';
 import { fetchApplication,addDraftApplication } from '../../FetchFunctions.jsx';
 import { useQuery,useMutation } from '@tanstack/react-query';
+import { useLocation } from 'react-router-dom';
 
-function ApplicationForm({action="Δημιουργία Νέου Συμφωνητικού" }){
+function ApplicationForm({action="Δημιουργία Νέου Συμφωνητικού"  }){
     const nav=useNavigate();
     const {id} = useParams();
+    const location = useLocation();
+    const { state } = location || {}; // Access state from location
+    const returnTo  = state || "applications"; // Destructure the state object safely
+
 
     const { userData,loading } = useAuth();
     // form should either start with this or be fetched from the server
@@ -44,6 +49,7 @@ function ApplicationForm({action="Δημιουργία Νέου Συμφωνητ
         retry:false,
         onSuccess:()=>nav("/parentapplications")
     })
+    console.log("inside application form: " +returnTo)
 
 
     useEffect(() => {
@@ -92,8 +98,8 @@ function ApplicationForm({action="Δημιουργία Νέου Συμφωνητ
                     {/* breadcrumbs */}
                     <div className="breadcrumbs  pl-5 text-md">
                         <ul>
-                            <li><Link to='/parentapplications'>Συμφωνητικά</Link></li>
-                            <li><Link className='font-medium'>{action}</Link></li>
+                            <li><Link to={returnTo==="applications" ? `/parentapplications` : `/parentHistory` }>{returnTo==="applications" ? "Συμφωνητικά" : "Ιστορικό"}</Link></li>
+                            <li><p className='font-semibold'>{action}</p></li>
                         </ul>
                     </div>
                     
@@ -122,8 +128,8 @@ function ApplicationForm({action="Δημιουργία Νέου Συμφωνητ
                         <div className='w-11/12 mx-auto flex flex-col flex-grow bg-pallete-100 rounded-md shadow-md shadow-gray-400 mb-3 '>
                             
                             {/* page1,2,3 here */}
-                            {selectedPage==1 && <FormPage1 myId={userData?.id} form={formState} setForm={setFormState} nextFn={handleNextPage}/>}
-                            {selectedPage==2 && <FormPage2 form={formState} setForm={setFormState} nextFn={handleNextPage}/>}
+                            {selectedPage==1 && <FormPage1 myId={userData?.id} form={formState} setForm={setFormState} returnTo={returnTo} nextFn={handleNextPage}/>}
+                            {selectedPage==2 && <FormPage2 form={formState} setForm={setFormState} nextFn={handleNextPage} returnTo={returnTo}/>}
                             {selectedPage==3 && <FormPage3/>}
 
 
@@ -141,4 +147,5 @@ export default ApplicationForm;
 
 ApplicationForm.propTypes = {
     action: PropTypes.string,
+    // returnTo: PropTypes.string
 };
