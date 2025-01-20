@@ -90,7 +90,7 @@ function ApplicationForm({action="Δημιουργία Νέου Συμφωνητ
     if(( (action==="Προβολή Συμφωνητικού" && !isLoading && data) || action==="Δημιουργία Νέου Συμφωνητικού" || action==="Επεξεργασία Συμφωνητικού") ) 
         return(
             <div className='w-full min-h-screen flex flex-col bg-white'>
-                {RenderHeaderNavbar(userData,2)}
+                {RenderHeaderNavbar(userData,returnTo==="history" ? 5:2)}
                 
                 {/* main page */}
                 <div className='flex flex-col bg-white flex-grow'>

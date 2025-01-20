@@ -17,11 +17,12 @@ function DraftOffer({code}){
 
             {/* view button */}
             <div className='w-1/2 flex gap-7 justify-center '>
-                <Link to={`/viewoffer/${code}`} className='w-1/3 border-2 border-pallete-800 text-pallete-800 hover:bg-pallete-800 hover:text-white h-14 rounded-md  flex gap-2 items-center justify-center px-2'>
+                <button  onClick={()=>nav(`/viewoffer/${code}`)} 
+                        className='w-1/3 border-2 border-pallete-800 text-pallete-800 hover:bg-pallete-800 hover:text-white h-14 rounded-md  flex gap-2 items-center justify-center px-2'>
                         <FaEye className='text-3xl'/>
                         Προβολή
 
-                </Link>
+                </button>
                 <Link to={`/editoffer/${code}`} className='w-1/3  h-14 rounded-md border-2 border-pallete-800 text-pallete-800 hover:bg-pallete-800 hover:text-white flex gap-2 items-center justify-center px-2'>
                         <MdEdit className='text-3xl'/>
                         Επεξεργασία

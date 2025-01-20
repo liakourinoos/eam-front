@@ -21,7 +21,7 @@ function FormPage3({ form, setForm, nextFn }) {
                             <Link to='/nannyoffers'
                                     className='bg-white border-2  flex items-center justify-center text-lg font-medium w-48 border-gray-500 text-md h-14 rounded-md my-3'
                             >
-                                Οι αγγελίες μου
+                                Οι Αγγελίες μου
                             </Link>
             </div>
         </div>

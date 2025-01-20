@@ -59,7 +59,7 @@ export default function NannyOffersHistory() {
                 }
                 {!isLoading && offers?.length > 0 && Array.isArray(offers) &&
                     offers.map((offer, idx) => (
-                        <ArchivedOffer key={idx} code={offer.id} finalDate={offer.finalizedAt} />
+                        <ArchivedOffer key={idx} code={offer.id} returnTo={"history"} finalDate={offer.finalizedAt} />
                     ))
                 }
             </div>

@@ -10,11 +10,15 @@ import FormPage3 from './FormPage3.jsx';
 import { useParams } from 'react-router-dom';
 import { fetchOffer, addDraftOffer } from '../../FetchFunctions.jsx';
 import { useQuery,useMutation } from '@tanstack/react-query';
+import { useLocation } from 'react-router-dom';
 
 function OfferForm({action="Δημιουργία Νέας Αγγελίας"}){
     const nav=useNavigate();
     
     const {id} = useParams();
+    const location = useLocation();
+    const { state } = location || {}; // Access state from location
+    const returnTo  = state || "offers"; // Destructure the state object safely
 
     const { userData } = useAuth();
     // form should either start with this or be fetched from the server
@@ -84,7 +88,7 @@ function OfferForm({action="Δημιουργία Νέας Αγγελίας"}){
     if((action==="Προβολή Αγγελίας" && !isLoading && data) || action==="Δημιουργία Νέας Αγγελίας" || action==="Επεξεργασία Αγγελίας") 
         return(
             <div className='w-full min-h-screen flex flex-col bg-white'>
-                {RenderHeaderNavbar(userData,1)}
+                {RenderHeaderNavbar(userData,returnTo==="history" ? 4:1)}
                 
                 {/* main page */}
                 <div className='flex flex-col bg-white flex-grow'>
@@ -92,8 +96,8 @@ function OfferForm({action="Δημιουργία Νέας Αγγελίας"}){
                     {/* breadcrumbs */}
                     <div className="breadcrumbs  pl-5 text-md">
                         <ul>
-                            <li><Link to='/nannyoffers'>Αγγελίες</Link></li>
-                            <li><Link className='font-medium'>{action}</Link></li>
+                            <li><Link to={returnTo==="offers" ? `/nannyoffers` : `/nannyhistory` }>{returnTo==="offers" ? "Αγγελίες" : "Ιστορικό"}</Link></li>
+                            <li><span className='font-medium'>{action}</span></li>
                         </ul>
                     </div>
                     
@@ -119,8 +123,8 @@ function OfferForm({action="Δημιουργία Νέας Αγγελίας"}){
                         <div className='w-11/12 mx-auto flex flex-col flex-grow bg-pallete-100 rounded-md shadow-md shadow-gray-400 mb-3 '>
                             
                             {/* page1,2,3 here */}
-                            {selectedPage==1 && <FormPage1 form={formState} setForm={setFormState} nextFn={handleNextPage}/>}
-                            {selectedPage==2 && <FormPage2 form={formState} setForm={setFormState} nextFn={handleNextPage}/>}
+                            {selectedPage==1 && <FormPage1 form={formState} returnTo={returnTo} setForm={setFormState} nextFn={handleNextPage}/>}
+                            {selectedPage==2 && <FormPage2 form={formState} returnTo={returnTo} setForm={setFormState} nextFn={handleNextPage}/>}
                             {selectedPage==3 && <FormPage3/>}
 
 

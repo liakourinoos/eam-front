@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { archiveOffer} from '../../FetchFunctions'
 import { queryClient } from '../../main'; // Adjust the import path as needed.
 
-function FinalOffer({code,finalDate}) {
+function FinalOffer({code,finalDate, returnTo="offers"}) {
     
 
     const {mutateAsync:deleteOffer,isPending} = useMutation({
@@ -36,10 +36,11 @@ function FinalOffer({code,finalDate}) {
 
             {/* view button */}
             <div className='w-1/3 flex justify-center px-2 gap-2 '>
-                <Link to={`/viewoffer/${code}`} className='w-2/3 border-2 border-pallete-800 text-pallete-800 hover:bg-pallete-800 hover:text-white h-14 rounded-md  flex gap-2 items-center justify-center px-2'>
+                <button  onClick={()=>nav(`/viewoffer/${code}`,{ state:  returnTo  })} 
+                        className='w-2/3 border-2 border-pallete-800 text-pallete-800 hover:bg-pallete-800 hover:text-white h-14 rounded-md  flex gap-2 items-center justify-center px-2'>
                     <FaEye className='text-3xl'/>
                     Προβολή
-                </Link>
+                </button>
                 <button className='w-2/3 border-2 border-pallete-800 text-pallete-800 hover:bg-pallete-800 hover:text-white h-14 rounded-md   flex gap-2 items-center justify-center px-2'
                         onClick={()=>deleteOffer()}
                 >
@@ -59,5 +60,6 @@ export default FinalOffer;
 
 FinalOffer.propTypes = {
     code: PropTypes.string.isRequired,
-    finalDate: PropTypes.string.isRequired
+    finalDate: PropTypes.string.isRequired,
+    returnTo:PropTypes.string
 };

@@ -7,8 +7,8 @@ import { Link } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "../../customHooks.jsx";
 import { addFinalOffer } from "../../FetchFunctions.jsx";
+function FormPage2({ form, setForm, nextFn, returnTo }) {
 
-function FormPage2({ form, setForm, nextFn }) {
 
     const {userData} = useAuth();
 
@@ -232,9 +232,15 @@ function FormPage2({ form, setForm, nextFn }) {
                         
                     </button>
                 }
-                {form.cantEdit && 
+                {form.cantEdit && returnTo==="offers" &&
                     <Link to='/nannyoffers' className={` border-2 flex items-center justify-center bg-white font-medium w-48 border-gray-500 text-md px-2 mr-10 h-14 rounded-md my-3`}>
-                        Οι Αιτήσεις Μου
+                        Οι Αγγελίες Μου
+                    </Link>
+
+                }
+                {form.cantEdit && returnTo==="history" &&
+                    <Link to='/nannyhistory' className={`text-center border-2 flex items-center justify-center bg-white font-medium w-48 border-gray-500 text-md px-2 mr-10 h-14 rounded-md my-3`}>
+                        Επιστροφή Στο Ιστορικό
                     </Link>
 
                 }
@@ -247,6 +253,7 @@ FormPage2.propTypes = {
     form: PropTypes.object.isRequired,
     setForm: PropTypes.func.isRequired,
     nextFn: PropTypes.func.isRequired,
+    returnTo:PropTypes.string
 };
 
 export default FormPage2;

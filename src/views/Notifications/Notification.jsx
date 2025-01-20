@@ -15,11 +15,6 @@ function Notification({ id, type, role }) {
     const nav=useNavigate();
     const [status, setStatus] = useState(null); // Local state for status
 
-    //     useEffect(()=>{
-    //         console.log(id,type)    
-
-    // },[])
-
     const { data: job, isLoading: isJobLoading } = useQuery({
         queryFn: () => fetchJobNotification(id),
         enabled: type === "jobOffer",
@@ -402,7 +397,7 @@ function Notification({ id, type, role }) {
                                         h-1/2 w-1/2 text-lg rounded-md font-semibold text-pallete-800 border-2 border-pallete-800
                                         ${status === "pending" && "bg-white hover:bg-pallete-700 hover:text-white"}   
                                         
-                                    `}                                                                                                              //setShowReviewModal(true);
+                                    `}                                                                                                              
                                     onClick={() => { setStatus("ended"); archiveApplication(endJob?.applicationId,"ended",endJob?.id);setConfirmOpenReviewModal(true);  }}
                                     disabled={status !== "pending"}
                                 >
@@ -469,7 +464,7 @@ function Notification({ id, type, role }) {
                 {/* showMessage First */}
                 {showReviewModal &&
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 ">
-                        <div className="w-4/6 flex-col flex items-center h-4/6 rounded-md z-50 my-auto bg-white shadow-xl p-6">
+                        <div className="w-4/6 flex-col flex items-center h-4/6 overflow-y-auto rounded-md z-50 my-auto bg-white shadow-xl p-6">
                             <div className="flex items-center justify-end w-full">
                                 <button onClick={() => setShowReviewModal(false)}>
                                     <MdOutlineClose className="font-bold text-7xl text-red-700 hover:text-red-500" />
