@@ -237,7 +237,7 @@ function NannyProfile() {
 
                         <div className='w-full   mt-5 flex flex-col items-center '>
                             {isReviewsLoading && <div className="w-full flex-grow  flex items-center justify-center"> <span className="loading loading-lg"></span> </div>}
-                            {!isReviewsLoading && reviews.length === 0 && <p>Δε βρέθηκαν αξιολογήσεις.</p>}
+                            {!isReviewsLoading && reviews.length === 0 && <p className='text-gray-500 text-xl font-semibold'>Δε βρέθηκαν πρόσφατες αξιολογήσεις.</p>}
                             {!isReviewsLoading && reviews.length > 0 &&
                                 reviews.slice(0, 5).map((review, index) => (
                                     <Review key={index} seenFrom="nanny" review={review}

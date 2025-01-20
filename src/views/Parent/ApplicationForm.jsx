@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom';
 import { fetchApplication,addDraftApplication } from '../../FetchFunctions.jsx';
 import { useQuery,useMutation } from '@tanstack/react-query';
 
-function ApplicationForm({action="Δημιουργία Νέου Συμφωνητικού"}){
+function ApplicationForm({action="Δημιουργία Νέου Συμφωνητικού" }){
     const nav=useNavigate();
     const {id} = useParams();
 

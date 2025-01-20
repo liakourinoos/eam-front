@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuth } from '../customHooks.jsx'
 import { RenderHeaderNavbar } from '../../global_assets/global_functions.jsx';
 import Footer from '../generic components/Footer.jsx'
@@ -41,6 +41,14 @@ function Contact() {
             setData({ ...data, senderId: userData?.id })
         }
     }, [userData, loading])
+
+    useEffect(() => {
+        setData({
+            ...data,
+            contactType: selectedOption === '1' ? 'phone' : selectedOption === '2' ? 'email' : 'skype',
+            contactInfo: selectedOption === '1' ? userData?.number : selectedOption === '2' ? userData?.email : userData?.skype
+        });
+    }, [selectedOption, userData]);
 
     const [successMessage, setSuccessMessage] = useState(false)
     const duration = 2000;

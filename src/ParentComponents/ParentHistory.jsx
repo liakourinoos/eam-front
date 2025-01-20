@@ -16,7 +16,7 @@ export default function ParentHistory({ initialPage = 1 }) {
 
     if(loading){
         return(
-            <div className="w-full h-screen bg-white flex items-center text-black justify-center text-3xl font-medium">            
+            <div className="w-full min-h-screen bg-white flex items-center text-black justify-center text-3xl font-medium">            
                 <h1>Loading...</h1>
             </div> 
         )

@@ -23,7 +23,7 @@ function NannyDraftOffers(){
         <div className="w-full py-2 ">
 
             <div className="h-16 w-11/12 mx-auto flex  items-center justify-between ">
-                <Link to='/offerform' className="h-full w-2/12 text-xl bg-pallete-200 font-medium flex items-center gap-4 justify-center rounded-md">
+                <Link to='/offerform' className="h-full w-2/12 text-xl border-2 border-pallete-800 text-pallete-800 hover:bg-pallete-800 hover:text-white font-medium flex items-center gap-4 justify-center rounded-md">
                     <VscNewFile className="text-3xl" />
                     <span>Νέα Αγγελία </span>
                 </Link>

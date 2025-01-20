@@ -27,7 +27,7 @@ function ParentFinalApplications() {
             
             {/*  new application and sort by  */}
             <div className="h-16 w-11/12 mx-auto flex  items-center justify-between ">
-                <Link to='/applicationform' className="h-full w-2/12 text-xl bg-pallete-200 font-medium flex items-center gap-4 justify-center rounded-md">
+                <Link to='/applicationform' className="h-full w-2/12 text-xl border-2 border-pallete-800 text-pallete-800 hover:bg-pallete-800 hover:text-white font-medium flex items-center gap-4 justify-center rounded-md">
                     <VscNewFile className="text-3xl" />
                     <span>Νέο Συμφωνητικό </span>
                 </Link>

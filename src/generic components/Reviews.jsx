@@ -49,7 +49,7 @@ function Reviews(){
                     {isNannyReviewsLoading && <div className="w-full flex-grow  flex items-center justify-center"> <span className="loading loading-lg"></span> </div>}
                     {!isNannyReviewsLoading && nannyReviews &&  nannyReviews.length === 0 && 
                         <div className="w-full flex-grow bg-white flex items-center justify-center"> 
-                            <p className="text-2xl text-gray-500">Καμία Κριτική Ακόμα.</p> 
+                            <p className="text-3xl font-semibold text-gray-500">Δεν βρέθηκαν παλαιότερες κριτικές.</p> 
                         </div>
                     }
                     
@@ -63,7 +63,7 @@ function Reviews(){
 
 
                     {/* for parents */}
-                    {isParentReviewsLoading && <div className="w-full flex-grow  flex items-center justify-center"> <span className="loading loading-lg"></span> </div>}
+                    {/* {isParentReviewsLoading && <div className="w-full flex-grow  flex items-center justify-center"> <span className="loading loading-lg"></span> </div>}
                     {!isParentReviewsLoading && parentReviews &&  parentReviews.length === 0 && 
                         <div className="w-full flex-grow bg-white flex items-center justify-center"> 
                             <p className="text-2xl text-gray-500">Καμία Κριτική Ακόμα.</p> 
@@ -89,7 +89,7 @@ function Reviews(){
                                 />
                             );
                         })
-                    }    
+                    }     */}
                 </div>
 
                 

@@ -10,8 +10,10 @@ import { FaStar, FaRegStar } from 'react-icons/fa';
 import { RiCloseLargeFill } from "react-icons/ri";
 import { MdOutlineClose } from "react-icons/md";
 import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 //prepei na pairnei tis leptomereies kathe notification
 function Notification({ id, type, role }) {
+    const nav=useNavigate();
     const [status, setStatus] = useState(null); // Local state for status
 
     //     useEffect(()=>{
@@ -44,6 +46,7 @@ function Notification({ id, type, role }) {
     });
 
     const [showModal, setShowModal] = useState(false);
+    const [confirmOpenReviewModal,setConfirmOpenReviewModal] = useState(false)
     const [showReviewModal,setShowReviewModal] = useState(false)
     const [ratedStars, setRatedStars] = useState(0);
     const [review,setReview]= useState("");
@@ -191,7 +194,7 @@ function Notification({ id, type, role }) {
                         <>
                             {status !== "accepted" &&
                                 <button className={`
-                                        h-1/2 w-1/2 text-xl rounded-md
+                                        h-1/2 w-1/2 text-xl rounded-md text-white
                                         ${status === "pending" && "bg-red-600 hover:bg-red-500"}   
                                         ${status === "rejected" && "bg-red-500"}
                                         ${status === "accepted" && "bg-red-200"}
@@ -256,10 +259,10 @@ function Notification({ id, type, role }) {
                                 <p className='w-1/6 h-full'></p>
                                 <p className='w-4/6 h-full font-medium text-3xl flex items-center justify-center bg-white'> Επιθεώρηση Συμφωνητικού Απασχόλησης</p>
                                 <div className='w-1/6 h-full flex items-center justify-end '>
-                                    <button className='h-12 w-12 text-red-500 border-2 border-gray-400 rounded-md flex items-center text-5xl font-medium justify-center bg-white'
+                                    <button className='h-12 w-12 text-red-600  rounded-md flex items-center text-5xl font-medium justify-center bg-white'
                                         onClick={() => setShowModal(false)}
                                     >
-                                        <MdClose />
+                                        <MdClose className='hover:text-red-500' />
                                     </button>
                                 </div>
                             </div>
@@ -375,25 +378,25 @@ function Notification({ id, type, role }) {
                         <>
                             {status !== "renewed" &&
                                 <button className={`
-                                        h-1/2 w-1/2 text-lg rounded-md text-pallete-800 border-2 border-pallete-800
+                                        h-1/2 w-1/2 text-lg rounded-md font-semibold text-pallete-800 border-2 border-pallete-800
                                         ${status === "pending" && "bg-white hover:bg-pallete-700 hover:text-white"}   
                                         
-                                    `}
-                                    onClick={() => { setStatus("ended"); archiveApplication(endJob?.applicationId,"ended"); setShowReviewModal(true); }}
+                                    `}                                                                                                              //setShowReviewModal(true);
+                                    onClick={() => { setStatus("ended"); archiveApplication(endJob?.applicationId,"ended");setConfirmOpenReviewModal(true);  }}
                                     disabled={status !== "pending"}
                                 >
                                     {status === "pending" && 'Επιβεβαίωση Λήξης'}
-                                    {status === "ended" && 'Απορρίφθηκε'}
+                                    {status === "ended" && 'Επιβεβαίωσατε Λήξη'}
                                 </button>
                             }
                             {status !== "ended" &&
                                 <button className={`
-                                            h-1/2 w-1/2 text-lg rounded-md text-pallete-800 border-2 border-pallete-800
+                                            h-1/2 w-1/2 text-lg rounded-md font-semibold text-pallete-800 border-2 border-pallete-800
                                             ${status === "pending" && "bg-white hover:bg-pallete-700 hover:text-white"}   
                                             
                                         `}
                                         //must open a modal or redirect to applications page with some arguments for new application
-                                    onClick={() => { setStatus("renewed"); archiveApplication(endJob?.applicationId,"renewed"); setShowReviewModal(true);  }}
+                                    onClick={() => { setStatus("renewed"); archiveApplication(endJob?.applicationId,"renewed"); setConfirmOpenReviewModal(true);  }}
                                     disabled={status !== "pending"}
 
                                 >
@@ -406,6 +409,33 @@ function Notification({ id, type, role }) {
                     }
 
                 </div>
+
+                {/* review confirmation modal */}
+                { confirmOpenReviewModal && 
+                    <div className="fixed inset-0 z-50 flex  justify-center bg-black bg-opacity-40 ">
+                        <div className="w-2/6 flex-col flex items-center py-8 justify-between h-1/6 rounded-md z-50 mt-20 bg-white shadow-xl px-1">
+                            <p className='text-2xl w-full text-center  font-medium'>Θέλετε να αφήσετε μια κριτική για τον επαγγελματία;</p>
+                            <div className='flex gap-5 justify-center  w-full  h-full mt-3'>
+                                <button className={`border-2 border-red-600 font-semibold hover:bg-red-600 hover:text-white w-32 text-red-600 px-2 py-3 rounded-md `}
+                                        onClick={()=>setConfirmOpenReviewModal(false)}
+                                >
+                                    
+                                    Όχι
+                                </button>
+                                <button className={`border-2 border-green-600 font-semibold hover:bg-green-600 hover:text-white w-32 text-green-600 px-2 py-3 rounded-md `}
+                                        onClick={()=>{setConfirmOpenReviewModal(false); setShowReviewModal(true)}}
+
+                                >
+                                    Ναι
+                                </button>
+                            </div>    
+                        </div>
+                    </div>
+
+
+
+                }
+
 
                 {/* showMessage First */}
                 {showReviewModal &&
@@ -430,31 +460,22 @@ function Notification({ id, type, role }) {
                             <div className='h-64 w-2/4 mt-10 flex flex-col items-end  justify-between'>
                                 <textarea className="w-full  h-48 max-h-48 resize-none rounded-md shadow-md border-2 border-gray-400 bg-white shadow-gray-600 p-2"
                                     value={review}
+                                    placeholder='Δώστε μια σύντομη περιγραφή (προαιρετικό)'
                                     onChange={(e) => setReview(e.target.value)}
                                 />
                                 <button
                                     className={`flex items-center mt-5 w-1/4 justify-center h-14    py-1 px-3 rounded-md font-semibold 
                                                 ${ratedStars === 0 ? "bg-gray-400 border-2 border-gray-400 text-white cursor-default" : "border-2 border-pallete-800 text-pallete-800 hover:bg-pallete-700 hover:text-white"}
-                                        
                                     `}
-                                    title={ratedStars===0 ? "Παρακαλούμε διαλέξτε πλήθος αστεριών." : ""}
+                                    title={ratedStars === 0 ? "Παρακαλούμε διαλέξτε πλήθος αστεριών." : ""}
                                     onClick={() => sendReview()}
                                     disabled={ratedStars === 0}
                                 >
                                     {isPending ? <span className='loading loading-md'></span> : "Υποβολή Αξιολόγησης"}
-                                    
                                 </button>
                             </div>
-
-
-
-
-
                         </div>
-
-
                     </div>
-
                 }
 
 

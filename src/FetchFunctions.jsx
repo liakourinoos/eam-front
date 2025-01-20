@@ -521,13 +521,14 @@ export async function fetchAllDraftOffers(userId){
 
 
 
-export async function fetchAllArchivedOffers(userId){
+export async function fetchArchivedOffers(userId){
     const offers = [];
     try {
         // Query to find the user document based on UID field
         const q = query(collection(db, 'offers'),
             where('userId', '==', userId),
-            where('archived', '==', true)
+            where('archived', '==', true),
+            where('type','==', 'final')
         );
         const querySnapshot = await getDocs(q); // Get documents matching the query
         if (!querySnapshot.empty) {                
@@ -1273,7 +1274,7 @@ export async function acceptContact(notificationId){
 
 
 
-export async function fetchContacts(nannyId) {
+export async function fetchParentContacts(nannyId) {
     const result = [];
     try {
         // Create the query
@@ -1318,6 +1319,141 @@ export async function fetchContacts(nannyId) {
         return result;
     }
 }
+
+
+export async function fetchNannyContacts(parentId) {
+    const result = [];
+    try {
+        // Create the query
+        const q = query(
+            collection(db, 'contactRequests'),
+            where('senderId', '==', parentId)
+            // where('status', '==', 'Εγκρίθηκε')
+        );
+
+        // Get documents matching the query
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            for (const dc of querySnapshot.docs) { 
+                const docData = dc.data();
+                // console.log(docData.senderId)
+
+                // Fetch nanny data like name and surname
+                const docRef1 = doc(db, 'users', docData.receiverId);
+                const docSnap = await getDoc(docRef1);
+                const userData=docSnap.data();
+                console.log(userData)
+
+                if (docSnap.exists()) {
+                    result.push({
+                        id: dc.id,
+                        ...docData,
+                        nannyName:userData.name,
+                        nannySurname:userData.surname
+                    });
+                } else {
+                    console.error('Parent data not found for senderId:', docData.receiverId);
+                }
+            }
+        } else {
+            console.error('No contacts found for nannyId:', nannyId);
+        }
+    } catch (error) {
+        console.error('Error fetching contacts:', error.message);
+    } finally {
+        console.log('Result:', result);
+        return result;
+    }
+}
+
+export async function fetchCompletedParentPayments(parentId){
+    const result = [];
+    try{
+        //fetch all payments for parentId
+        const q = query(
+            collection(db, 'payments'),
+            where('parentId', '==', parentId),
+            where('status', '==', 'accepted')
+        );
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+            for (const dc of querySnapshot.docs) { 
+                const docData = dc.data();
+                // console.log(docData.senderId)
+
+                // Fetch nanny data like name and surname
+                const docRef1 = doc(db, 'users', docData.nannyId);
+                const docSnap = await getDoc(docRef1);
+                const userData=docSnap.data();
+                console.log(userData)
+
+                if (docSnap.exists()) {
+                    result.push({
+                        id: dc.id,
+                        ...docData,
+                        nannyName:userData.name,
+                        nannySurname:userData.surname
+                    });
+                } else {
+                    console.error('Parent data not found for senderId:', docData.nannyId);
+                }
+            }
+        } else {
+            console.error('No contacts found for nannyId:', nannyId);
+        }
+    }
+    catch(error){
+        console.log(error.message)
+    }
+    finally {
+        console.log('Result:', result);
+        return result;
+    }
+}
+
+
+export async function fetchCompletedNannyPayments(nannyId) {
+    const result = [];
+    try {
+        // Fetch all payments for nannyId with status 'accepted'
+        const q = query(
+            collection(db, 'payments'),
+            where('nannyId', '==', nannyId),
+            where('status', '==', 'accepted')
+        );
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+            for (const dc of querySnapshot.docs) {
+                const docData = dc.data();
+
+                // Fetch parent data like name and surname
+                const docRef1 = doc(db, 'users', docData.parentId);
+                const docSnap = await getDoc(docRef1);
+                const userData = docSnap.data();
+
+                if (docSnap.exists()) {
+                    result.push({
+                        id: dc.id,
+                        ...docData,
+                        parentName: userData.name,
+                        parentSurname: userData.surname
+                    });
+                } else {
+                    console.error('Parent data not found for parentId:', docData.parentId);
+                }
+            }
+        } else {
+            console.error('No completed payments found for nannyId:', nannyId);
+        }
+    } catch (error) {
+        console.error('Error fetching completed payments:', error.message);
+    } finally {
+        console.log('Result:', result);
+        return result;
+    }
+}
+
 
 
 export async function rejectApplication(notificationId){
@@ -1635,29 +1771,6 @@ export async function fetchContactedNannies(parentId) {
 
 }
 
-export async function fetchArchivedApplications(userId) {
-    const result = [];
-    try {
-        const q = query(collection(db, 'applications'),
-            where('userId', '==', userId),
-            where('archived','==', true)
-        );
-        const querySnapshot = await getDocs(q); // Get documents matching the query
-        if (!querySnapshot.empty) {
-            querySnapshot.forEach((doc) => {
-                result.push({ id: doc.id, ...doc.data() });
-            });
-
-        } else {
-            console.error('No nannies found..');
-        }
-    } catch (error) {
-        console.error('Error fetching nannies');
-    }
-
-    console.log("before exit...")
-    return result;
-}
 
 export async function fetchParentPayments(userId){
     const result = [];
@@ -1695,40 +1808,40 @@ export async function fetchParentPayments(userId){
 }
 
 
-export async function fetchArchivedParentPayments(userId){
-    const result = [];
-    try {
-        const q = query(collection(db, 'payments'),
-            where('parentId', '==', userId),
-            where('status', '==', "accepted")
-        );
-        const querySnapshot = await getDocs(q); // Get documents matching the query
-        if (!querySnapshot.empty) {
-            for (const ndoc of querySnapshot.docs) {
-                const paymentData = ndoc.data();
-                const nannyDocRef = doc(db, 'users', paymentData.nannyId);
-                const nannyDocSnap = await getDoc(nannyDocRef);
-                let nannyName = "", nannySurname = "";
-                if (nannyDocSnap.exists()) {
-                    const nannyData = nannyDocSnap.data();
-                    nannyName = nannyData.name || "";
-                    nannySurname = nannyData.surname || "";
-                } else {
-                    console.error(`Nanny with id ${paymentData.nannyId} not found.`);
-                }
-                result.push({ id: ndoc.id, ...paymentData, nannyName, nannySurname });
-            }
-        } else {
-            console.error('No payments found for parentId:', userId);
-        }
-    } catch (error) {
-        console.error('Error fetching payments:', error);
-    }
+// export async function fetchArchivedParentPayments(userId){
+//     const result = [];
+//     try {
+//         const q = query(collection(db, 'payments'),
+//             where('parentId', '==', userId),
+//             where('status', '==', "accepted")
+//         );
+//         const querySnapshot = await getDocs(q); // Get documents matching the query
+//         if (!querySnapshot.empty) {
+//             for (const ndoc of querySnapshot.docs) {
+//                 const paymentData = ndoc.data();
+//                 const nannyDocRef = doc(db, 'users', paymentData.nannyId);
+//                 const nannyDocSnap = await getDoc(nannyDocRef);
+//                 let nannyName = "", nannySurname = "";
+//                 if (nannyDocSnap.exists()) {
+//                     const nannyData = nannyDocSnap.data();
+//                     nannyName = nannyData.name || "";
+//                     nannySurname = nannyData.surname || "";
+//                 } else {
+//                     console.error(`Nanny with id ${paymentData.nannyId} not found.`);
+//                 }
+//                 result.push({ id: ndoc.id, ...paymentData, nannyName, nannySurname });
+//             }
+//         } else {
+//             console.error('No payments found for parentId:', userId);
+//         }
+//     } catch (error) {
+//         console.error('Error fetching payments:', error);
+//     }
 
-    console.log("payments:")
-    console.log(result)
-    return result;
-}
+//     console.log("payments:")
+//     console.log(result)
+//     return result;
+// }
 
 
 export async function updatePayment(paymentId){
@@ -1896,38 +2009,38 @@ export async function fetchEndJobNotification(notifId){
         }
         const appData = appDocSnap.data();
 
-
-        return {
-            senderId,
+        const res={senderId,
             senderName,
             senderSurname,
             img,
             createdAt: data.createdAt,
-            status:appData.status,
+            status:data.status,
             type:data.type,
             gender:senderData.gender,
             applicationId:data.applicationId,
-            receiverId: data.receiverId,
-        }
+            receiverId: data.receiverId,}
+        
+        console.log("EndOfJob notif:")
+        console.log(res)
+        return res
     }
     catch(error){
         console.log(error.message)
     }
 }
 
-
-export async function addReview(parentId,nannyId,rating,bio){
+export async function addReview(parentId, nannyId, rating, bio) {
     const today = new Date();
     const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
     const exactDate = Timestamp.now();
-    try{
+    try {
         const reviewData = {
             parentId: parentId,
             nannyId: nannyId,
-            rating: rating,
+            rating: Number(rating),
             bio: bio,
             createdAt: formattedDate,
-            exactDate:exactDate
+            exactDate: exactDate
         };
 
         const reviewsCollection = collection(db, 'parentReviews');
@@ -1936,23 +2049,146 @@ export async function addReview(parentId,nannyId,rating,bio){
         // fetch nanny data with nannyId
         const docRef = doc(db, 'users', nannyId);
         const docSnap = await getDoc(docRef);
-        const nannyData= docSnap.data();
+        const nannyData = docSnap.data();
 
-        //update ratingCount by 1 and calculate the new average rating
-        const newAverage= (nannyData.rating + rating) / (nannyData.ratingCount +1)
-        
+        // Calculate the new average rating
+        const newTotalRating = (Number(nannyData.rating) * Number(nannyData.ratingCount)) + Number(rating);
+        const newRatingCount = Number(nannyData.ratingCount) + 1;
+        const newAverage = (newTotalRating / newRatingCount).toFixed(2);
+
         //updateDoc
         await updateDoc(docRef, {
-            rating: newAverage,
-            ratingCount: nannyData.ratingCount +1
+            rating: Number(newAverage),
+            ratingCount: Number(newRatingCount)
         });
 
         return { success: true, message: 'Review added successfully' };
 
+    } catch (error) {
+        console.log(error.message);
+        return { success: false, message: 'Review not added' };
+    }
+}
+
+
+export async function fetchArchivedApplications(parentId){
+    const result=[]
+    try{
+        // query all applications by parentId and status archived
+        const q = query(collection(db, 'applications'),
+                where('userId', '==', parentId),
+                where('type', '==' , 'final'),
+                where('archived', '==', true)
+            );
+            const querySnapshot = await getDocs(q); // Get documents matching the query
+            if (!querySnapshot.empty) {
+                
+                querySnapshot.forEach((doc) => {
+                    result.push({ id: doc.id, ...doc.data() });
+                });
+                
+            } else {
+                console.error('No document found for userId:', parentId);
+            }
+
     }
     catch(error){
         console.log(error.message)
-        return { success: false, message: 'Review not added' };
     }
+    finally{
+        console.log(result)
+        return result
+    }
+}
 
+
+export async function fetchNannyDeals(nannyId){
+    const result=[]
+    try{
+        // fetch nanny data with nannyId
+        const docRef = doc(db, 'users', nannyId);
+        const docSnap = await getDoc(docRef);
+        const nannyData= docSnap.data();
+
+        // query all applications by nannyId and status archived
+        const q = query(collection(db, 'applications'),
+                where('nannyAMKA', '==', nannyData.AMKA),
+                where('nannyName', '==', nannyData.name),
+                where('nannySurname','==',nannyData.surname),
+                where('type', '==' , 'final')
+                // where('archived', '==', true)
+            );
+            const querySnapshot = await getDocs(q); // Get documents matching the query
+            if (!querySnapshot.empty) {
+                
+                for (const applicationDoc of querySnapshot.docs) {
+                    const applicationData = { id: applicationDoc.id, ...applicationDoc.data() };
+
+                    // Fetch parent data using userId field of applicationDoc
+                    const parentDocRef = doc(db, 'users', applicationData.userId);
+                    const parentDocSnap = await getDoc(parentDocRef);
+                    let parentData = {};
+                    if (parentDocSnap.exists()) {
+                        parentData = parentDocSnap.data();
+                    } else {
+                        console.error(`Parent with id ${applicationData.userId} not found.`);
+                    }
+
+                    result.push({ ...applicationData, parentData });
+                }
+                
+            } else {
+                console.error('No document found for nannyId:', nannyId);
+            }
+
+    }
+    catch(error){
+        console.log(error.message)
+    }
+    finally{
+        console.log(result)
+        return result
+    }
+}
+
+
+export async function searchAvailableNannies({filters}){
+    const results=[]
+    try{
+        if(filters.town){
+            console.log("Updated search for town:" , filters.town)
+        }
+        if(filters.area){
+            console.log("Updated search for area:" , filters.area)
+        }
+        if(filters.canHost){
+            console.log("Updated search for canHost:" , filters.canHost)
+        }
+        if(filters.timeType){
+            console.log("Updated search for timeType:" , filters.timeType)
+        }
+        if(filters.childAge){
+            console.log("Updated search for childAge:" , filters.childAge)
+        }
+        if(filters.experience){
+            console.log("Updated search for experience:" , filters.experience)
+        }
+        if(filters.gender){
+            console.log("Updated search for gender:" , filters.gender)
+        }
+        if(filters.months){
+            console.log("Updated search for months:" , filters.months)
+        }
+        if(filters.startingDate){
+            console.log("Updated search for startingDate:" , filters.startingDate)
+        }
+        
+    }
+    catch(error){
+        console.log(error.message)
+    }
+    finally{
+        console.log(results)
+        return results
+    }
 }

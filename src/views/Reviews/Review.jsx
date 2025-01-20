@@ -77,6 +77,7 @@ export default function Review({seenFrom,nannyName,nannySurname,nannyImg,review}
                 {/* bio */}
                 <textarea   className='w-full px-2 py-1 bg-white h-full rounded-md border-2 border-gray-400'
                             value={review.bio}
+                            placeholder={review.bio.length===0 ?'Ο γονέας δεν πρόσθεσε κάποια περιγραφή.' : ''}
                             readOnly
                 />
 
