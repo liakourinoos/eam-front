@@ -87,7 +87,7 @@ function App() {
                       pathname: '/search',
                     }}
                     state={{ selectedTown: town, selectedLocation: location }}
-                    className='rounded-md flex items-center justify-center font-semibold text-center text-xl bg-pallete-800 hover:bg-pallete-700 w-40 h-12 text-white py-1'
+                    className='rounded-md flex items-center justify-center font-semibold text-center text-xl bg-pallete-800 hover:bg-pallete-600 w-40 h-12 text-white py-1'
                   >
                     <span>Συνέχεια</span>
                   </Link>
