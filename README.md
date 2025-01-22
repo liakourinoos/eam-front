@@ -47,4 +47,4 @@
 **Σημείωση:** Στα πλαίσια παρουσίασης της λειτουργικότητας της εργασίας, μπορούμε να εμφανίζουμε και τις μελλοντικές ειδοποιήσεις βάζοντας σε σχόλιο τη συνθήκη που τις εξαιρεί.
 
 - **src/FetchFunctions.jsx**: Γραμμές 1030 και 1069 `if (data.exactDate <= now)`
-- **src/views/Parent/PaymentInfo.jsx**: Γραμμή 24 `const currentDate = getCurrentDate();`
+- **src/views/Parent/PaymentInfo.jsx**: Γραμμή 24 `currentDate = getCurrentDate();` 
