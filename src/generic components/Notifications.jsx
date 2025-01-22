@@ -33,7 +33,7 @@ function Notifications() {
     if (loading)
         return (
             <div className="w-full min-h-screen bg-white flex items-center justify-center">
-                <span className="loading loading-lg"></span>
+                <span className='text-3xl font-bold'>Φόρτωση...</span>
             </div>
         );
     if (!loading)

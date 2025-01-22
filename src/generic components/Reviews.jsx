@@ -25,7 +25,7 @@ function Reviews(){
     if(loading){
         return (
             <div className="w-full bg-white h-screen flex justify-center items-center">
-                <span className="loading loading-lg"></span>
+                <span className='text-3xl font-bold'>Φόρτωση...</span>
             </div>
         )
     }

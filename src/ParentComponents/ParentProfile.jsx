@@ -31,7 +31,7 @@ function ParentProfile() {
     if (loading || isUserLoading ) {
         return (
             <div className="w-full bg-white h-screen flex items-center justify-center">
-                <span className="loading loading-spinner loading-lg"></span>
+                <span className='text-3xl font-bold'>Φόρτωση...</span>
             </div>
         )
     }

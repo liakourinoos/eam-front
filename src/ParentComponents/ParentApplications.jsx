@@ -34,7 +34,7 @@ function ParentApplications() {
     if(loading){
         return(
             <div className="w-full h-screen bg-white flex items-center text-black justify-center text-3xl font-medium">            
-                <h1>Loading...</h1>
+                <span className='text-3xl font-bold'>Φόρτωση...</span>
             </div> 
         )
     }

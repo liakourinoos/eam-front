@@ -83,7 +83,7 @@ function ApplicationForm({action="Δημιουργία Νέου Συμφωνητ
     if(isLoading || loading)
         return(
             <div className='w-full h-screen bg-white flex items-center justify-center text-3xl font-medium'>
-                <h1>Loading...</h1>
+                <span className='text-3xl font-bold'>Φόρτωση...</span>
             </div>
         )
 

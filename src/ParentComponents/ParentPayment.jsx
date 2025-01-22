@@ -8,7 +8,7 @@ import { fetchParentPayments } from '../FetchFunctions.jsx';
 
 function ParentPayment() {
 
-    const { userData } = useAuth();
+    const { userData,loading } = useAuth();
     const { data: payments, isLoading } = useQuery({
         queryKey: ['parentPayments'],
         queryFn: () => fetchParentPayments(userData?.id),
@@ -26,6 +26,13 @@ function ParentPayment() {
             return () => clearTimeout(timer);
         }
     }, [successMessage, duration])
+
+    if(loading) 
+        return(
+            <div className="w-full bg-white h-screen flex items-center justify-center">
+                <span className='text-3xl font-bold'>Φόρτωση...</span>
+            </div>
+        )
 
     return (
         <div className="w-full bg-white min-h-screen flex flex-col">

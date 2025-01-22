@@ -66,7 +66,7 @@ function ParentProfileEdit({setSuccessMessage}) {
     if(loading) 
         return (
             <div className="w-full h-screen flex items-center justify-center">
-                <span className="loading loading-spinner loading-lg"></span>
+                <span className='text-3xl font-bold'>Φόρτωση...</span>
             </div>
         )
 

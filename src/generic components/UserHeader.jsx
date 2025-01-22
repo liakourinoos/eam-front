@@ -30,7 +30,7 @@ function UserHeader({ main_page = "/", role, id }) {
 
     if (loading) return (
         <div className='h-16 w-full flex justify-between border-b-2 border-black bg-white'>
-            <span className="loading loading-spinner loading-lg"></span>
+            <span className='text-3xl font-bold'>Φόρτωση...</span>
         </div>
     )
 

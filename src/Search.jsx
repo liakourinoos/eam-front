@@ -87,7 +87,7 @@ function Search() {
     if (loading )
         return (
             <div className="w-full h-screen bg-white flex items-center justify-center">
-                <span className="loading loading-spinner loading-lg"></span>
+                <span className='text-3xl font-bold'>Φόρτωση...</span>
             </div>
         )
 

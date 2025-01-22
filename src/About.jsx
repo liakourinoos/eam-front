@@ -45,7 +45,7 @@ function App() {
   if (loading)
     return (
       <div className='w-full h-screen flex justify-center items-center bg-white'>
-        <span className='loading loading-lg'></span>
+        <span className='text-3xl font-bold'>Φόρτωση...</span>
       </div>
     )
 
