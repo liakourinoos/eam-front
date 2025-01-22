@@ -79,7 +79,7 @@ function ParentProfile() {
                                 />
                             </div>
                             <div className=' w-full h-20 flex items-center'>
-                                <p className='text-2xl font-medium'>{userData?.name} {userData?.surname}</p>
+                                <p className='text-2xl font-medium'>{userData?.name} {userData?.surname} , {userData?.age}</p>
                                 {userData?.gender ? <FaMale className='text-2xl ml-2' title='Αρσενικό'/> : <FaFemale className='text-2xl ml-2' title='Θηλυκό'/>}
                             </div>
                         </div>

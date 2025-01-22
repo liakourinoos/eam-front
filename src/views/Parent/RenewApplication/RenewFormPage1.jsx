@@ -80,11 +80,52 @@ function RenewFormPage1({myId, form, setForm, nextFn, returnTo }) {
     return (
         <div className="w-full">
             {/* progress bar */}
-            <ul className="steps w-full my-2 font-medium">
-                <li className="step step-secondary text-secondary">Στοιχεία Επαγγελματία</li>
-                <li className="step">Περιοχή και Πρόγραμμα</li>
-                {!form.cantEdit && <li className="step">Οριστικοποίηση</li>}
-            </ul>
+            {!form.cantEdit &&
+                <div className="w-3/4 mt-2 mx-auto flex justify-around items-center relative">
+                    {/* Step 1 */}
+                    <div className="text-pallete-800 z-10 text-xl font-semibold flex flex-col items-center justify-center relative">
+                        <span className="rounded-full h-8 w-8 text-white flex items-center bg-pallete-800 justify-center">1</span>
+                        <span>Στοιχεία Επαγγελματία</span>
+                    </div>
+
+                    {/* Line between Step 1 and Step 2 */}
+                    <div className="absolute top-4 left-60 h-1 bg-gray-400 w-2/6"></div>
+
+                    {/* Step 2 */}
+                    <div className="text-gray-400 z-10 text-xl font-semibold flex flex-col items-center justify-center relative">
+                        <span className="rounded-full h-8 w-8 text-white flex items-center bg-gray-400 justify-center">2</span>
+                        <span>Περιοχή και Πρόγραμμα</span>
+                    </div>
+
+                    {/* Line between Step 2 and Step 3 */}
+                    <div className="absolute top-4  mr-6 right-40 h-1 bg-gray-400 w-2/6"></div>
+
+                    {/* Step 3 */}
+                    <div className="text-gray-400 z-10 text-xl font-semibold flex flex-col items-center justify-center relative">
+                        <span className="rounded-full h-8 w-8 text-white flex items-center bg-gray-400 justify-center">3</span>
+                        <span>Οριστικοποίηση</span>
+                    </div>
+                </div>
+            }
+            {form.cantEdit &&
+                <div className="w-3/4 mt-2  mx-auto flex justify-around items-center relative">
+                    {/* Step 1 */}
+                    <div className="text-pallete-800 z-10 text-xl font-semibold flex flex-col items-center justify-center relative">
+                        <span className="rounded-full h-8 w-8 text-white flex items-center bg-pallete-800 justify-center">1</span>
+                        <span>Στοιχεία Επαγγελματία</span>
+                    </div>
+
+                    {/* Line between Step 1 and Step 2 */}
+                    <div className="absolute top-4 left-1/6 h-1 bg-gray-400 w-3/6"></div>
+
+                    {/* Step 2 */}
+                    <div className="text-gray-400 z-10 text-xl font-semibold flex flex-col items-center justify-center relative">
+                        <span className="rounded-full h-8 w-8 text-white flex items-center bg-gray-400 justify-center">2</span>
+                        <span>Περιοχή και Πρόγραμμα</span>
+                    </div>
+
+                </div>
+            }
             
             <p className="text-3xl font-medium mt-16 text-center">Στοιχεία Επαγγελματία</p>
             <div className=" h-96 flex">

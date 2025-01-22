@@ -34,7 +34,8 @@ function SignUp({role}){
         skills:[],
         rating:0,
         ratingCount:0,
-        experience:0
+        experience:0,
+        age:18
 
 
     });
@@ -76,7 +77,8 @@ function SignUp({role}){
                 skills:[],
                 rating:0,
                 ratingCount:0,
-                experience:0
+                experience:0,
+                age:18
 
             })
         
@@ -133,16 +135,19 @@ function SignUp({role}){
     
 
 
-    const [numberError,setNumberError]= useState("")
+    const [numberError, setNumberError] = useState("");
     // input check for number
-    useEffect(()=>{
+    useEffect(() => {
         const isValidNumber = /^\d{10}$/.test(SignUpData.number);
-        if (!isValidNumber && SignUpData.number.length > 0) {
+        const containsOnlyDigits = /^\d+$/.test(SignUpData.number);
+        if (!containsOnlyDigits && SignUpData.number.length > 0) {
+            setNumberError("Ο αριθμός τηλεφώνου πρέπει να περιέχει μόνο ψηφία.");
+        } else if (!isValidNumber && SignUpData.number.length > 0) {
             setNumberError("Ο αριθμός τηλεφώνου πρέπει να αποτελείται από 10 ψηφία.");
         } else {
             setNumberError("");
         }
-    },[SignUpData.number])
+    }, [SignUpData.number]);
 
 
     const [emailError, setEmailError] = useState("");
@@ -172,6 +177,7 @@ function SignUp({role}){
     }, [SignUpData.password]);
 
 
+
     const isFormValid = () => {
         return (
             repeatPassword.length > 0 &&
@@ -183,7 +189,8 @@ function SignUp({role}){
             matchingPasswords &&
             SignUpData.gender !== "" &&
             SignUpData.password.length > 6 &&
-            passwordError===""
+            passwordError==="" &&
+            SignUpData.age.length!==null
         );
     };
 
@@ -206,7 +213,7 @@ function SignUp({role}){
 
 
             <Header/>
-            <div className="w-full flex-grow flex flex-col  justify-center items-center  ">
+            <div className="w-full py-10 flex-grow flex flex-col  justify-center items-center  ">
                 <div className="w-2/3 rounded-md flex flex-col  items-center bg-white  ">
                     <p className="text-5xl font-bold">Εγγραφή</p>
                     {signUpMessage.length>0 && <p className="text-red-500 text-3xl font-medium -mb-10 mx-auto mt-10">{signUpMessage}</p>}
@@ -266,9 +273,24 @@ function SignUp({role}){
                                 className={`w-full h-10 border-2 bg-white rounded-md pl-2 mt-1 ${numberError.length>0 ? 'border-red-700' : 'border-gray-300'}`}
                                 value={SignUpData.number}
                                 onChange={(e)=>setSignUpData({...SignUpData,number:e.target.value})}
+                                placeholder="6999999999"
                                 />
                         
                     
+                    </div>
+
+                    <div className="w-1/4  mt-5 flex flex-col gap-2 text-lg  ">
+                        <p className="text-xl ml-1 font-medium ">Ηλικία</p>
+                        <input
+                            type="number"
+                            className="w-full h-10 border-2 bg-white rounded-md px-2 mt-1 border-gray-300"
+                            value={SignUpData.age}
+                            onChange={(e) => setSignUpData({ ...SignUpData, age: e.target.value })}
+                            placeholder="Ηλικία"
+                            min={16}
+                            max={99}
+                        />
+
                     </div>
 
                     <div className="w-1/4  mt-5 flex flex-col gap-2 text-lg  ">
@@ -297,6 +319,10 @@ function SignUp({role}){
                     
                     </div>
 
+                    
+
+
+
 
 
                     
@@ -304,7 +330,7 @@ function SignUp({role}){
                     <span className="mt-10 mr-20 ">
                         Έχετε ήδη εγγραφτεί;
                         <Link to='/login'>
-                            <span className="underline font-medium ml-2 hover:text-pallete-600 text-pallete-800" >Σύνδεση{" >"}</span>
+                            <span className="underline font-medium ml-2 hover:text-pallete-800 " >Σύνδεση{" >"}</span>
                         </Link>
                     </span>
 

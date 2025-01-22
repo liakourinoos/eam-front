@@ -40,7 +40,7 @@ export default function NannyPaymentsHistory() { // Corrected function declarati
                 <div className="w-1/3 flex items-center justify-center gap-1"
                     title="Οι ημερομηνίες εμφανίζονται σε μορφή ΗΗ/ΜΜ/ΕΕΕΕ"
                 >
-                    <p>Ημερομηνία Πληρωμής</p>
+                    <p>Ημερομηνία Λήψης Voucher</p>
                     <FaRegQuestionCircle className="text-xl" />
                 </div>
                 <p className="w-1/3 text-center">Κωδικός Voucher</p>
@@ -59,7 +59,7 @@ export default function NannyPaymentsHistory() { // Corrected function declarati
                     payments.map((payment, idx) => (
                         <Payment key={idx} id={payment?.parentId} parentName={payment?.parentName}
                             parentSurname={payment?.parentSurname}
-                            date={payment?.payDate}
+                            date={payment?.sentAt}
                             voucher={payment?.voucherCode}
                         />
                     ))

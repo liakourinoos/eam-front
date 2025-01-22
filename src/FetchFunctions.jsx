@@ -106,6 +106,45 @@ export async function updatePic(id,newImg) {
     }
 }
 
+export async function updateAge(id,newAge) {
+    console.log(id,newAge)
+    try {
+        // Directly reference the document using the document ID
+        const docRef = doc(db, "users", id); // `id` is the document ID
+
+        // Update the 'bio' field in the document
+        await updateDoc(docRef, {
+            age: Number(newAge),
+        });
+
+        console.log(`Document with ID ${id} updated successfully.`);
+    } catch (error) {
+        console.error("Error updating document:", error);
+    }
+}
+
+export async function updateExperience(id,newExperience) {
+    console.log(id,newExperience)
+    try {
+        // Directly reference the document using the document ID
+        const docRef = doc(db, "users", id); // `id` is the document ID
+
+        // Update the 'bio' field in the document
+        await updateDoc(docRef, {
+            experience: Number(newExperience),
+        });
+
+        console.log(`Document with ID ${id} updated successfully.`);
+    } catch (error) {
+        console.error("Error updating document:", error);
+    }
+}
+
+
+
+
+
+
 
 
 
@@ -1831,16 +1870,19 @@ export async function updatePayment(paymentId){
         const paymentData = paymentSnap.data();
         console.log(`Payment data for ID ${paymentId}:`, paymentData);
 
+        //get todays date to add a field about when the voucher was sent to nanny
+        const today = new Date();
+        const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
 
         // update the status field to "pending"
         await updateDoc(paymentRef, {
-            status: "pending"
+            status: "pending",
+            sentAt:formattedDate
         });
 
     
         //create a new notification from parent to nanny for the payment
-        const today = new Date();
-        const formattedDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+        
         const exactDate = Timestamp.now();
         const notificationData = {
             senderId: paymentData.parentId,

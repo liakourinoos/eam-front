@@ -42,7 +42,7 @@ export default function ParentPaymentsHistory() {
                 <div className="w-1/3 flex items-center justify-center gap-1"
                     title="Οι ημερομηνίες εμφανίζονται σε μορφή ΗΗ/ΜΜ/ΕΕΕΕ"
                 >
-                    <p>Ημερομηνία Πληρωμής</p>
+                    <p>Ημερομηνία Αποστολής Voucher</p>
                     <FaRegQuestionCircle className="text-xl" />
                 </div>
                 <p className="w-1/3 text-center p-10">Κωδικός Voucher</p>
@@ -61,7 +61,7 @@ export default function ParentPaymentsHistory() {
                     payments.map((payment, idx) => (
                         <Payment key={idx} id={payment?.nannyId} nannyName={payment?.nannyName}
                             nannySurname={payment?.nannySurname}
-                            date={payment?.payDate}
+                            date={payment?.sentAt}
                             voucher={payment?.voucherCode}
                         />
                     ))
