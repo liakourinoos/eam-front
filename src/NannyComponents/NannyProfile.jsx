@@ -103,7 +103,7 @@ function NannyProfile() {
             <div className='w-full h-screen bg-white'>
                 {RenderHeaderNavbar(myData, 0)}
                 <div className='h-screen bg-white flex flex-col gap-5 items-center justify-center text-3xl font-medium'>
-                    <p >Δε βρέθηκε ο χρήστης.</p>
+                    <p >Δεν βρέθηκε ο χρήστης.</p>
                     <Link to='/' className='text-blue-500 ml-2'>Επιστροφή στην αρχική σελίδα.</Link>
                 </div>
                 <Footer />
@@ -175,11 +175,13 @@ function NannyProfile() {
                         {/* bio section */}
                         <div className='w-2/4 ml-4  mt-10 '>
                             <p className='text-xl pl-2 font-medium'>Σύντομη Περιγραφή</p>
-                            <div className='rounded-md pl-6 pr-2  py-1 bg-gray-100 w-full'>
-                                {(!userData?.bio || userData?.bio?.length === 0) && <p className='text-gray-600'>Δε βρέθηκε περιγραφή.</p>}
-                                {userData?.bio && <p>{userData?.bio}</p>}
-
-                            </div>
+                            <textarea className={`rounded-md pl-6 pr-2 ${userData?.bio ? '' : 'text-gray-600'} resize-none  py-1 bg-gray-100 w-full`}
+                                readOnly
+                                value={userData?.bio ? userData?.bio : "Δεν βρέθηκε περιγραφή."}
+                                // {(!userData?.bio || userData?.bio?.length === 0) && <p className='text-gray-600'>Δεν βρέθηκε περιγραφή.</p>}
+                                // {userData?.bio && <p>{userData?.bio}</p>}
+                            />
+                            {/* </div> */}
                         </div>
 
                         {/* studies section */}
@@ -187,7 +189,7 @@ function NannyProfile() {
                             <p className='text-xl pl-2 font-medium flex cursor-default items-center gap-2 ' title='Επαληθευμένο από εμάς.'>Σπουδές <FaRegQuestionCircle /></p>
                             <div className='rounded-md px-2 py-1 bg-gray-100 w-full'>
                                 <ul className='list-disc pl-4'>
-                                    {(!userData?.education || userData?.education?.length === 0) && <p className='text-gray-600'>Δε βρέθηκαν σπουδές.</p>}
+                                    {(!userData?.education || userData?.education?.length === 0) && <p className='text-gray-600'>Δεν βρέθηκαν σπουδές.</p>}
                                     {userData?.education?.map((edu, idx) => (
                                         <li key={idx}>{edu.title}</li>
                                     ))}
@@ -202,7 +204,7 @@ function NannyProfile() {
                             <p className='text-xl pl-2 font-medium flex cursor-default items-center gap-2 ' title='Επαληθευμένο από εμάς.'>Πιστοποιήσεις<FaRegQuestionCircle /></p>
                             <div className='rounded-md px-2 py-1 bg-gray-100 w-full'>
                                 <ul className='list-disc pl-4'>
-                                    {(!userData?.certificates || userData?.certificates?.length === 0) && <p className='text-gray-600'>Δε βρέθηκαν πιστοποιήσεις.</p>}
+                                    {(!userData?.certificates || userData?.certificates?.length === 0) && <p className='text-gray-600'>Δεν βρέθηκαν πιστοποιήσεις.</p>}
                                     {userData?.certificates?.map((cert, idx) => (
                                         <li key={idx} >
                                             {cert.title}
@@ -216,7 +218,7 @@ function NannyProfile() {
                         <div className='w-2/4 ml-4  mt-8 '>
                             <p className='text-xl pl-2 font-medium flex cursor-default items-center gap-2 ' title='Επαληθευμένο από εμάς.'>Συστατικές Επιστολές</p>
                             <div className='rounded-md px-2 py-1 bg-gray-100 w-full'>
-                                {(!userData?.letters || userData?.letters.length === 0) && <p className='text-gray-600'>Δε βρέθηκαν συστατικές επιστολές.</p>}
+                                {(!userData?.letters || userData?.letters.length === 0) && <p className='text-gray-600'>Δεν βρέθηκαν συστατικές επιστολές.</p>}
                                 {userData?.letters?.map((lett, idx) => (
                                     <li key={idx} className="flex my-1 items-center">
                                         <span className="mr-2 text-3xl">•</span>
@@ -237,7 +239,7 @@ function NannyProfile() {
 
                         <div className='w-full   mt-5 flex flex-col items-center '>
                             {isReviewsLoading && <div className="w-full flex-grow  flex items-center justify-center"> <span className="loading loading-lg"></span> </div>}
-                            {!isReviewsLoading && reviews.length === 0 && <p className='text-gray-500 text-xl font-semibold'>Δε βρέθηκαν πρόσφατες αξιολογήσεις.</p>}
+                            {!isReviewsLoading && reviews.length === 0 && <p className='text-gray-500 text-xl font-semibold'>Δεν βρέθηκαν πρόσφατες αξιολογήσεις.</p>}
                             {!isReviewsLoading && reviews.length > 0 &&
                                 reviews.slice(0, 5).map((review, index) => (
                                     <Review key={index} seenFrom="nanny" review={review}
@@ -305,7 +307,7 @@ function NannyProfile() {
                             <p className=' font-medium'>{userData?.gender ? "Εξοικιωμένος" : "Εξοικιωμένη"} με:</p>
                             <div className='bg-gray-100 shadow-md py-1 shadow-gray-700 pl-2 w-full h-44 overflow-y-auto rounded-md'>
                                 <ul className='list-disc pl-4'>
-                                    {(!userData?.skills || userData?.skills?.length === 0) && <p className='font-medium mt-2  text-gray-600'>Δε βρέθηκαν εξοικιώσεις του χρήστη</p>}
+                                    {(!userData?.skills || userData?.skills?.length === 0) && <p className='font-medium mt-2  text-gray-600'>Δεν βρέθηκαν εξοικιώσεις του χρήστη</p>}
                                     {userData?.skills.map((skill, idx) => (
                                         <li key={idx}>{skill}</li>
                                     ))}

@@ -47,7 +47,7 @@ function ApplicationForm({action="Δημιουργία Νέου Συμφωνητ
     const {mutateAsync:addDraft,isPending} = useMutation({
         mutationFn:()=>addDraftApplication({...formState,userId:userData.id}),
         retry:false,
-        onSuccess:()=>nav("/parentapplications")
+        onSuccess:()=>nav("/parentapplications", { state: { successMessage: "Το συμφωνητικό αποθηκεύτηκε στα μη οριστικοποιημένα με επιτυχία." } })
     })
     console.log("inside application form: " +returnTo)
 
@@ -93,7 +93,7 @@ function ApplicationForm({action="Δημιουργία Νέου Συμφωνητ
                 {RenderHeaderNavbar(userData,returnTo==="history" ? 5:2)}
                 
                 {/* main page */}
-                <div className='flex flex-col bg-white flex-grow'>
+                <div className='flex flex-col bg-white mb-5 flex-grow'>
 
                     {/* breadcrumbs */}
                     <div className="breadcrumbs  pl-5 text-md">
@@ -104,13 +104,13 @@ function ApplicationForm({action="Δημιουργία Νέου Συμφωνητ
                     </div>
                     
                     <p className='my-5 mx-auto text-3xl font-medium'>{action}</p>
-                    {action!=="Προβολή Συμφωνητικού" && 
+                    {action!=="Προβολή Συμφωνητικού" && selectedPage!==3 &&
                         <div className='w-11/12  mx-auto'>
                             <button 
                                 className={`border-2 font-medium w-48 border-gray-500 text-md px-2 h-16 rounded-md my-3 
                                     ${(formState.name==="" && formState.surname==="" && formState.AMKA==="" && formState.address==="" 
                                         && formState.schedule.length===0 && formState.startingDate==="" && formState.months==="" && !formState.hasAccepted && !formState.hasSigned)
-                                        ? "cursor-not-allowed bg-gray-200" : "cursor-pointer bg-white"}
+                                        ? "text-gray-500 cursor-not-allowed" : "border-2 border-pallete-800 text-pallete-800 font-semibold hover:bg-pallete-800 hover:text-white hover:border-pallete-800"}
                                 `}
 
                                 onClick={()=>addDraft()}
@@ -125,7 +125,7 @@ function ApplicationForm({action="Δημιουργία Νέου Συμφωνητ
                     }
 
                     {/* main content, the two page form */}
-                        <div className='w-11/12 mx-auto flex flex-col flex-grow bg-pallete-100 rounded-md shadow-md shadow-gray-400 mb-3 '>
+                        <div className='w-11/12 mx-auto flex flex-col flex-grow bg-white rounded-lg shadow-md shadow-gray-600 mb-3 '>
                             
                             {/* page1,2,3 here */}
                             {selectedPage==1 && <FormPage1 myId={userData?.id} form={formState} setForm={setFormState} returnTo={returnTo} nextFn={handleNextPage}/>}

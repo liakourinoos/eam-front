@@ -36,6 +36,11 @@ function Search() {
         monthsSlider: 0,
         experienceSlider: 0
     })
+
+    const isFilterUnchanged = () => {
+        return Object.values(filter).every(value => value === "" || value === null || value === 0);
+    };
+
     const handleChange = (field, value) => {
         if(field ==="selectedDate") console.log("starting date is: " + value)
         setFilter(prevFilter => ({ ...prevFilter, [field]: value }));
@@ -44,7 +49,7 @@ function Search() {
     const { data, isLoading } = useQuery({
         queryFn: ({ signal }) => searchAvailableNannies(filter, { signal }),
         queryKey: ['searchNannies', filter],
-        enabled: !!userData,
+        // enabled: !!userData,
         refetchOnWindowFocus: false,
         staleTime: 0,
         cacheTime: 0
@@ -236,11 +241,18 @@ function Search() {
                                 <div className='w-full h-full flex items-center justify-center text-2xl  font-medium'>
                                     <span className=''>Αναζήτηση Επαγγελματιών...</span>
                                 </div> }
-                        {!isLoading && data?.length===0 && 
+                        {!isLoading && data?.length===0 && isFilterUnchanged()===false && 
                                 <div className='w-full h-full flex items-center justify-center text-3xl text-gray-500 font-semibold'>
-                                    <p>Δε βρέθηκαν επαγγελματίες με βάση τα φίλτρα σας.</p>
+                                    <p>Δεν βρέθηκαν επαγγελματίες με βάση τα φίλτρα σας.</p>
                                 </div>        
                         } 
+
+                        {!isLoading && data?.length === 0 && isFilterUnchanged() === true &&
+                            <div className='w-full h-full flex items-center justify-center text-3xl text-gray-500 font-semibold'>
+                                <p>Δεν βρέθηκαν διαθέσιμοι επαγγελματίες.</p>
+                            </div>
+                        } 
+
                         {!isLoading && data?.length >0 && data?.map((nanny, idx) => (
                             <OfferProfile key={idx} id={nanny?.userId} name={nanny?.name} surname={nanny?.surname} bio={nanny?.bio} rating={nanny?.rating} img={nanny?.img} ratingCount={nanny?.ratingCount} />
 

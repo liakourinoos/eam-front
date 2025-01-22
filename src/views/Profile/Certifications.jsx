@@ -6,7 +6,13 @@ import { v4 as uuidv4 } from 'uuid'; // Import uuid function
 import { updateUserInfo } from "../../FetchFunctions";
 import { useMutation } from "@tanstack/react-query";
 import { downloadFile } from "../../../global_assets/global_functions";
-function Certifications() {
+import PropTypes from 'prop-types';
+
+Certifications.propTypes = {
+    setSuccessMessage: PropTypes.func.isRequired,
+};
+
+function Certifications({setSuccessMessage}) {
 
     
 
@@ -19,6 +25,7 @@ function Certifications() {
         },
         onSuccess:()=>{
             refetch();
+            setSuccessMessage("Οι σπουδές σας ενημερώθηκαν επιτυχώς.");
         }
 
     });
@@ -30,6 +37,8 @@ function Certifications() {
         },
         onSuccess:()=>{
             refetch();
+            setSuccessMessage("Οι βεβαιώσεις σας ενημερώθηκαν επιτυχώς.");
+
         }
 
     });
@@ -41,6 +50,8 @@ function Certifications() {
         },
         onSuccess:()=>{
             refetch();
+            setSuccessMessage("Οι συστατικές επιστολές σας ενημερώθηκαν επιτυχώς.");
+
         }
 
     });
@@ -213,7 +224,7 @@ function Certifications() {
                                     />
                                 </div>
                                 <div className="w-full flex justify-end mt-5">
-                                    <button className="bg-green-500 text-white w-1/4 h-10 rounded-md shadow-md hover:bg-green-600"
+                                    <button className="bg-green-600 font-semibold text-white w-1/4 h-10 rounded-md shadow-md hover:bg-green-600"
                                         onClick={() => {  appendEdu(); }}
                                     >
                                         Προσθήκη
@@ -225,7 +236,7 @@ function Certifications() {
 
                     </div>
                     <div className="w-full flex justify-end px-20 mt-10">
-                        <button className={` ${isPending || userData?.education === education ? 'bg-gray-400' : "bg-green-500 hover:bg-green-600"}  text-white w-1/5 h-10 rounded-md shadow-md `}
+                        <button className={` ${isPending || userData?.education === education ? "border-gray-400 bg-gray-400" : ' text-white border-pallete-800 border-2 hover:bg-pallete-700 hover:border-pallete-700 bg-pallete-800'}  text-white w-1/5 h-10 rounded-md shadow-md `}
                                 onClick={() => changeEducation()}
                                 disabled={isPending || userData?.education === education}
                         >
@@ -290,7 +301,7 @@ function Certifications() {
                                     />
                                 </div>
                                 <div className="w-full flex justify-end mt-5">
-                                    <button className="bg-green-500 text-white w-1/4 h-10 rounded-md shadow-md hover:bg-green-600"
+                                    <button className="bg-green-600 font-semibold text-white w-1/4 h-10 rounded-md shadow-md hover:bg-green-600"
                                         onClick={() => {  appendCert(); }}
                                     >
                                         Προσθήκη
@@ -302,7 +313,7 @@ function Certifications() {
 
                     </div>
                     <div className="w-full flex justify-end px-20 mt-10">
-                        <button className={` ${isCertPending || userData?.certificates === certificates ? 'bg-gray-400' : "bg-green-500 hover:bg-green-600"}  text-white w-1/5 h-10 rounded-md shadow-md `}
+                        <button className={` ${isCertPending || userData?.certificates === certificates ? "border-gray-400 bg-gray-400" : ' text-white border-pallete-800 border-2 hover:bg-pallete-700 hover:border-pallete-700 bg-pallete-800'}  text-white w-1/5 h-10 rounded-md shadow-md `}
                                 onClick={() => changeCertificates()}
                                 disabled={isCertPending || userData?.certificates === certificates}
                         >
@@ -356,7 +367,7 @@ function Certifications() {
                                     />
                                 </div>
                                 <div className="w-full flex justify-end mt-5">
-                                    <button className="bg-green-500 text-white w-1/4 h-10 rounded-md shadow-md hover:bg-green-600"
+                                    <button className="bg-green-600 font-semibold text-white w-1/4 h-10 rounded-md shadow-md hover:bg-green-600"
                                         onClick={() => {  appendLett(); }}
                                     >
                                         Προσθήκη
@@ -368,7 +379,7 @@ function Certifications() {
 
                     </div>
                     <div className="w-full flex justify-end px-20 mt-10">
-                        <button className={` ${isLettPending || userData?.letters === letters ? 'bg-gray-400' : "bg-green-500 hover:bg-green-600"}  text-white w-1/5 h-10 rounded-md shadow-md `}
+                        <button className={` ${isLettPending || userData?.letters === letters ? "border-gray-400 bg-gray-400" : ' text-white border-pallete-800 border-2 hover:bg-pallete-700 hover:border-pallete-700 bg-pallete-800'}  text-white w-1/5 h-10 rounded-md shadow-md `}
                                 onClick={() => changeLetters()}
                                 disabled={isLettPending || userData?.letters === letters}
                         >

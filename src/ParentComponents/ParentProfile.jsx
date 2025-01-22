@@ -42,7 +42,7 @@ function ParentProfile() {
             <div className='w-full h-screen bg-white'> 
                 {RenderHeaderNavbar(myData,0)}
                 <div className='h-screen bg-white flex flex-col gap-5 items-center justify-center text-3xl font-medium'>
-                    <p >Δε βρέθηκε ο χρήστης.</p>
+                    <p >Δεν βρέθηκε ο χρήστης.</p>
                     <Link to='/' className='text-blue-500 ml-2'>Επιστροφή στην αρχική σελίδα.</Link>
                 </div>
                 <Footer/>
@@ -88,7 +88,7 @@ function ParentProfile() {
                     {/* bio */}
                     <div className='w-3/4 flex flex-col pl-10  0  mt-5  mx-auto'>
                         <span className='w-2/3  mb-2 text-start pl-2 font-medium text-xl  '>Σύντομη Περιγραφή</span>
-                        <textarea className='w-2/3  h-40 rounded-md shadow-md border-2 border-gray-400 bg-white shadow-gray-400 p-2' value={userData?.bio || "Δε βρέθηκε βιογραφικό."} readOnly/>
+                        <textarea className='w-2/3  h-40 rounded-md shadow-md border-2 resize-none border-gray-400 bg-white shadow-gray-400 p-2' value={userData?.bio || "Δεν βρέθηκε βιογραφικό."} readOnly/>
                     </div>
                 </div>
 

@@ -4,7 +4,9 @@ import {days,hours} from '../../../global_assets/global_values'
 import {updateSchedule,updateSkills} from "../../FetchFunctions"
 import { useMutation } from "@tanstack/react-query";
 
-export default function AvailabilityAndSkills(){
+
+
+export default function AvailabilityAndSkills({setSuccessMessage}){
     const predefinedSkills = [
         "Καλή σχέση με τα κατοικίδια",
         "Δουλειές του σπιτιού",
@@ -35,10 +37,16 @@ export default function AvailabilityAndSkills(){
 
     const {mutateAsync:changeSchedule,isPending}=useMutation({
         mutationFn:()=>updateSchedule(userData?.id,schedule),
+        onSuccess:()=>{
+            setSuccessMessage("Η διαθεσιμότητά σας ενημερώθηκε επιτυχώς")
+        }
     })
 
     const {mutateAsync:changeSkills,isPending:isSkillsPending}=useMutation({
         mutationFn:()=>updateSkills(userData?.id,skills),
+        onSuccess:()=>{
+            setSuccessMessage("Οι εξοικιώσεις σας ενημερώθηκαν επιτυχώς")
+        }
     })
     
 
@@ -173,13 +181,13 @@ export default function AvailabilityAndSkills(){
                         </table>     
 
                         <div className="w-full font-medium  mt-10 flex justify-end items-center gap-4 h-16">
-                            <button className={` border-2 border-gray-500 rounded-md p-2  "bg-gray-400" 'bg-white' `}
+                            <button className={` border-2 border-gray-500 rounded-md p-2 bg-white hover:border-red-600 hover:text-red-600 `}
                                     onClick={()=>setShowModal(true)}
                                     disabled={schedule.length===0}
                             >
                                 Καθαρισμός Ωρών
                             </button>
-                            <button className={`${isPending? "bg-gray-400"  : 'bg-pallete-400'} border-2  border-gray-500 rounded-md p-2    `}
+                            <button className={` ${isPending? " text-white bg-pallete-800 border-pallete-800 border-2" : ' text-white border-pallete-800 border-2 hover:bg-pallete-700 hover:border-pallete-700 bg-pallete-800'} border-2  border-gray-500 rounded-md p-2    `}
                                     onClick={()=>changeSchedule()}
                                     disabled={isPending}
                             >
@@ -211,12 +219,12 @@ export default function AvailabilityAndSkills(){
                             )}
                         </div>
                         <div className="w-full font-medium  mt-10 flex justify-end items-center gap-4 h-16">
-                            <button className={` border-2 border-gray-500 rounded-md p-2  "bg-gray-400" 'bg-white' `}
+                            <button className={` border-2 border-gray-500 rounded-md p-2  bg-white hover:text-red-600 hover:border-red-600 `}
                                     onClick={()=>setSkills([])}
                             >
                                 Καθαρισμός
                             </button>
-                            <button className={`${isSkillsPending? "bg-gray-400"  : 'bg-pallete-400'} border-2  border-gray-500 rounded-md p-2    `}
+                            <button className={` ${isSkillsPending? " text-white bg-pallete-800 border-pallete-800 border-2" : ' text-white bg-pallete-800 border-pallete-800 border-2 hover:bg-pallete-700 hover:border-pallete-700 '} border-2  border-gray-500 rounded-md p-2    `}
                                     onClick={()=>changeSkills()}
                                     disabled={isSkillsPending}
                             >

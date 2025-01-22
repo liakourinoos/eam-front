@@ -5,7 +5,7 @@ import { IoMdInformationCircleOutline } from "react-icons/io";
 import { useMutation } from '@tanstack/react-query';
 import { updatePayment } from '../../FetchFunctions';
 
-function PaymentInfo({paymentId,firstName,lastName,paymentDate,status,voucher,senderId,role}) {
+function PaymentInfo({paymentId,firstName,lastName,paymentDate,status,voucher,senderId,role,setSuccessMessage}) {
     const nav = useNavigate();    
 
     const getCurrentDate = () => {
@@ -21,9 +21,9 @@ function PaymentInfo({paymentId,firstName,lastName,paymentDate,status,voucher,se
         return date;
     };
 
-    const currentDate = getCurrentDate();
+    // const currentDate = getCurrentDate();
     // δειτε την αλλαγη στο Component (format: YYYY-MM-DD) 
-    // const currentDate = "2025-06-30";
+    const currentDate = "2025-06-30";
 
     const hasPaymentDatePassed = () => {
         return formatDate(paymentDate) <= new Date(currentDate);
@@ -56,7 +56,7 @@ function PaymentInfo({paymentId,firstName,lastName,paymentDate,status,voucher,se
             </div>
             <div className={`flex flex-col w-1/4 items-center ${hasPaymentDatePassed() ? 'text-red-600' : ''}`}>
                 <p>{paymentDate}</p>
-                {hasPaymentDatePassed() && <p>(Εκπρόθεσμη οφειλή)</p>}
+                {hasPaymentDatePassed() && <p>(Εκκρεμεί Πληρωμή)</p>}
             </div>
             <div className='w-1/4 flex items-center justify-center'>
                 <p className={`cursor-pointer ${payStatus === "unavailable" && "text-gray-400"}`}
@@ -66,9 +66,14 @@ function PaymentInfo({paymentId,firstName,lastName,paymentDate,status,voucher,se
             </div>
             <div className={`w-1/4 flex justify-center items-center`}>
                 <div className='w-1/4'></div>
-                <button className={`${payStatus === "unavailable" || payStatus === "pending" ? "bg-gray-400" : 'bg-green-500 hover:bg-green-400'} text-xl text-white font-semibold flex justify-center items-center rounded-md w-1/2 h-14 p-2`}
+                <button className={`${payStatus === "unavailable" || payStatus === "pending" ? "bg-gray-400" : 'bg-green-600 hover:bg-green-400'} text-xl text-white font-semibold flex justify-center items-center rounded-md w-1/2 h-14 p-2`}
                         disabled={payStatus === "unavailable" || payStatus === "pending"}
-                        onClick={() => sendVoucher(paymentId)}>
+                        onClick={async() =>{ 
+                            await sendVoucher(paymentId);
+                            setSuccessMessage("Ο κωδικός Voucher στάλθηκε επιτυχώς!");
+
+                        }}
+                >
                     {(!isPending && payStatus === "available") && "Αποστολή Voucher"}
                     {payStatus === "pending" && "Εκκρεμεί Επιβεβαίωση"}
                     {payStatus === "unavailable" && "Αναμονή Λήξης Συνεργασίας"}
@@ -93,5 +98,6 @@ PaymentInfo.propTypes = {
     voucher: PropTypes.number.isRequired,
     role: PropTypes.bool.isRequired,
     senderId: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired
+    status: PropTypes.string.isRequired,
+    setSuccessMessage:PropTypes.func.isRequired
 };

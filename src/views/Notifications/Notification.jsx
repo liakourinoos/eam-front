@@ -11,7 +11,7 @@ import { MdOutlineClose } from "react-icons/md";
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 //prepei na pairnei tis leptomereies kathe notification
-function Notification({ id, type, role }) {
+function Notification({ id, type, role,setSuccessMessage }) {
     const nav=useNavigate();
     const [status, setStatus] = useState(null); // Local state for status
 
@@ -55,6 +55,15 @@ function Notification({ id, type, role }) {
     })
 
 
+    const handleModalClose = () => {
+        setConfirmOpenReviewModal(false); 
+        console.log("status in handle" + status)
+        if (status === "renewed") {
+            nav(`/renewapplication/${endJob?.applicationId}`);
+        }
+    };
+    
+
 
     useEffect(() => {
         if (request)
@@ -74,26 +83,26 @@ function Notification({ id, type, role }) {
         // skeleton for loading
         return (
             <>
-                {[1, 2, 3, 4, 5].slice(0, 4).map((el) => (
-                    <div key={el} className="rounded-md bg-gray-200 mx-auto my-5 w-2/3 flex items-center h-32">
-                        {/* Left side, profile and info */}
-                        <div className="w-3/4 h-full rounded-l-md flex items-center space-x-3 px-4">
-                            {/* Skeleton for image */}
-                            <div className="h-28 w-32 bg-gray-500 rounded-full animate-pulse" />
 
-                            {/* Skeleton for name and date */}
-                            <div className="h-full w-full flex flex-col justify-center space-y-2">
-                                <div className="h-4 bg-gray-500 rounded-md animate-pulse w-3/4" />
-                                <div className="h-4 bg-gray-500 rounded-md animate-pulse w-5/6" />
-                            </div>
-                        </div>
+                <div className="rounded-md bg-gray-200 mx-auto mt-5 w-2/3 flex items-center h-32">
+                    {/* Left side, profile and info */}
+                    <div className="w-3/4 h-full rounded-l-md flex items-center space-x-3 px-4">
+                        {/* Skeleton for image */}
+                        <div className="h-28 w-32 bg-gray-500 rounded-full animate-pulse" />
 
-                        {/* Right side (action buttons area) */}
-                        <div className="w-1/4 h-full rounded-r-md font-medium pr-5 flex items-center justify-center">
-                            <div className="h-8 w-full bg-gray-500 rounded-md animate-pulse" />
+                        {/* Skeleton for name and date */}
+                        <div className="h-full w-full flex flex-col justify-center space-y-2">
+                            <div className="h-4 bg-gray-500 rounded-md animate-pulse w-3/4" />
+                            <div className="h-4 bg-gray-500 rounded-md animate-pulse w-5/6" />
                         </div>
                     </div>
-                ))}
+
+                    {/* Right side (action buttons area) */}
+                    <div className="w-1/4 h-full rounded-r-md font-medium pr-5 flex items-center justify-center">
+                        <div className="h-8 w-full bg-gray-500 rounded-md animate-pulse" />
+                    </div>
+                </div>
+
             </>
         );
 
@@ -102,7 +111,7 @@ function Notification({ id, type, role }) {
     //notification for nannies
     if (((!isJobLoading && type === "jobOffer") || (!isRequestLoading && type === "contactRequest") || (!isPaymentLoading && type === "payment") || (!isEndJobLoading && type==="endOfJob") ) && !role) {
         return (
-            <div className='rounded-md bg-white shadow-md border-black border-2 shadow-gray-400 mx-auto my-5 w-2/3 flex items-center h-32'>
+            <div className='rounded-md bg-white shadow-md border-black border-2 shadow-gray-400 mx-auto mt-5 w-2/3 flex items-center h-32'>
 
                 {/* left side, profile and info */}
                 <div className='w-3/4 h-full rounded-l-md flex items-center'>
@@ -178,7 +187,12 @@ function Notification({ id, type, role }) {
                                                 ${status === "rejected" && "bg-green-200"}
                                                 ${status === "accepted" && "bg-white"}
                                             `}
-                                    onClick={() => { setStatus("accepted"); acceptContact(id); }}
+                                    onClick={async () => { 
+                                                setStatus("accepted"); 
+                                                acceptContact(id); 
+                                                setSuccessMessage("Μπορείτε να βρείτε τις λεπτομέρειες πηγαίνοντας Ιστορικό > Επικοινωνίες.")
+                                            }
+                                    }
                                     disabled={status !== "pending"}
 
                                 >
@@ -203,7 +217,12 @@ function Notification({ id, type, role }) {
                                         ${status === "rejected" && "bg-white"}
                                         ${status === "accepted" && "bg-red-200"}
                                     `}
-                                    onClick={() => { setStatus("rejected"); rejectApplication(id); }}
+                                    onClick={async() => { 
+                                        setStatus("rejected"); 
+                                        rejectApplication(id);
+                                        setSuccessMessage("Μπορείτε να βρείτε αντίγραφό του πηγαίνοντας Ιστορικό > Συμφωνητικά.")
+                                    }
+                                }
                                     disabled={status !== "pending"}
                                 >
                                     {status === "pending" && 'Απόρριψη'}
@@ -221,7 +240,12 @@ function Notification({ id, type, role }) {
                                             ${status === "rejected" && "bg-green-200"}
                                             ${status === "accepted" && "bg-white"}
                                         `}
-                                    onClick={() => { setStatus("accepted"); acceptApplication(id); }}
+                                    onClick={async() => { 
+                                            setStatus("accepted"); 
+                                            acceptApplication(id);
+                                            setSuccessMessage("Μπορείτε να βρείτε αντίγραφό του πηγαίνοντας Ιστορικό > Συμφωνητικά.")
+                                        }
+                                    }
                                     disabled={status !== "pending"}
 
                                 >
@@ -245,7 +269,12 @@ function Notification({ id, type, role }) {
                                                 ${status === "rejected" && "bg-green-200"}
                                                 ${status === "accepted" && "bg-white"}
                                             `}
-                                    onClick={() => { setStatus("accepted"); acceptPayment(id); }}
+                                            onClick={async() => { 
+                                                setStatus("accepted"); 
+                                                acceptPayment(id);
+                                                setSuccessMessage("Μπορείτε να βρείτε τον κωδικό Voucher πηγαίνοντας Ιστορικό > Πληρωμές.")
+                                            }
+                                        }
                                     disabled={status !== "pending"}
 
                                 >
@@ -342,7 +371,7 @@ function Notification({ id, type, role }) {
     // notification for parents
     if (((!isJobLoading && type === "jobOffer") || (!isRequestLoading && type === "contactRequest") || (!isPaymentLoading && type === "payment") || (!isEndJobLoading &&  type === "endOfJob")) && role) {
         return (
-            <div className='rounded-md bg-white shadow-md border-black border-2 shadow-gray-400 mx-auto my-5 w-2/3 flex items-center h-32'>
+            <div className='rounded-md bg-white shadow-md border-black border-2 shadow-gray-400 mx-auto mt-5 w-2/3 flex items-center h-32'>
 
                 {/* left side, profile and info */}
                 <div className='w-3/4 h-full rounded-l-md flex items-center'>
@@ -398,7 +427,7 @@ function Notification({ id, type, role }) {
                                         ${status === "pending" && "bg-white hover:bg-pallete-700 hover:text-white"}   
                                         
                                     `}                                                                                                              
-                                    onClick={() => { setStatus("ended"); archiveApplication(endJob?.applicationId,"ended",endJob?.id);setConfirmOpenReviewModal(true);  }}
+                                    onClick={() => { setStatus("ended"); archiveApplication(endJob?.applicationId,"ended",endJob?.id); setConfirmOpenReviewModal(true);  }}
                                     disabled={status !== "pending"}
                                 >
                                     {status === "pending" && 'Επιβεβαίωση Λήξης'}
@@ -441,7 +470,7 @@ function Notification({ id, type, role }) {
                             <p className='text-2xl w-full text-center  font-medium'>Θέλετε να αφήσετε μια κριτική για τον επαγγελματία;</p>
                             <div className='flex gap-5 justify-center  w-full  h-full mt-3'>
                                 <button className={`border-2 border-red-600 font-semibold hover:bg-red-600 hover:text-white w-32 text-red-600 px-2 py-3 rounded-md `}
-                                        onClick={()=>{setConfirmOpenReviewModal(false) ; nav(`/renewapplication/${endJob?.applicationId}`)}}
+                                        onClick={()=>handleModalClose()}
                                 >
                                     
                                     Όχι
@@ -466,7 +495,12 @@ function Notification({ id, type, role }) {
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 ">
                         <div className="w-4/6 flex-col flex items-center h-4/6 overflow-y-auto rounded-md z-50 my-auto bg-white shadow-xl p-6">
                             <div className="flex items-center justify-end w-full">
-                                <button onClick={() => {setShowReviewModal(false);nav(`/renewapplication/${endJob?.applicationId}`)}}>
+                                <button 
+                                    
+                                    onClick={() => {
+                                        setShowReviewModal(false); }
+                                        
+                                    }>
                                     <MdOutlineClose className="font-bold text-7xl text-red-700 hover:text-red-500" />
                                 </button>
                             </div>
@@ -496,7 +530,8 @@ function Notification({ id, type, role }) {
                                         if (ratedStars > 0) {
                                             try {
                                                 await sendReview(); // Wait for the review submission
-                                                nav(`/renewapplication/${endJob?.applicationId}`); // Redirect after review is submitted
+                                                if(status==="renewed" ) 
+                                                    nav(`/renewapplication/${endJob?.applicationId}`); // Redirect after review is submitted
                                             } catch (error) {
                                                 console.error("Error submitting review:", error);
                                             }
@@ -524,4 +559,5 @@ Notification.propTypes = {
     id: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     role: PropTypes.bool.isRequired,
+    setSuccessMessage: PropTypes.func.isRequired,
 };

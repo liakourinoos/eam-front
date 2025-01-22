@@ -1,4 +1,4 @@
-import { useState,useContext } from "react";
+import { useState,useEffect } from "react";
 // import Header from "./generic components/Header";
 import Footer from "../generic components/Footer.jsx";
 // import NannyNavbar from './generic components/NannyNavbar.jsx'
@@ -13,19 +13,47 @@ function ParentSettings(){
 
     const { userData } = useAuth();
 
+    const [successMessage, setSuccessMessage] = useState("");
+    const duration = 3000;
+    useEffect(() => {
+        if (successMessage.length > 0) {//make it appear for some seconds
+            const timer = setTimeout(() => {
+                setSuccessMessage(""); // Hide the alert after the duration
+            }, duration);
+            // Cleanup the timer on component unmount
+            return () => clearTimeout(timer);
+        }
+    }, [successMessage, duration])
+
+
     return(
         <div className="w-full  "> 
         
         {RenderHeaderNavbar(userData,0)}
             {/* //main div to change what type of info will be changed */}
             <div className="w-full bg-white flex ">
-
+                {successMessage.length > 0 &&
+                    <div role="alert" className="alert alert-success fixed top-20 left-1/2 transform z-10 -translate-x-1/2 w-1/2 flex items-center justify-center  p-4 rounded shadow">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 shrink-0 stroke-current text-white text-2xl "
+                            fill="none"
+                            viewBox="0 0 24 24">
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className='text-white font-bold text-xl'>{successMessage}</span>
+                    </div>
+                }
                 {/* left div to select which page will be shown */}
                 <div className="w-1/5 flex flex-col items-center h-full  mt-10 ml-10 sticky top-5 ">
-                    <button className={`${shownPage==1 ? "text-red-500 underline":" text-black" } font-medium text-lg  `}
+                    <button className={`${shownPage==1 ? "text-pallete-800 font-semibold underline":" text-black" } hover:text-pallete-700 font-medium text-lg  `}
                             onClick={()=>toggleShownPage(1)}
                     >Το Προφίλ Μου</button>
-                    <button className={`${shownPage==2 ? "text-red-500 underline":" text-black" } font-medium text-lg  `}
+                    <button className={`${shownPage==2 ? "text-pallete-800 font-semibold underline":" text-black" } hover:text-pallete-700 font-medium text-lg  `}
                             onClick={()=>toggleShownPage(2)}
                     >Στοιχεία Λογαριασμού</button>
 
@@ -34,8 +62,8 @@ function ParentSettings(){
                 {/* right div */}
 
                 <div className="w-full   ">
-                    {shownPage ==1 && <ParentProfileEdit />}
-                    {shownPage==2 && <AccountEdit  />}
+                    {shownPage ==1 && <ParentProfileEdit setSuccessMessage={setSuccessMessage} />}
+                    {shownPage==2 && <AccountEdit setSuccessMessage={setSuccessMessage}  />}
 
 
 

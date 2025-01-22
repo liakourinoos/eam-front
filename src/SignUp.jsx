@@ -188,7 +188,7 @@ function SignUp({role}){
     };
 
     return(
-        <div className="w-full h-full flex flex-col  justify-between bg-pink-100 ">
+        <div className="w-full min-h-screen  flex flex-col  justify-between bg-white ">
            {successMessage && <div role="alert" className="alert alert-success fixed top-32 left-1/2 transform -translate-x-1/2 w-1/2 flex items-center justify-center  p-4 rounded shadow">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -206,12 +206,12 @@ function SignUp({role}){
 
 
             <Header/>
-            <div className="w-full flex-grow flex flex-col  items-center py-20 ">
-                <div className="w-2/3 flex-grow rounded-md flex flex-col p-20 items-center bg-fuchsia-200 shadow-lg shadow-gray-400">
+            <div className="w-full flex-grow flex flex-col  justify-center items-center  ">
+                <div className="w-2/3 rounded-md flex flex-col  items-center bg-white  ">
                     <p className="text-5xl font-bold">Εγγραφή</p>
                     {signUpMessage.length>0 && <p className="text-red-500 text-3xl font-medium -mb-10 mx-auto mt-10">{signUpMessage}</p>}
 
-                    <div className="w-1/4  mt-20 ">
+                    <div className="w-1/4  mt-10 ">
                         <p className="text-xl ml-1 font-medium ">Email</p>
                         {emailError.length>0 && <p className="text-red-700 my-2 font-medium text-sm ">{emailError}</p>}
                         <input  type="text" 
@@ -304,14 +304,14 @@ function SignUp({role}){
                     <span className="mt-10 mr-20 ">
                         Έχετε ήδη εγγραφτεί;
                         <Link to='/login'>
-                            <span className="underline font-medium ml-2" >Σύνδεση{" >"}</span>
+                            <span className="underline font-medium ml-2 hover:text-pallete-600 text-pallete-800" >Σύνδεση{" >"}</span>
                         </Link>
                     </span>
 
-                    <div className="w-full flex justify-end px-32 mt-3">
+                    <div className="w-full flex justify-end px-32 ">
 
                     
-                        <button     className={`h-10 w-36  flex items-center justify-center text-xl font-medium text-white rounded-md px-3 py-1 mt-10 ${!isFormValid() ? 'bg-gray-400 ' : 'bg-pink-600'}`}
+                        <button     className={`h-10 w-36  flex items-center justify-center text-xl font-medium text-white rounded-md px-3 py-1 mt-10 ${!isFormValid() ? 'bg-gray-400 ' : 'hover:bg-pallete-700 bg-pallete-800'}`}
                                     disabled={isFormValid()===false}
                                     onClick={()=>{ createUser();}}
                                     title={!isFormValid() ? "Παρακαλούμε συμπληρώστε όλα τα πεδία." : ""}

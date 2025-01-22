@@ -30,22 +30,22 @@ export default function NannyHistory({ initialPage = 1 }) {
                 <div className="mt-5 mb-7 space-x-4  ">
                     <button
                         onClick={() => setSelectedPage(1)}
-                        className={`cursor-pointer border-2 w-80 ${selectedPage === 1 ? "bg-pallete-800 text-white border-white font-semibold underline" : "bg-white text-pallete-800 font-semibold border-pallete-800"} py-2 px-6 rounded-lg text-lg h-20`}>
+                        className={`hover:text-white hover:bg-pallete-700 hover:border-pallete-700 hover:border-2 cursor-pointer border-2 w-80 ${selectedPage === 1 ? "bg-pallete-800 text-white border-pallete-800 font-semibold " : "bg-white text-pallete-800 font-semibold border-pallete-800"} py-2 px-6 rounded-lg text-lg h-20`}>
                         Αγγελίες
                     </button>
                     <button
                         onClick={() => setSelectedPage(2)}
-                        className={`cursor-pointer border-2 w-80 ${selectedPage === 2 ? "bg-pallete-800 text-white border-white font-semibold underline" : "bg-white text-pallete-800 font-semibold border-pallete-800"} py-2 px-6 rounded-lg text-lg h-20`}>
+                        className={`hover:text-white hover:bg-pallete-700 hover:border-pallete-700 hover:border-2 cursor-pointer border-2 w-80 ${selectedPage === 2 ? "bg-pallete-800 text-white border-pallete-800 font-semibold " : "bg-white text-pallete-800 font-semibold border-pallete-800"} py-2 px-6 rounded-lg text-lg h-20`}>
                         Συμφωνητικά
                     </button>
                     <button
                         onClick={() => setSelectedPage(3)}
-                        className={`cursor-pointer border-2 w-80 ${selectedPage === 3 ? "bg-pallete-800 text-white border-white font-semibold underline" : "bg-white text-pallete-800 font-semibold border-pallete-800"} py-2 px-6 rounded-lg text-lg h-20`}>
+                        className={`hover:text-white hover:bg-pallete-700 hover:border-pallete-700 hover:border-2 cursor-pointer border-2 w-80 ${selectedPage === 3 ? "bg-pallete-800 text-white border-pallete-800 font-semibold " : "bg-white text-pallete-800 font-semibold border-pallete-800"} py-2 px-6 rounded-lg text-lg h-20`}>
                         Πληρωμές
                     </button>
                     <button
                         onClick={() => setSelectedPage(4)}
-                        className={`cursor-pointer border-2 w-80 ${selectedPage === 4 ? "bg-pallete-800 text-white border-white font-semibold underline" : "bg-white text-pallete-800 font-semibold border-pallete-800"} py-2 px-6 rounded-lg text-lg h-20`}>
+                        className={`hover:text-white hover:bg-pallete-700 hover:border-pallete-700 hover:border-2 cursor-pointer border-2 w-80 ${selectedPage === 4 ? "bg-pallete-800 text-white border-pallete-800 font-semibold " : "bg-white text-pallete-800 font-semibold border-pallete-800"} py-2 px-6 rounded-lg text-lg h-20`}>
                         Επικοινωνίες
                     </button>
                 </div>

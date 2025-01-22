@@ -46,7 +46,9 @@ function OfferForm({action="Δημιουργία Νέας Αγγελίας"}){
     const {mutateAsync:addDraft,isPending} = useMutation({
         mutationFn:()=>addDraftOffer({...formState,userId:userData.id}),
         retry:false,
-        onSuccess:()=>nav("/nannyoffers")
+        onSuccess:()=>{
+            nav("/nannyoffers", { state: { successMessage: "Η αγγελία αποθηκεύτηκε στις μη οριστικοποιημένες με επιτυχία." } })
+        }
     })
 
 
@@ -72,6 +74,15 @@ function OfferForm({action="Δημιουργία Νέας Αγγελίας"}){
             });
         }
     }, [data, isLoading, action]);
+
+    const isFormEmpty = () => {
+        return !formState.town &&
+            formState.rows.every(row => !row.area && row.neighborhood.length === 0 && !row.canHost) &&
+            !formState.startingDate &&
+            !formState.months &&
+            !formState.childAge &&
+            !formState.timeType;
+    };
 
     const [selectedPage,setSelectedPage] = useState(1);
     const handleNextPage = (num=1)=> setSelectedPage(sp => sp+num);
@@ -105,14 +116,13 @@ function OfferForm({action="Δημιουργία Νέας Αγγελίας"}){
                     {action!=="Προβολή Αγγελίας" && 
                         <div className='w-11/12  mx-auto'>
                             <button 
-                                className={`border-2 font-medium w-48 border-gray-500 text-md px-2 h-16 rounded-md my-3  `}
+                                className={`border-2 font-medium w-48 border-gray-500 text-md px-2 h-16 rounded-md my-3  
+                                            ${isFormEmpty() ? "text-gray-500 cursor-not-allowed" : "border-2 border-pallete-800 text-pallete-800 font-semibold hover:bg-pallete-800 hover:text-white hover:border-pallete-800" }    
+                                `}
                                 
-
+                                disabled={isFormEmpty()}
                                 onClick={()=>addDraft()}
-                                // title={formState.name==="" || formState.surname==="" || formState.AMKA==="" || formState.address==="" || formState.schedule.length===0 || formState.startingDate==="" || formState.months==="" || !formState.hasAccepted || !formState.hasSigned ? "Συμπληρώστε κάποιο από τα πεδία πρώτα." : ""}
-                                // disabled={isPending || (
-                                //         formState.name==="" && formState.surname==="" && formState.AMKA==="" && formState.address==="" && formState.schedule.length===0 && formState.startingDate==="" && formState.months==="" && !formState.hasAccepted && !formState.hasSigned)
-                                // }
+                                title={isFormEmpty() ? "Παρακαλούμε τροποποιήστε κάποιο από τα πεδία πρώτα." : ""}
                             >
                                 {isPending ? "Αποθήκευση..." : "Προσωρινή Αποθήκευση"}
                             </button>
@@ -120,7 +130,7 @@ function OfferForm({action="Δημιουργία Νέας Αγγελίας"}){
                     }
 
                     {/* main content, the two page form */}
-                        <div className='w-11/12 mx-auto flex flex-col flex-grow bg-pallete-100 rounded-md shadow-md shadow-gray-400 mb-3 '>
+                        <div className='w-11/12 mx-auto flex flex-col flex-grow bg-ςηιτε rounded-λγ shadow-md shadow-gray-600 mb-3 '>
                             
                             {/* page1,2,3 here */}
                             {selectedPage==1 && <FormPage1 form={formState} returnTo={returnTo} setForm={setFormState} nextFn={handleNextPage}/>}

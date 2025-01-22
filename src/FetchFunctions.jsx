@@ -1928,16 +1928,16 @@ export async function archiveApplication(applicationId,status,notificationId){
     console.log(status)
     // update archived field to true
     try {
-        // const docRef = doc(db, 'applications', applicationId);
-        // await updateDoc(docRef, {
-        //     archived: true,
-        // });
-        // // update notification status too
-        // const docRef2 = doc(db, 'notifications', notificationId);
-        // await updateDoc(docRef2, {
-        //     status:status
-        // });
-        console.log("UNCOMMENT FUNCTIONALITY!")
+        const docRef = doc(db, 'applications', applicationId);
+        await updateDoc(docRef, {
+            archived: true,
+        });
+        // update notification status too
+        const docRef2 = doc(db, 'notifications', notificationId);
+        await updateDoc(docRef2, {
+            status:status
+        });
+        // console.log("UNCOMMENT FUNCTIONALITY!")
     } catch (error) {
         console.error("Error archiving application:", error);
     }
@@ -2097,7 +2097,8 @@ export async function fetchNannyDeals(nannyId){
                 where('nannyAMKA', '==', nannyData.AMKA),
                 where('nannyName', '==', nannyData.name),
                 where('nannySurname','==',nannyData.surname),
-                where('type', '==' , 'final')
+                where('type', '==' , 'final'),
+                where('status' , 'in' , ['Εγκρίθηκε','Απερρίφθη'])
                 // where('archived', '==', true)
             );
             const querySnapshot = await getDocs(q); // Get documents matching the query

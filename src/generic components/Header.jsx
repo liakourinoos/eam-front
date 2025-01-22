@@ -51,7 +51,7 @@ function Header(){
                 <div className='h-5/6 my-auto border-2 border-black'></div>
 
                 <Link to='/login' state={location.pathname}  className='flex items-center'>
-                    <div className='bg-pallete-800 hover:bg-pallete-600 rounded-md px-3 py-1 flex items-center'>
+                    <div className='bg-pallete-800 hover:bg-pallete-700 rounded-md px-3 py-1 flex items-center'>
                         <span  className='text-3xl text-white'>Σύνδεση</span>
                     </div>
                 </Link>

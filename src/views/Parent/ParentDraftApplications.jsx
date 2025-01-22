@@ -52,7 +52,12 @@ function ParentDraftApplications() {
             <div className='w-11/12 mx-auto flex-grow flex flex-col mb-2  gap-2 items-center justify-start overflow-y-auto mt-2'>
                 {isLoading &&
                     <div className="flex flex=grow items-center justify-center ">
-                        <span className="loading loading-lg mt-32"></span>
+                        <span className="loading loading-lg h-96"></span>
+                    </div>
+                }
+                 {!isLoading && Array.isArray(applications) && applications?.length===0 &&
+                    <div className="w-full h-96 flex items-center justify-center">
+                        <h1 className="text-3xl font-semibold text-gray-500">Δεν βρέθηκαν μη οριστικοποιημένα συμφωνητικά.</h1>
                     </div>
                 }
                 {!isLoading && Array.isArray(applications) &&

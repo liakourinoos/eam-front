@@ -2,8 +2,9 @@ import PropTypes from 'prop-types'
 import { FaEye } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { Link } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 function DraftOffer({code}){
+    const nav=useNavigate();
     return(
     
 

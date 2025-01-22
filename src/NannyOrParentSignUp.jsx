@@ -39,7 +39,7 @@ function ParentOrNannySignUp() {
         </div>
         {/* login link */}
         <div className='w-full flex justify-center items-center mb-20 text-xl font-medium'>
-                <span>Έχετε ήδη εγγραφτεί;<Link className='underline ml-2 text-pallete-600 font-extrabold' to="/login">{`Σύνδεση >`} </Link></span>
+                <span>Έχετε ήδη εγγραφτεί;<Link className='underline ml-2 hover:text-pallete-700 font-extrabold' to="/login">{`Σύνδεση >`} </Link></span>
         </div>
         
         <Footer />

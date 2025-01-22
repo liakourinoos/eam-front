@@ -1,12 +1,18 @@
 import { MdAddPhotoAlternate } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
-// import PropTypes from 'prop-types';
 import {useAuth} from '../../customHooks.jsx'
 import { useEffect,useState } from "react";
 import { updateBio,updatePic } from "../../FetchFunctions.jsx";
 import { set } from "date-fns";
 import { useMutation } from "@tanstack/react-query";
-function ParentProfileEdit(){
+import PropTypes from 'prop-types';
+
+
+ParentProfileEdit.propTypes = {
+    setSuccessMessage: PropTypes.func.isRequired,
+};
+
+function ParentProfileEdit({setSuccessMessage}) {
 
     //get user info
     const { userData,loading,refetch } = useAuth(); 
@@ -27,7 +33,7 @@ function ParentProfileEdit(){
     const {mutateAsync:changeBio,isPending} = useMutation({
         mutationFn:() => updateBio(userData?.id, bio),
         onSuccess:()=>{
-            console.log("Bio updated successfully")
+            setSuccessMessage("Το βιογραφικό σας ενημερώθηκε επιτυχώς.");
             refetch(); // Use the captured refetch function
         
         }
@@ -36,7 +42,7 @@ function ParentProfileEdit(){
     const {mutateAsync:changePic} = useMutation({
         mutationFn:() => updatePic(userData?.id, imgUrl),
         onSuccess:()=>{
-            console.log("Pic updated successfully")
+            setSuccessMessage("Η φωτογραφία σας ενημερώθηκε επιτυχώς.");
             refetch(); // Use the captured refetch function
             setPicChange(false);
             setImgUrl("");
@@ -48,7 +54,7 @@ function ParentProfileEdit(){
         setBio(e.target.value);
     };
 
-    const handleChange = () => {
+    const  handleChange = () => {
         if(userData?.bio !== bio){
             changeBio();
         }
@@ -154,17 +160,19 @@ function ParentProfileEdit(){
                     <textarea   
                                 className="textarea bg-gray-100  textarea-bordered h-24 w-full px-1 resize-none border-2 border-gray-700 rounded-md"
                                 value={bio}
-                                placeholder={`${userData?.bio == 0 ? " Δε βρέθηκε βιογραφικό" : ""}`}
+                                placeholder={`${userData?.bio == 0 ? " Δεν βρέθηκε βιογραφικό" : ""}`}
                                 onChange={handleBioChange}
                     />
                 </label>
 
-                <button className={`${userData?.bio === bio  && userData?.img === imgUrl ? "bg-gray-200" : "bg-pallete-300" }  w-32 font-medium h-10 px-2 text-center rounded-md`}
-                        onClick={()=>handleChange()}
+                <button className={`border-2 ${userData?.bio === bio  && userData?.img === imgUrl ? "bg-gray-400 border-gray-400" : "hover:bg-pallete-700 hover:border-pallete-700 text-white border-pallete-800 bg-pallete-800" }  w-32 font-medium h-10 px-2 text-center rounded-md`}
+                        onClick={ ()=>
+                            handleChange()
+                        }
                         disabled={!userData?.uid || isPending || (userData?.bio === bio && userData?.img === imgUrl)}
                 >
                     
-                    {isPending ? <span className="loading loading-md"></span> : "Αποθήκευση"}
+                    {isPending ? <span className="loading loading-md"></span> : "Ενημέρωση"}
                 </button>
 
             </div>
@@ -172,13 +180,3 @@ function ParentProfileEdit(){
 }
 
 export default ParentProfileEdit;
-
-// ParentProfileEdit.propTypes= {
-//     userData:PropTypes.shape({
-//         name: PropTypes.string.isRequired,
-//         surname: PropTypes.string.isRequired,
-//         AMKA: PropTypes.string.isRequired,
-//         gender: PropTypes.isRequired, // or more values if needed
-//         role: PropTypes.string.isRequired,
-//     })
-//   };

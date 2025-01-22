@@ -34,8 +34,10 @@ function Login() {
           nav("/nannyOffers"); 
         else{ //im a user that just logged in after pressing contact, must go to the next page
           if(from==="/") nav("/search");
-          else
+          else if(from!=='/signupnanny' && from!=='/signupparent')
             nav(from); // Redirect to previous page
+          else if(from==='/signupnanny' || from==='/signupparent')
+            nav('/')
         }
 
 
@@ -80,17 +82,17 @@ function Login() {
     };
 
   return (
-    <div className="w-full min-h-screen flex flex-col overflow-hidden justify-between bg-pink-100 ">
+    <div className="w-full min-h-screen flex flex-col overflow-hidden justify-between bg-white ">
       <Header />
 
       <div className="w-full h-full overflow-y-auto flex flex-col items-center py-20 ">
-        <form className="w-2/3 rounded-md flex flex-col p-20 items-center bg-fuchsia-200 shadow-lg my-auto shadow-gray-400">
+        <form className="w-1/3 rounded-xl flex flex-col p-20 justify-center items-center    my-auto ">
       
           <p className="text-5xl font-bold">Σύνδεση</p>
           {/* Show message after success or error */}
           {message && <p className=" text-xl mt-14 font-medium -mb-14 text-red-600">{message}</p>}
           
-          <div className="w-1/4 mt-20 ">
+          <div className="w-1/2 mt-20 ">
             <p className="text-xl ml-1 font-medium ">Email</p>
             {emailError.length>0 && <p className="text-red-700 my-2 font-medium text-sm ">{emailError}</p>}
             <input
@@ -102,7 +104,7 @@ function Login() {
             />
           </div>
 
-          <div className="w-1/4 mt-5 ">
+          <div className="w-1/2 mt-5 ">
             <p className="text-xl ml-1 font-medium ">Κωδικός Πρόσβασης</p>
 
             <div className="w-full flex items-center justify-center">
@@ -126,19 +128,19 @@ function Login() {
             <span className="underline font-medium">Ξέχασα τον κωδικό μου</span>
           </a> */}
 
-          <span className="mt-3 mr-20 ">
+          <span className="mt-3 w-1/2   ">
             Νέος Χρήστης;
             <Link to="/signup">
-              <span className="underline font-medium ml-2">Εγγραφή{" >"}</span>
+              <span className=" hover:text-pallete-800 font-medium ml-2"><span className="underline">Εγγραφή</span>{" >"}</span>
             </Link>
           </span>
 
           {/* Display loading or error messages */}
-          <div className="w-full flex justify-end px-32">
+          <div className="w-full flex justify-end mt-3  ">
             <button
               onClick={handleLogin}
               type="submit"
-              className={`${validInput() ? "bg-pink-600" : "bg-gray-500" } h-10 w-32 text-lg justify-center ml-60 flex items-center font-medium text-white rounded-md px-3 py-1 mt-5`}
+              className={`${validInput() ? "bg-pallete-800 hover:bg-pallete-700" : "bg-gray-500" } h-10 w-32 text-lg justify-center ml-60 flex items-center font-medium text-white rounded-md px-3 py-1 mt-5`}
               disabled={isLoading || !validInput()} // Disable button when loading
               title={validInput() ? "Σύνδεση" : "Συμπληρώστε πρώτα τα στοιχεία σύνδεσής σας"}
             >

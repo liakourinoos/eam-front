@@ -85,7 +85,7 @@ function Contact() {
     if (!loading)
         return (
             <div className='w-full h-screen flex flex-col'>
-                {successMessage && <div role="alert" className="alert alert-success fixed top-32 left-1/2 transform -translate-x-1/2 w-1/2 flex items-center justify-center  p-4 rounded shadow">
+                {successMessage && <div role="alert" className="alert alert-success fixed top-28 left-1/2 transform -translate-x-1/2 w-1/2 flex items-center justify-center  p-4 rounded shadow">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-6 w-6 shrink-0 stroke-current text-white text-2xl "
@@ -97,7 +97,7 @@ function Contact() {
                             strokeWidth="2"
                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span className='text-white font-bold text-2xl'>Το αίτημά σας στάλθηκε!</span>
+                    <span className='text-white font-bold text-2xl'>Το αίτημα επικοινωνίας στάλθηκε!</span>
                 </div>}
                 {RenderHeaderNavbar(userData)}
                 <div className='flex-grow pb-5 flex flex-col bg-white'>

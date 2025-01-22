@@ -4,7 +4,13 @@ import {useAuth } from "../../customHooks"
 import { updateSkype,updateNumber,updateUserEmail,updateUserPassword} from "../../FetchFunctions";
 import { useMutation } from "@tanstack/react-query";
 
-function AccountEdit(){
+import PropTypes from 'prop-types';
+
+AccountEdit.propTypes = {
+    setSuccessMessage: PropTypes.func.isRequired,
+};
+
+function AccountEdit({setSuccessMessage}) {
 
     const {userData, loading,refetch} = useAuth();
 
@@ -114,6 +120,7 @@ function AccountEdit(){
         mutationFn:() => updateUserEmail(userData?.password, newEmail),
         onSuccess:()=>{
             console.log("Email updated successfully")
+            setSuccessMessage("Το email ενημερώθηκε επιτυχώς")
             refetch(); // Use the captured refetch function
         },
         onError:(error)=>{
@@ -125,6 +132,7 @@ function AccountEdit(){
         mutationFn:() => updateUserPassword(userData?.password, newPassword),
         onSuccess:()=>{
             console.log("password updated successfully")
+            setSuccessMessage("Ο κωδικός πρόσβασης ενημερώθηκε επιτυχώς.")
             refetch(); // Use the captured refetch function
         },
         onError:(error)=>{
@@ -137,6 +145,7 @@ function AccountEdit(){
         mutationFn:() => updateNumber(userData?.id, number),
         onSuccess:()=>{
             console.log("Bio updated successfully")
+            setSuccessMessage("Ο αριθμός τηλεφώνου ενημερώθηκε επιτυχώς.")
             refetch(); // Use the captured refetch function
         
         }
@@ -146,6 +155,7 @@ function AccountEdit(){
         mutationFn:() => updateSkype(userData?.id, skype),
         onSuccess:()=>{
             console.log("Bio updated successfully")
+            setSuccessMessage("Η διεύθυνση Skype ενημερώθηκε επιτυχώς.")
             refetch(); // Use the captured refetch function
         
         }
@@ -194,13 +204,13 @@ function AccountEdit(){
                     </div>
 
                     <div className="w-2/3 font-medium  mt-10 flex justify-end items-center gap-4 px-3  h-16">
-                        <button className={` border-2 border-gray-500 rounded-md p-2  "bg-gray-400" 'bg-white' `}
+                        <button className={` border-2 border-gray-500 rounded-md p-2  bg-white hover:border-red-600 hover:text-red-600 `}
                                 onClick={()=>{setNewEmail(""); setRepeatNewEmail("")}}
                         >
                             Καθαρισμός
                         </button>
 
-                        <button className={` border-2 border-gray-500 rounded-md p-2 ${emailMessage.length>0 || ( newEmail.length===0 || repeatNewEmail.length===0 )? "bg-gray-400" : 'bg-pallete-400' }`}
+                        <button className={` border-2  rounded-md p-2 ${emailMessage.length>0 || ( newEmail.length===0 || repeatNewEmail.length===0 )? "border-gray-400 bg-gray-400" : ' text-white border-pallete-800 border-2 hover:bg-pallete-700 hover:border-pallete-700 bg-pallete-800' }`}
                                 disabled={emailMessage.length>0 || (newEmail.length===0 || repeatNewEmail.length===0)}
                                 onClick={ ()=>  changeEmail()}
                         >Ενημέρωση</button>
@@ -262,13 +272,13 @@ function AccountEdit(){
                     </div>
 
                     <div className="w-2/3 font-medium mt-10 flex gap-3 justify-end items-center px-3  h-16">
-                        <button className={` border-2 border-gray-500 rounded-md p-2  "bg-gray-400" 'bg-white' `}
+                        <button className={` border-2 border-gray-500 rounded-md p-2  bg-white hover:border-red-600 hover:text-red-600 `}
                                 onClick={()=>{setPassword(""); setNewPassword("");  setRepeatNewPassword("")}}
                         >
                             Καθαρισμός
                         </button>
 
-                        <button className={` border-2 border-gray-500 rounded-md p-2 ${passwordMessage.length>0 || password.length===0 || newPassword.length===0 || repeatNewPassword.length===0 ? "bg-gray-400" : 'bg-pallete-400' }`}
+                        <button className={` border-2 border-gray-500 rounded-md p-2 ${passwordMessage.length>0 || password.length===0 || newPassword.length===0 || repeatNewPassword.length===0 ? "border-gray-400 bg-gray-400" : ' text-white border-pallete-800 border-2 hover:bg-pallete-700 hover:border-pallete-700 bg-pallete-800'}`}
                                 disabled={passwordMessage.length>0 || password.length===0 || (newPassword.length===0 || repeatNewPassword.length===0)}
                                 onClick={ ()=>  changePassword()}
                         >
@@ -287,7 +297,7 @@ function AccountEdit(){
                     />
                     {numberMessage.length>0 && <p className="font-medium mt-10 -mb-10 text-red-500 ">{numberMessage}</p>}
                     <div className="w-2/3  mt-10 flex gap-3 justify-end items-center px-3  h-16">
-                        <button className={` ${numberMessage.length>0 ? 'bg-gray-400' : 'bg-white'} border-2 border-gray-500 rounded-md p-2 `}
+                        <button className={` ${numberMessage.length>0 ? "border-gray-400 bg-gray-400" : ' text-white border-pallete-800 border-2 hover:bg-pallete-700 hover:border-pallete-700 bg-pallete-800'} border-2 border-gray-500 rounded-md p-2 `}
                                 disabled={numberMessage.length>0 }
                                 onClick={ ()=>  changeNumber()}
                         >
@@ -309,7 +319,7 @@ function AccountEdit(){
                     {skypeMessage.length>0 && <p className="font-medium mt-10 -mb-10 text-red-500 ">{skypeMessage}</p>}
 
                     <div className="w-2/3  mt-10 flex gap-3 justify-end items-center px-3  h-16">
-                        <button className={` ${skypeMessage.length>0 || skype.length===0 || skype===userData?.skype ? 'bg-gray-400' : 'bg-white'} flex items-center justify-center h-12 w-28 border-2 border-gray-500 rounded-md p-2 `}
+                        <button className={` ${skypeMessage.length>0 || skype.length===0 || skype===userData?.skype ? "border-gray-400 bg-gray-400" : ' text-white border-pallete-800 border-2 hover:bg-pallete-700 hover:border-pallete-700 bg-pallete-800'} flex items-center justify-center h-12 w-28 border-2 border-gray-500 rounded-md p-2 `}
                                 disabled={skypeMessage.length>0 || skype.length===0 || skype===userData?.skype}
                                 onClick={ ()=>  changeSkype()}
                         >

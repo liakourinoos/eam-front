@@ -7,3 +7,10 @@
     --accent: #000000; /* Default accent color */
   }
   
+  .vertical-line {
+    width: 2px; /* Thickness of the line */
+    height: 100%; /* Height of the line */
+    background-color: rgb(150, 150, 150); /* Line color */
+    margin: 0 auto; /* Center the line if needed */
+  }
+  

@@ -61,8 +61,16 @@ function ParentFinalApplications() {
 
             {/* data */}
             <div className='w-11/12 mx-auto h-full flex flex-col mb-5  gap-2 items-center justify-start overflow-y-auto mt-2'>
-                {isLoading && <span className="loading loading-lg mt-32"></span>
+                {isLoading && <span className="loading loading-lg h-96"></span>
+
                 }
+
+                {!isLoading && Array.isArray(applications) && applications?.length===0 &&
+                    <div className="w-full  h-96  flex items-center justify-center">
+                        <h1 className="text-3xl font-semibold text-gray-500">Δεν βρέθηκαν οριστικοποιημένα συμφωνητικά.</h1>
+                    </div>
+                }
+
                 {!isLoading && Array.isArray(applications) && 
                     applications.map((app,idx)=>(
                         <FinalApplication key={idx} code={app.id} firstName={app.nannyName} lastName={app.nannySurname} status={app.status} finalDate={app.finalizedAt}/>

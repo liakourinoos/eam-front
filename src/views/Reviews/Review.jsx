@@ -39,7 +39,7 @@ export default function Review({seenFrom,nannyName,nannySurname,nannyImg,review}
     },[])
 
     return(
-        <div className="w-11/12 md:w-3/5 mx-auto bg- flex h-40  items-center justify-center font-medium  border-2 pb-2 shadow-lg shadow-gray-300 border-black rounded-lg px-2 py-1 my-5">
+        <div className="w-11/12 md:w-3/5 mx-auto  flex h-40  items-center justify-center font-medium  border-2 pb-2 shadow-lg shadow-gray-300 border-black rounded-lg px-2 py-1 mt-5">
             
             {/* left div: img */}
             <div className='w-32 h-full flex items-center justify-center'>
@@ -75,7 +75,7 @@ export default function Review({seenFrom,nannyName,nannySurname,nannyImg,review}
                 </div>
 
                 {/* bio */}
-                <textarea   className='w-full px-2 py-1 bg-white h-full rounded-md border-2 border-gray-400'
+                <textarea   className='w-full px-2 py-1 bg-white resize-none h-full rounded-md border-2 border-gray-400'
                             value={review.bio}
                             placeholder={review.bio.length===0 ?'Ο γονέας δεν πρόσθεσε κάποια περιγραφή.' : ''}
                             readOnly
