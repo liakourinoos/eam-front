@@ -25,7 +25,7 @@ function PaymentInfo({paymentId,firstName,lastName,paymentDate,status,voucher,se
     let currentDate;
     currentDate = getCurrentDate();
     // δειτε την αλλαγη στο Component αλλάζοντας το currentDate όπως δείχνεται από κάτω (format: YYYY-MM-DD)  
-    currentDate = "2025-06-30";
+    // currentDate = "2025-06-30";
 //##############################################################
 
     const hasPaymentDatePassed = () => {
