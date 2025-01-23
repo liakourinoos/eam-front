@@ -42,7 +42,7 @@ function Footer() {
                 {/* <Link to='/about' className="my-auto mx-auto"><p className="underline text-black font-bold text-center  ">Εγχειρίδιο Χρήσης</p></Link> */}
                 <div className="flex flex-col justify-center  px-2 ">
                     <p><span className="font-medium">support:</span> nanika@gmail.com</p>
-                    <p><span className="font-medium">Nanika©</span>, 2024-2024</p>
+                    <p><span className="font-medium">Nanika©</span>, 2024-2025</p>
                 </div>
 
             </div>
