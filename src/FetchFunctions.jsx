@@ -1841,6 +1841,7 @@ export async function fetchContactedNannies(parentId) {
     }
 
     // console.log("before exit...")
+    console.log(result)
     return result;
 
 
@@ -2327,7 +2328,12 @@ export async function searchAvailableNannies(filter){
         console.log(error.message)
     }
     finally{
+        // remove duplicates
+        const uniqueResults = Array.from(new Set(results.map(a => a.id)))
+            .map(id => {
+                return results.find(a => a.id === id)
+            })
         console.log(results)
-        return results
+        return uniqueResults
     }
 }

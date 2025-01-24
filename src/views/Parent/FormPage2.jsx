@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
@@ -82,7 +82,12 @@ function FormPage2({ form, setForm, nextFn, returnTo }) {
             const isSelected = hours.every(time => prevState.schedule.some(slot => slot.day === day && slot.time === time));
             const newSchedule = isSelected 
                 ? prevState.schedule.filter(slot => slot.day !== day)
-                : [...prevState.schedule, ...hours.map(time => ({ day, time }))];
+                : [
+                    ...prevState.schedule, 
+                    ...hours
+                        .filter(time => prevState.nannySchedule.some(slot => slot.day === day && slot.time === time))
+                        .map(time => ({ day, time }))
+                ];
             return { ...prevState, schedule: newSchedule };
         });
     };
@@ -92,7 +97,12 @@ function FormPage2({ form, setForm, nextFn, returnTo }) {
             const isSelected = days.every(day => prevState.schedule.some(slot => slot.day === day && slot.time === time));
             const newSchedule = isSelected 
                 ? prevState.schedule.filter(slot => slot.time !== time)
-                : [...prevState.schedule, ...days.map(day => ({ day, time }))];
+                : [
+                    ...prevState.schedule, 
+                    ...days
+                        .filter(day => prevState.nannySchedule.some(slot => slot.day === day && slot.time === time))
+                        .map(day => ({ day, time }))
+                ];
             return { ...prevState, schedule: newSchedule };
         });
     };
@@ -218,7 +228,8 @@ function FormPage2({ form, setForm, nextFn, returnTo }) {
                                             checked={form.schedule.some(slot => slot.day === day && slot.time === time)}
                                             onChange={() => handleTimeClick(day, time)}
                                             className="checkbox checkbox-sm checkbox-secondary -my-1"
-                                            disabled={form.cantEdit}
+                                            disabled={form.cantEdit || (form?.nannySchedule && !form?.nannySchedule.some(slot => slot.day === day && slot.time === time))}
+                                            title={(form?.nannySchedule && !form?.nannySchedule.some(slot => slot.day === day && slot.time === time)) ? "Ο/Η επαγγελματίας έχει δηλώσει πως δεν είναι διαθέσιμος/η την συγκεκριμένη ημέρα και ώρα." : ""}
                                         />
                                     </td>
                                 ))}

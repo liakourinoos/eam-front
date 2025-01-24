@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
 import { fetchContactedNannies } from "../../FetchFunctions";
+import { set } from "date-fns";
 
 function FormPage1({myId, form, setForm, nextFn, returnTo }) {
     const [errors, setErrors] = useState({
@@ -25,15 +26,22 @@ function FormPage1({myId, form, setForm, nextFn, returnTo }) {
         } else if (name === "AMKA") {
             if (!/^\d*$/.test(value)) {
                 error = "Επιτρέπονται μόνο αριθμοί.";
+                setForm(prevState => ({...prevState, nannySchedule: []}));
             }
             else if( value.length !== 11 && value.length !== 0){
                 error = "Το ΑΜΚΑ πρέπει να αποτελείται από 11 ψηφία.";
+                setForm(prevState => ({...prevState, nannySchedule: []}));
             }
             else if (value.length>0 && !nannies.some(nanny => nanny.AMKA === value && nanny.name === form.name && nanny.surname === form.surname)) {
                 error = "Το ΑΜΚΑ που εισάγατε δεν αντιστοιχεί στον συγκεκριμένο επαγγελματία.";
-                setForm(prevState => ({...prevState,correctAMKA:false}));
+                setForm(prevState => ({...prevState,correctAMKA:false, nannySchedule: []}));
             }
-            else if(value.length>0 && nannies.some(nanny => nanny.AMKA === value && nanny.name === form.name && nanny.surname === form.surname)) setForm(prevState => ({...prevState,correctAMKA:true}));
+            else if(value.length===11 && nannies.some(nanny => nanny.AMKA === value && nanny.name === form?.name && nanny.surname === form?.surname)) {
+                setForm(prevState => ({...prevState,correctAMKA:true}));
+                // keep the schedule of nanny in a copy variable
+                setForm(prevState => ({...prevState, nannySchedule: nannies.find(nanny => nanny.AMKA === value).availabilityMatrix }));
+
+            }
         }
 
         setErrors(prevState => ({ ...prevState, [name]: error }));
@@ -46,6 +54,8 @@ function FormPage1({myId, form, setForm, nextFn, returnTo }) {
         enabled: form.cantEdit && !!myId
         
     })
+
+
 
 
     const [searchInput,setSearchInput] = useState("");
@@ -76,6 +86,24 @@ function FormPage1({myId, form, setForm, nextFn, returnTo }) {
     }, [searchInput])
 
     const [selectedNannyAMKA,setSelectedNannyAMKA] = useState("");
+
+    useEffect(() => {
+        if (selectedNannyAMKA) {
+            if (selectedNannyAMKA !== form?.AMKA && form?.AMKA.length === 11) {
+                setErrors(prevState => ({ ...prevState, AMKA: "Το ΑΜΚΑ που εισάγατε δεν αντιστοιχεί στον συγκεκριμένο επαγγελματία." }));
+                setForm(prevState => ({ ...prevState, correctAMKA: false, nannySchedule: [] }));
+            }
+            else if (selectedNannyAMKA === form?.AMKA && form?.AMKA.length === 11) {
+                setErrors(prevState => ({ ...prevState, AMKA: "" }));
+                setForm(prevState => ({ ...prevState, correctAMKA: true }));
+                setForm(prevState => ({
+                    ...prevState, nannySchedule: nannies?.find(nanny => nanny.AMKA === form?.AMKA).availabilityMatrix
+                }));
+                console.log(nannies?.find(nanny => nanny?.AMKA === form?.AMKA).availabilityMatrix)
+
+            }
+        }
+    }, [selectedNannyAMKA, form?.AMKA])
 
     return (
         <div className="w-full">
@@ -150,7 +178,7 @@ function FormPage1({myId, form, setForm, nextFn, returnTo }) {
                             {form.cantEdit && <div className="w-full h-full bg-gray-300"/>}
                             {isNanniesLoading && <div className="h-full w-full flex items-center justify-center"><span className="loading loading-lg"></span></div>}
                             {!form.cantEdit && searchResult?.length >0 && searchResult?.map((nanny, index) => (
-                                <div    key={index} onClick={()=>{ setForm(prevState => ({...prevState,name: nanny.name,surname: nanny.surname})); setSelectedNannyAMKA( nanny.AMKA); }} 
+                                <div    key={index} onClick={(e)=>{ setForm(prevState => ({...prevState,name: nanny.name,surname: nanny.surname})); setSelectedNannyAMKA( nanny.AMKA); handleChange({target:{name:'AMKA',value:form?.AMKA}})  }} 
                                         className={` ${ selectedNannyAMKA===nanny.AMKA ? 'text-pallete-900 underline': 'text-black' } flex h-20 pl-5 items-center border-b-2 border-gray-300 hover:bg-white bg-slate-50 hover:text-pallete-500 cursor-pointer`}
                                 >    
                                     <img src={nanny.img} className="h-16 w-16 rounded-full object-cover"/>
