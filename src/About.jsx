@@ -80,7 +80,7 @@ function App() {
 
             </div>
           </div>
-          <div class="vertical-line"></div>
+          <div className="vertical-line"></div>
           <div className='w-5/6 h-full overflow-y-scroll '>
           <div id="section1" className='px-20 mt-10'>
             <p className={` ${selectedOption === 1 ? 'text-pallete-800' : ''} font-semibold text-xl mb-2`}>1. Εισαγωγή</p>
